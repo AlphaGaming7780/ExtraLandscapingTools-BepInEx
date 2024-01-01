@@ -1,0 +1,6 @@
+dist/
+bin/
+obj/
+ts-build/
+.vs/
+text.txt

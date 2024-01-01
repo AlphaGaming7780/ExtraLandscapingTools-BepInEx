@@ -1,0 +1,107 @@
+name: RadioExtended-ci
+
+on:
+  push:
+    branches: [ "DEV" ]
+    tags: [ "v*" ]
+env:
+  RELEASE_TAG: ${{ github.ref == 'refs/heads/DEV' && 'v0.1.0' || github.ref_name }}
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    strategy:
+      matrix:
+        bepinex-version: [5, 6]
+    steps:
+      - name: Checkout source
+        uses: actions/checkout@v4
+      - name: Checkout libcs2
+        uses: actions/checkout@v4
+        with:
+          repository: AlphaGaming7780/libcs2
+          token: ${{ secrets.GH_PAT }}
+          path: libcs2/
+      - name: Install .NET Core
+        uses: actions/setup-dotnet@v3
+        with:
+          dotnet-version: 6.0.x
+      - name: Install TagLibSharp
+        run: dotnet add package TagLibSharp --version 2.3.0
+      - name: Build (BepInEx ${{ matrix.bepinex-version }})
+        run: make package-unix BEPINEX_VERSION=${{ matrix.bepinex-version }}
+      - name: Coping All the default elements
+        run: |
+          mkdir -p  ${{ github.workspace }}/dist/resources/;
+          cp -a ${{ github.workspace }}/resources/. ${{ github.workspace }}/dist/resources/
+          mv ${{ github.workspace }}/dist ${{ github.workspace }}/${{ github.event.repository.name }}
+      - name: Archive Release
+        uses: thedoctor0/zip-release@0.7.5
+        with:
+          type: 'zip'
+          filename: "${{ github.event.repository.name }}-${{ env.RELEASE_TAG }}_BepInEx-${{ matrix.bepinex-version }}.zip"
+          path: "${{ github.event.repository.name }}"
+      - name: Upload Artifact (Zip Release BepInEx ${{ matrix.bepinex-version }})
+        uses: actions/upload-artifact@v3
+        with:
+          name: ${{ github.event.repository.name }}-${{env.RELEASE_TAG}}_BepInEx-${{ matrix.bepinex-version }}
+          path: ${{ github.event.repository.name }}-${{env.RELEASE_TAG}}_BepInEx-${{ matrix.bepinex-version }}.zip
+
+  Release:
+    needs: build
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - name: Checkout source
+        uses: actions/checkout@v3
+      - name: Download Zip artifact
+        uses: actions/download-artifact@v3
+        id: download
+        with:
+          path: .
+      - name: Create Release
+        uses: ncipollo/release-action@v1.13.0
+        with:
+          tag: "${{env.RELEASE_TAG}}"
+          allowUpdates: true
+          removeArtifacts: true
+          artifacts: "${{ github.event.repository.name }}-${{env.RELEASE_TAG}}_BepInEx-5/${{ github.event.repository.name }}-${{env.RELEASE_TAG}}_BepInEx-5.zip,${{ github.event.repository.name }}-${{env.RELEASE_TAG}}_BepInEx-6/${{ github.event.repository.name }}-${{env.RELEASE_TAG}}_BepInEx-6.zip"
+          bodyFile: "LASTCHANGELOG.md"
+          omitNameDuringUpdate: true
+          omitBodyDuringUpdate: true
+          prerelease: ${{github.ref == 'refs/heads/DEV'}}
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+  publish:
+    needs: Release
+    if: startsWith(github.ref, 'refs/tags/v')
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout source
+        uses: actions/checkout@v3
+      - name: Download Zip artifact BepInEx-5
+        uses: actions/download-artifact@v3
+        with:
+          name: ${{ github.event.repository.name }}-${{env.RELEASE_TAG}}_BepInEx-5
+          path: .
+      - name: Debug
+        run: ls -R
+      - name: Preparing BepInEx-5 (UnZip and moving)
+        run: |
+          unzip ${{ github.workspace }}/${{ github.event.repository.name }}-${{env.RELEASE_TAG}}_BepInEx-5.zip
+          mkdir -p ${{ github.workspace }}/dist
+          mv ${{ github.workspace }}/${{ github.event.repository.name }} ${{ github.workspace }}/dist/${{ github.event.repository.name }}
+      - name: Debug
+        run: ls && ls dist/
+      - name: Download tcli
+        run: |
+          curl -L https://github.com/thunderstore-io/thunderstore-cli/releases/download/0.2.1/tcli-0.2.1-linux-x64.tar.gz -o tcli.tar.gz
+          tar -xzf tcli.tar.gz
+      - name: Publish with tcli
+        run: ./tcli-0.2.1-linux-x64/tcli publish --token=${{ secrets.TS_TOKEN }}
+          
+
+
