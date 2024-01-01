@@ -24,9 +24,13 @@ If you download it from the GitHub or the Thunderstore page without using the mo
 ## Feature roadmap
 - ❌ Custom brush
 - ❌ Brush angle
+- ✔️ Surface Tools
+- ✔️ Ore, Oil, Underground water and fertile land tools
+- ✔️ Brushes parameter
 
 # Acknowledgment
-- [CityRat](https://thunderstore.io/c/cities-skylines-ii/p/CityRat/)
+- [CynicalBusiness](https://lab.vevox.io/games/cities-skylines-2/surface-tools/-/tree/develop?ref_type=heads) For it's surface tool that help me a lot to make this mod.
+- [CityRat](https://thunderstore.io/c/cities-skylines-ii/p/CityRat/) For all the custom icons.
 
 # Community
 Looking to discuss Cities: Skylines 2 Unofficial modding together with other modders? You're welcome to join [Cities 2 Modding Discord](https://discord.gg/vd7HXnpPJf) or the [Cities: Skylines Modding Discord](https://discord.gg/27CVdGFA47).
