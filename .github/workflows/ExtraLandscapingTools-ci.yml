@@ -32,11 +32,6 @@ jobs:
         run: dotnet add package TagLibSharp --version 2.3.0
       - name: Build (BepInEx ${{ matrix.bepinex-version }})
         run: make package-unix BEPINEX_VERSION=${{ matrix.bepinex-version }}
-      - name: Coping All the default elements
-        run: |
-          mkdir -p  ${{ github.workspace }}/dist/resources/;
-          cp -a ${{ github.workspace }}/resources/. ${{ github.workspace }}/dist/resources/
-          mv ${{ github.workspace }}/dist ${{ github.workspace }}/${{ github.event.repository.name }}
       - name: Archive Release
         uses: thedoctor0/zip-release@0.7.5
         with:
