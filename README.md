@@ -23,6 +23,7 @@ If you download it from the GitHub or the Thunderstore page without using the mo
 
 ## Feature roadmap
 - ❌ Custom brush
+- ❌ Brush angle
 
 # Acknowledgment
 - [CityRat](https://thunderstore.io/c/cities-skylines-ii/p/CityRat/)
