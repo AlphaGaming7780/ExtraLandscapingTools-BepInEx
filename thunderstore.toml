@@ -3,7 +3,7 @@ schemaVersion = "0.0.1"
 
 [package]
 namespace = "TritonSupreme"
-name = "ExtendedLandscapeTool"
+name = "ExtraLandscapingTools"
 versionNumber = "0.1.0"
 description = ""
 websiteUrl = "https://github.com/AlphaGaming7780/ExtendedRadio"
