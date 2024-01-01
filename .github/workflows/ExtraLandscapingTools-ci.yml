@@ -1,11 +1,11 @@
-name: RadioExtended-ci
+name: ExtraLandscapingTools-ci
 
 on:
   push:
     branches: [ "DEV" ]
     tags: [ "v*" ]
 env:
-  RELEASE_TAG: ${{ github.ref == 'refs/heads/DEV' && 'v0.1.0' || github.ref_name }}
+  RELEASE_TAG: ${{ github.ref == 'refs/heads/DEV' && 'v0.1.0-pre-1' || github.ref_name }}
 
 jobs:
   build:

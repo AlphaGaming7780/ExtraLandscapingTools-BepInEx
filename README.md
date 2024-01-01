@@ -4,7 +4,7 @@ This mod aims to add features and improve existing ones for the game's landscapi
 > [!IMPORTANT]  
 > We're in the early stages of C:S2 modding and the tooling is not ready yet so please take this mod as it is and accept any issue.
 
-### -> [Changelog](https://github.com/AlphaGaming7780/ExtraLandscapingTools/blob/master/CHANGELOG.md)
+### -> [Changelog](https://github.com/AlphaGaming7780/ExtraLandscapingTools/blob/main/CHANGELOG.md)
 
 ## Requirements
 
