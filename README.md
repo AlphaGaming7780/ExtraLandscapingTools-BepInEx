@@ -29,7 +29,7 @@ If you download it from the GitHub or the Thunderstore page without using the mo
 - ✔️ Brushes parameter
 
 # Acknowledgment
-- [CynicalBusiness](https://lab.vevox.io/games/cities-skylines-2/surface-tools/-/tree/develop?ref_type=heads) For it's surface tool that help me a lot to make this mod.
+- [CynicalBusiness](https://lab.vevox.io/games/cities-skylines-2/surface-tools/-/tree/develop?ref_type=heads) For its surface tools which help me a lot to make this mod.
 - [CityRat](https://thunderstore.io/c/cities-skylines-ii/p/CityRat/) For all the custom icons.
 
 # Community
