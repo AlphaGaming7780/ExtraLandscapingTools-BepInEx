@@ -31,7 +31,7 @@
 		<EmbeddedResource Include="embedded\UI\REMOVE_UI.js"></EmbeddedResource>
 	</ItemGroup>
 
-	<ItemGroup>
+	<!-- <ItemGroup>
 		<None Remove="resources\Icons\Agriculture Surface 01.svg" />
 		<None Remove="resources\Icons\Concrete Surface 01.svg" />
 		<None Remove="resources\Icons\Concrete Surface 02.svg" />
@@ -48,6 +48,13 @@
 		<None Remove="resources\Icons\Landfill Surface 01.svg" />
 		<None Remove="resources\Icons\Oil Surface 01.svg" />
 		<None Remove="resources\Icons\Ore Surface 01.svg" />
+		<None Remove="resources\Brushes\Custom 01.png" />
+		<None Remove="resources\Brushes\Mountain 01.png" />
+		<None Remove="resources\Brushes\Mountain 02.png" />
+		<None Remove="resources\Brushes\Mountain 03.png" />
+		<None Remove="resources\Brushes\Plateau 01.png" />
+		<None Remove="resources\Brushes\River 01.png" />
+		<None Remove="resources\Brushes\River 02.png" />
 	</ItemGroup>
 	<ItemGroup>
 		<Content Include="resources\Icons\Agriculture Surface 01.svg">
@@ -101,7 +108,28 @@
 		 <Content Include="resources\Icons\Ore Surface 01.svg">
 			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
  		</Content>
-	</ItemGroup>
+		 <Content Include="resources\Brushes\Custom 01.png">
+			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	  	</Content>
+	  	<Content Include="resources\Brushes\Mountain 01.png">
+			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+ 		</Content>
+		 <Content Include="resources\Brushes\Mountain 02.png">
+			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+ 		</Content>
+		 <Content Include="resources\Brushes\Mountain 03.png">
+			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+ 		</Content>
+		 <Content Include="resources\Brushes\Plateau 01.png">
+			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+ 		</Content>
+		 <Content Include="resources\Brushes\River 01.png">
+			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+ 		</Content>
+		 <Content Include="resources\Brushes\River 02.png">
+			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+ 		</Content>
+	</ItemGroup> -->
 
 	<!--
 		Uncomment this PropertyGroup to let the C# project read DLLs directory from your game directory,
