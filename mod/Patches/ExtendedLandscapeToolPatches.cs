@@ -130,7 +130,7 @@ namespace ExtraLandscapingTools.Patches
 			return true;
 		}
 
-		private static UIAssetCategoryPrefab? GetOrCreateTerraformingToolCategory(PrefabSystem prefabSystem)
+		private static UIAssetCategoryPrefab GetOrCreateTerraformingToolCategory(PrefabSystem prefabSystem)
 		{
 
 			prefabSystem.TryGetPrefab(new PrefabID(nameof(UIAssetCategoryPrefab), "Terraforming"), out var p1);
@@ -139,7 +139,7 @@ namespace ExtraLandscapingTools.Patches
 
 		}
 
-		private static UIAssetCategoryPrefab? GetOrCreateSurfacesToolCategory(PrefabSystem prefabSystem)
+		private static UIAssetCategoryPrefab GetOrCreateSurfacesToolCategory(PrefabSystem prefabSystem)
         {
             if (prefabSystem.TryGetPrefab(new PrefabID(nameof(UIAssetCategoryPrefab), "Surfaces"), out var p1)
                 && p1 is UIAssetCategoryPrefab surfaceCategory)

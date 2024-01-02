@@ -26,11 +26,14 @@ var ExtraLandscapingTools_brushAngle_content_input = document.createElement("inp
 var ExtraLandscapingTools_brushOption_content_buttonsDict = {}
 var ExtraLandscapingTools_brushs
 var ExtraLandscapingTools_index = 0
+var ExtraLandscapingTools_isPressed = false
+var ExtraLandscapingTools_cursorX = 0
+var ExtraLandscapingTools_sliderX = 0
 
 ExtraLandscapingTools_brushOption_item.className = "item_bZY"
 ExtraLandscapingTools_brushOption_itemContent.className = "item-content_nNz"
 ExtraLandscapingTools_brushOption_label.className = "label_RZX"
-ExtraLandscapingTools_brushOption_label.innerHTML = "Brushs"
+ExtraLandscapingTools_brushOption_label.innerHTML = "Brush"
 ExtraLandscapingTools_brushOption_content.className = "content_ZIz"
 ExtraLandscapingTools_brushOption_content_buttonDown.className = "button_KVN button_KVN start-button_F6t"
 ExtraLandscapingTools_brushOption_content_buttonDown_img.className = "icon_Ysc"
@@ -41,23 +44,28 @@ ExtraLandscapingTools_brushOption_content_buttonUp_img.className = "icon_Ysc"
 ExtraLandscapingTools_brushOption_content_buttonUp_img.src = "Media/Glyphs/ThickStrokeArrowUp.svg"
 
 ExtraLandscapingTools_getBrush("tool.brushes")
-ExtraLandscapingTools_getSelectedBrush("tool.selectedBrush", ExtraLandscapingTools_selectedBrush)
+ExtraLandscapingTools_getSelectedBrush("tool.selectedBrush")
 
 ExtraLandscapingTools_brushAngle_item.className = "item_bZY"
 ExtraLandscapingTools_brushAngle_itemContent.className = "item-content_nNz"
 ExtraLandscapingTools_brushAngle_label.className = "label_RZX"
 ExtraLandscapingTools_brushAngle_label.innerHTML = "Brush angle"
 ExtraLandscapingTools_brushAngle_content.className = "content_ZIz"
+ExtraLandscapingTools_brushAngle_content.style.width = "40%"
 ExtraLandscapingTools_brushAngle_content_SliderContainer.className = "slider-container_Q_K"
 ExtraLandscapingTools_brushAngle_content_SliderContainer_slider.className = "slider_KXG slider_pUS horizontal slider_ROT"
 ExtraLandscapingTools_brushAngle_content_SliderContainer_slider_track.className = "track-bounds_H8_"
 ExtraLandscapingTools_brushAngle_content_SliderContainer_slider_track_rangeBounds.className = "range-bounds_lNt"
+ExtraLandscapingTools_brushAngle_content_SliderContainer_slider_track_rangeBounds.style.width = "0%"
 ExtraLandscapingTools_brushAngle_content_SliderContainer_slider_track_rangeBounds_range.className = "range_nHO range_iUN"
 ExtraLandscapingTools_brushAngle_content_SliderContainer_slider_track_rangeBounds_thumbContainer.className = "thumb-container_aso"
 ExtraLandscapingTools_brushAngle_content_SliderContainer_slider_track_rangeBounds_thumbContainer_thumb.className = "thumb_kkL"
 ExtraLandscapingTools_brushAngle_content_input.className = "slider-input_DXM input_Wfi"
 ExtraLandscapingTools_brushAngle_content_input.type = "text"
-// ExtraLandscapingTools_brushAngle_content_input += "vk-title vk-description vk-type='text' rows='5'"
+ExtraLandscapingTools_brushAngle_content_input.setAttributeNS(null, "vk-title", "")
+ExtraLandscapingTools_brushAngle_content_input.setAttributeNS(null, "vk-description", "")
+ExtraLandscapingTools_brushAngle_content_input.setAttributeNS(null, "vk-type", "text")
+ExtraLandscapingTools_brushAngle_content_input.setAttributeNS(null, "rows", "5")
 
 ExtraLandscapingTools_toolOption.appendChild(ExtraLandscapingTools_brushOption_item)
 ExtraLandscapingTools_brushOption_item.appendChild(ExtraLandscapingTools_brushOption_itemContent)
@@ -69,7 +77,7 @@ ExtraLandscapingTools_brushOption_content.appendChild(ExtraLandscapingTools_brus
 ExtraLandscapingTools_brushOption_content_buttonDown.appendChild(ExtraLandscapingTools_brushOption_content_buttonDown_img)
 ExtraLandscapingTools_brushOption_content_buttonUp.appendChild(ExtraLandscapingTools_brushOption_content_buttonUp_img)
 
-// ExtraLandscapingTools_toolOption.appendChild(ExtraLandscapingTools_brushAngle_item)
+ExtraLandscapingTools_toolOption.appendChild(ExtraLandscapingTools_brushAngle_item)
 ExtraLandscapingTools_brushAngle_item.appendChild(ExtraLandscapingTools_brushAngle_itemContent)
 ExtraLandscapingTools_brushAngle_itemContent.appendChild(ExtraLandscapingTools_brushAngle_label)
 ExtraLandscapingTools_brushAngle_itemContent.appendChild(ExtraLandscapingTools_brushAngle_content)
@@ -82,22 +90,70 @@ ExtraLandscapingTools_brushAngle_content_SliderContainer_slider_track_rangeBound
 ExtraLandscapingTools_brushAngle_content_SliderContainer_slider_track_rangeBounds_thumbContainer.appendChild(ExtraLandscapingTools_brushAngle_content_SliderContainer_slider_track_rangeBounds_thumbContainer_thumb)
 ExtraLandscapingTools_brushAngle_content.appendChild(ExtraLandscapingTools_brushAngle_content_input)
 
+ExtraLandscapingTools_getBrushAngle("tool.brushAngle")
+
+ExtraLandscapingTools_brushAngle_content_SliderContainer_slider_track_rangeBounds_thumbContainer_thumb.addEventListener("mousedown", (e) => {
+    ExtraLandscapingTools_isPressed = true;
+    ExtraLandscapingTools_cursorX = e.clientX;
+	ExtraLandscapingTools_sliderX = ExtraLandscapingTools_brushAngle_content_SliderContainer_slider_track_rangeBounds.clientWidth
+});
+
+document.addEventListener("mouseup", () => {
+    ExtraLandscapingTools_isPressed = false;
+});
+
+document.addEventListener("mousemove", (e) => {
+	if (!ExtraLandscapingTools_isPressed) return;
+	e.preventDefault();
+	let o = (ExtraLandscapingTools_sliderX + (e.clientX - ExtraLandscapingTools_cursorX))/ExtraLandscapingTools_brushAngle_content_SliderContainer_slider_track.clientWidth * 100
+	if(o > 100) o = 100
+	if(o < 0) o = 0
+	ExtraLandscapingTools_brushAngle_content_SliderContainer_slider_track_rangeBounds.style.width = `${o}%`
+	engine.trigger("tool.setBrushAngle", o*3.6)
+});
+
+ExtraLandscapingTools_brushAngle_content_input.addEventListener("input", function() {
+	if(this.value > 360) this.value = 360
+	if(this.value < 0) this.value = 0
+	// ExtraLandscapingTools_brushAngle_content_SliderContainer_slider_track_rangeBounds.style.width = ((this.value/360)*100)+"%"
+	engine.trigger("tool.setBrushAngle", parseFloat(this.value))
+})
+
 ExtraLandscapingTools_brushOption_content_buttonDown.addEventListener("click", function() {
-	ExtraLandscapingTools_index--
-	if(ExtraLandscapingTools_index < 0) ExtraLandscapingTools_index = 0
-	engine.trigger("tool.selectBrush", ExtraLandscapingTools_brushs[ExtraLandscapingTools_index].entity)
+	if(ExtraLandscapingTools_index == 0) return
+	engine.trigger("tool.selectBrush", ExtraLandscapingTools_brushs[ExtraLandscapingTools_index-1].entity)
 })
 
 ExtraLandscapingTools_brushOption_content_buttonUp.addEventListener("click", function() {
-	ExtraLandscapingTools_index++
-	if(ExtraLandscapingTools_index > ExtraLandscapingTools_brushs.length-1) ExtraLandscapingTools_index = ExtraLandscapingTools_brushs.length-1
-	engine.trigger("tool.selectBrush", ExtraLandscapingTools_brushs[ExtraLandscapingTools_index].entity)
+	if(ExtraLandscapingTools_index+1 == ExtraLandscapingTools_brushs.length) return
+	engine.trigger("tool.selectBrush", ExtraLandscapingTools_brushs[ExtraLandscapingTools_index+1].entity)
 })
 
 function ExtraLandscapingTools_selectedBrush(brush) {
 	ExtraLandscapingTools_index = ExtraLandscapingTools_brushs.findIndex(aBrush => aBrush.entity.index == brush.index)
 	if(ExtraLandscapingTools_index < 0) ExtraLandscapingTools_index = 0
 	ExtraLandscapingTools_brushOption_content_field.innerHTML = ExtraLandscapingTools_brushs[ExtraLandscapingTools_index].name
+}
+
+function ExtraLandscapingTools_updateBrushAngle(angle) {
+	ExtraLandscapingTools_brushAngle_content_SliderContainer_slider_track_rangeBounds.style.width = angle/360*100+"%"
+	ExtraLandscapingTools_brushAngle_content_input.value = angle
+}
+
+function ExtraLandscapingTools_getBrushAngle(event) {
+	const updateEvent = event + ".update"
+	const subscribeEvent = event + ".subscribe"
+	const unsubscribeEvent = event + ".unsubscribe"
+	
+	var sub = engine.on(updateEvent, (data) => {
+		ExtraLandscapingTools_updateBrushAngle && ExtraLandscapingTools_updateBrushAngle(data)
+	})
+
+	engine.trigger(subscribeEvent)
+	return () => {
+		engine.trigger(unsubscribeEvent)
+		sub.clear()
+	};
 }
 
 function ExtraLandscapingTools_getSelectedBrush(event) {
