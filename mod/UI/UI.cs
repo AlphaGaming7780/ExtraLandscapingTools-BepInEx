@@ -1,8 +1,10 @@
 using System.Collections;
 using System.IO;
+using Game.Prefabs;
 using Game.SceneFlow;
 using Game.UI;
 using UnityEngine;
+using UnityEngine.Networking;
 
 namespace ExtraLandscapingTools
 {
@@ -19,11 +21,6 @@ namespace ExtraLandscapingTools
             eLT_UI_Mono = eLT_UI_Object.AddComponent<ELT_UI_Mono>();
 			
         }
-
-
-		private void SettingsButtonCallBack() {
-			Debug.Log("YEAH");
-		}
 
 		internal static string GetStringFromEmbbededJSFile(string path) {
 			return new StreamReader(ExtraLandscapingTools.GetEmbedded("UI."+path)).ReadToEnd();

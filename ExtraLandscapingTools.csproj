@@ -32,73 +32,73 @@
 	</ItemGroup>
 
 	<ItemGroup>
-		<None Remove="resources\Agriculture Surface 01.svg" />
-		<None Remove="resources\Concrete Surface 01.svg" />
-		<None Remove="resources\Concrete Surface 02.svg" />
-		<None Remove="resources\Grass Surface 01.svg" />
-		<None Remove="resources\Grass Surface 02.svg" />
-		<None Remove="resources\Pavement Surface 01.svg" />
-		<None Remove="resources\Pavement Surface 02.svg" />
-		<None Remove="resources\Sand Surface 01.svg" />
-		<None Remove="resources\Sand Surface 02.svg" />
-		<None Remove="resources\Tiles Surface 01.svg" />
-		<None Remove="resources\Tiles Surface 02.svg" />
-		<None Remove="resources\Tiles Surface 03.svg" />
-		<None Remove="resources\Forestry Surface 01.svg" />
-		<None Remove="resources\Landfill Surface 01.svg" />
-		<None Remove="resources\Oil Surface 01.svg" />
-		<None Remove="resources\Ore Surface 01.svg" />
+		<None Remove="resources\Icons\Agriculture Surface 01.svg" />
+		<None Remove="resources\Icons\Concrete Surface 01.svg" />
+		<None Remove="resources\Icons\Concrete Surface 02.svg" />
+		<None Remove="resources\Icons\Grass Surface 01.svg" />
+		<None Remove="resources\Icons\Grass Surface 02.svg" />
+		<None Remove="resources\Icons\Pavement Surface 01.svg" />
+		<None Remove="resources\Icons\Pavement Surface 02.svg" />
+		<None Remove="resources\Icons\Sand Surface 01.svg" />
+		<None Remove="resources\Icons\Sand Surface 02.svg" />
+		<None Remove="resources\Icons\Tiles Surface 01.svg" />
+		<None Remove="resources\Icons\Tiles Surface 02.svg" />
+		<None Remove="resources\Icons\Tiles Surface 03.svg" />
+		<None Remove="resources\Icons\Forestry Surface 01.svg" />
+		<None Remove="resources\Icons\Landfill Surface 01.svg" />
+		<None Remove="resources\Icons\Oil Surface 01.svg" />
+		<None Remove="resources\Icons\Ore Surface 01.svg" />
 	</ItemGroup>
 	<ItemGroup>
-		<Content Include="resources\Agriculture Surface 01.svg">
+		<Content Include="resources\Icons\Agriculture Surface 01.svg">
 		  	<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
 		</Content>
-		<Content Include="resources\Concrete Surface 01.svg">
+		<Content Include="resources\Icons\Concrete Surface 01.svg">
 			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
 	  	</Content>
-	  	<Content Include="resources\Concrete Surface 02.svg">
+	  	<Content Include="resources\Icons\Concrete Surface 02.svg">
 			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
  		</Content>
-		 <Content Include="resources\Grass Surface 01.svg">
+		 <Content Include="resources\Icons\Grass Surface 01.svg">
 			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
 	  	</Content>
-	  	<Content Include="resources\Grass Surface 02.svg">
+	  	<Content Include="resources\Icons\Grass Surface 02.svg">
 			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
  		</Content>
-		 <Content Include="resources\Pavement Surface 01.svg">
+		 <Content Include="resources\Icons\Pavement Surface 01.svg">
 			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
 	  	</Content>
-	  	<Content Include="resources\Pavement Surface 02.svg">
+	  	<Content Include="resources\Icons\Pavement Surface 02.svg">
 			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
  		</Content>
-		 <Content Include="resources\Sand Surface 01.svg">
+		 <Content Include="resources\Icons\Sand Surface 01.svg">
 			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
 	  	</Content>
-	  	<Content Include="resources\Sand Surface 02.svg">
+	  	<Content Include="resources\Icons\Sand Surface 02.svg">
 			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
  		</Content>
-		 <Content Include="resources\Pavement Surface 02.svg">
+		 <Content Include="resources\Icons\Pavement Surface 02.svg">
 			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
  		</Content>
-		 <Content Include="resources\Tiles Surface 01.svg">
+		 <Content Include="resources\Icons\Tiles Surface 01.svg">
 			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
 	  	</Content>
-	  	<Content Include="resources\Tiles Surface 02.svg">
+	  	<Content Include="resources\Icons\Tiles Surface 02.svg">
 			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
  		</Content>
-		 <Content Include="resources\Tiles Surface 03.svg">
+		 <Content Include="resources\Icons\Tiles Surface 03.svg">
 			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
  		</Content>
-		 <Content Include="resources\Forestry Surface 01.svg">
+		 <Content Include="resources\Icons\Forestry Surface 01.svg">
 			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
  		</Content>
-		 <Content Include="resources\Landfill Surface 01.svg">
+		 <Content Include="resources\Icons\Landfill Surface 01.svg">
 			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
  		</Content>
-		 <Content Include="resources\Oil Surface 01.svg">
+		 <Content Include="resources\Icons\Oil Surface 01.svg">
 			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
  		</Content>
-		 <Content Include="resources\Ore Surface 01.svg">
+		 <Content Include="resources\Icons\Ore Surface 01.svg">
 			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
  		</Content>
 	</ItemGroup>

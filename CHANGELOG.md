@@ -1,5 +1,6 @@
-# 0.1.0-pre-3
+# 0.1.0-pre-4
+- Add: Custom Brush support (plugins -> ExtraLandscapingTools_mods -> CustomBrushes -> customBrush.png)
 - Add: Surface Tools
 - Add: Ore, Oil, Underground water and fertile land tools
-- add: Brushes parameter : angle
+- Add: Brushes parameter : angle
 - Add: Brushes parameter : Brushes
