@@ -23,10 +23,9 @@ You can now change the brush and rotate it.
 ### Ore, Oil, Underground water and fertile land tools
 You can now add resources to your map using this tool.
 ### Surface Tools
-You can now paint your terrain with different material using this tool.
+Add different materials to your map using the area tool. (This is a new tab in the landscape tool user interface)
 ### Custom brush
-You can add custom brush into the game, to do that create this folder in your Plugins folder : `ExtraLandscapingTools_mods -> CustomBrushes`, in this folder you can put all your brush, the brush use transparency, the mod resize the image to 512x512.
-`Plugins -> ExtraLandscapingTools_mods -> CustomBrushes -> customBrush.png`.
+You can add custom brush into the game. To add a custom brush to your game. Create a folder in the BepInEx/Plugins folder and name it `ExtraLandscapingTools_mods`. Inside this folder create another folder and name it `CustomBrushes`. You can now add your custom brushes into the CustomBrushes folder. All custom brushes must be png format, with a transparent background, and 512x512 in size.
 
 ## Feature roadmap
 - ✔️ Custom brush

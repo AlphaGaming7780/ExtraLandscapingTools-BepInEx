@@ -146,8 +146,6 @@ namespace ExtraLandscapingTools.Patches
 	{
 		public static bool Prefix( PrefabSystem __instance, PrefabBase prefab)
 		{
-
-
 			if (ExtraLandscapingTools.removeTools.Contains(prefab.name) || (prefab is not TerraformingPrefab && prefab is not SurfacePrefab))
 			{
 				return true;
@@ -170,13 +168,13 @@ namespace ExtraLandscapingTools.Patches
 				TerraformingUI.m_Priority = 1;
 			}
 
-			if(prefab is TerraformingPrefab) TerraformingUI.m_Group = GetOrCreateTerraformingToolCategory(__instance) ?? TerraformingUI.m_Group;
+			if(prefab is TerraformingPrefab) TerraformingUI.m_Group = GetTerraformingToolCategory(__instance) ?? TerraformingUI.m_Group;
 			if(prefab is SurfacePrefab) TerraformingUI.m_Group = GetOrCreateNewToolCategory(__instance, "Surfaces") ?? TerraformingUI.m_Group;
 
 			return true;
 		}
 
-		private static UIAssetCategoryPrefab GetOrCreateTerraformingToolCategory(PrefabSystem prefabSystem)
+		private static UIAssetCategoryPrefab GetTerraformingToolCategory(PrefabSystem prefabSystem)
 		{
 
 			prefabSystem.TryGetPrefab(new PrefabID(nameof(UIAssetCategoryPrefab), "Terraforming"), out var p1);
@@ -201,11 +199,11 @@ namespace ExtraLandscapingTools.Patches
 			}
 
 			surfaceCategory = ScriptableObject.CreateInstance<UIAssetCategoryPrefab>();
-			surfaceCategory.name = cat; //
+			surfaceCategory.name = cat;
 			surfaceCategory.m_Menu = landscapingMenu;
 			var surfaceCategoryUI = surfaceCategory.AddComponent<UIObject>();
 			surfaceCategoryUI.m_Icon = "Media/Game/Icons/LotTool.svg";
-			surfaceCategoryUI.m_Priority = 4;
+			surfaceCategoryUI.m_Priority = 10;
 			surfaceCategoryUI.active = true;
 			surfaceCategoryUI.m_IsDebugObject = false;
 
