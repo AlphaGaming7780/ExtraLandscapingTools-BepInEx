@@ -18,12 +18,19 @@ You can download this mod directly for this GitHub or from the [C:S2 Thunderstor
 If you download it from the GitHub or the Thunderstore page without using the mod manger, you need to put the folder named `ExtraLandscapingTools` inside the `YourGamePath/BepInEx/Plugins` folder.
 
 ## Features
-
-- Give the player access to custom brush already in the game.
+### Brushes parameter
+You can now change the brush and rotate it.
+### Ore, Oil, Underground water and fertile land tools
+You can now add resources to your map using this tool.
+### Surface Tools
+You can now paint your terrain with different material using this tool.
+### Custom brush
+You can add custom brush into the game, to do that create this folder in your Plugins folder
+`Plugins -> ExtraLandscapingTools_mods -> CustomBrushes -> customBrush.png`.
 
 ## Feature roadmap
-- ❌ Custom brush
-- ❌ Brush angle
+- ✔️ Custom brush
+- ✔️ Brush angle
 - ✔️ Surface Tools
 - ✔️ Ore, Oil, Underground water and fertile land tools
 - ✔️ Brushes parameter

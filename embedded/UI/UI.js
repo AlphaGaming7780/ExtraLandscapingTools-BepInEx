@@ -50,7 +50,7 @@ ExtraLandscapingTools_getSelectedBrush("tool.selectedBrush")
 ExtraLandscapingTools_brushAngle_item.className = "item_bZY"
 ExtraLandscapingTools_brushAngle_itemContent.className = "item-content_nNz"
 ExtraLandscapingTools_brushAngle_label.className = "label_RZX"
-ExtraLandscapingTools_brushAngle_label.innerHTML = "Brush angle"
+ExtraLandscapingTools_brushAngle_label.innerHTML = "Brush Rotation"
 ExtraLandscapingTools_brushAngle_content.className = "content_ZIz"
 ExtraLandscapingTools_brushAngle_content.style.width = "40%"
 ExtraLandscapingTools_brushAngle_content_SliderContainer.className = "slider-container_Q_K"
@@ -134,6 +134,10 @@ function ExtraLandscapingTools_selectedBrush(brush) {
 	ExtraLandscapingTools_index = ExtraLandscapingTools_brushs.findIndex(aBrush => aBrush.entity.index == brush.index)
 	if(ExtraLandscapingTools_index < 0) ExtraLandscapingTools_index = 0
 	ExtraLandscapingTools_brushOption_content_field.innerHTML = ExtraLandscapingTools_brushs[ExtraLandscapingTools_index].name
+	if(ExtraLandscapingTools_index == 0) ExtraLandscapingTools_brushOption_content_buttonDown.setAttribute("disabled", "")
+	else ExtraLandscapingTools_brushOption_content_buttonDown.removeAttribute("disabled")
+	if(ExtraLandscapingTools_index == ExtraLandscapingTools_brushs.length-1) ExtraLandscapingTools_brushOption_content_buttonUp.setAttribute("disabled", "")
+	else ExtraLandscapingTools_brushOption_content_buttonUp.removeAttribute("disabled")
 }
 
 function ExtraLandscapingTools_updateBrushAngle(angle) {
