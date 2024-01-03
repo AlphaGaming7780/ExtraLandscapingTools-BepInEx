@@ -25,7 +25,7 @@ You can now add resources to your map using this tool.
 ### Surface Tools
 You can now paint your terrain with different material using this tool.
 ### Custom brush
-You can add custom brush into the game, to do that create this folder in your Plugins folder
+You can add custom brush into the game, to do that create this folder in your Plugins folder : `ExtraLandscapingTools_mods -> CustomBrushes`, in this folder you can put all your brush, the brush use transparency, the mod resize the image to 512x512.
 `Plugins -> ExtraLandscapingTools_mods -> CustomBrushes -> customBrush.png`.
 
 ## Feature roadmap

@@ -11,7 +11,7 @@ containsNsfwContent = false
 
 [package.dependencies]
 BepInEx-BepInExPack = "5.4.2100"
-# AuthorName-PackageName = "0.0.1"
+# AuthorName-PackageName = "0.1.0"
 
 [build]
 icon = "./icon.png"
@@ -21,4 +21,4 @@ outdir = "./ts-build"
 [publish]
 repository = "https://thunderstore.io"
 communities = [ "cities-skylines-ii", ]
-categories = [ "Mods", "Tools"]
+categories = [ "mods", "tools"]

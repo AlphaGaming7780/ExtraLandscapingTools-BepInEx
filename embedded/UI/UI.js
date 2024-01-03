@@ -103,7 +103,7 @@ document.addEventListener("mouseup", () => {
     ExtraLandscapingTools_isPressed = false;
 });
 
-document.addEventListener("mousemove", (e) => {
+ExtraLandscapingTools_toolOption.addEventListener("mousemove", (e) => {
 	if (!ExtraLandscapingTools_isPressed) return;
 	e.preventDefault();
 	let o = (ExtraLandscapingTools_sliderX + (e.clientX - ExtraLandscapingTools_cursorX))/ExtraLandscapingTools_brushAngle_content_SliderContainer_slider_track.clientWidth * 100
