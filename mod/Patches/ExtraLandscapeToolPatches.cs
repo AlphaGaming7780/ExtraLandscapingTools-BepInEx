@@ -12,6 +12,7 @@ using System.Collections.Generic;
 using Game.UI;
 using System.Linq;
 using Game;
+using System;
 
 namespace ExtraLandscapingTools.Patches
 {
@@ -144,19 +145,15 @@ namespace ExtraLandscapingTools.Patches
 			// foreach(string folder in FolderToLoadSurface) {;
 			// 	foreach(string filePath in Directory.GetFiles(folder)) 
 			// 	{	
-			// 		UnityEngine.Debug.Log(Path.GetFileName(filePath));
-			// 		// byte[] fileData = File.ReadAllBytes(filePath);
-			// 		// Texture2D texture2D = new(1024, 1024);
-			// 		// if(!texture2D.LoadImage(fileData)) UnityEngine.Debug.LogError("Failed to Load Image");
-
 			// 		SurfacePrefab surfacePrefab = (SurfacePrefab)ScriptableObject.CreateInstance("SurfacePrefab");
-			// 		surfacePrefab.name = Path.GetFileNameWithoutExtension(filePath);
+			// 		surfacePrefab.name = "test";//Path.GetFileNameWithoutExtension("test");
+			// 		surfacePrefab.active = true;
 
 			// 		// surfacePrefab.prefab = surfacePrefab;
 
-			// 		SpawnableArea spawnableArea = surfacePrefab.AddComponent<SpawnableArea>();
-			// 		spawnableArea.m_Placeholders = new AreaPrefab[1];
-			// 		spawnableArea.m_Placeholders[0] = surfacePrefab;
+			// 		SpawnableArea spawnableArea2 = surfacePrefab.AddComponent<SpawnableArea>();
+			// 		spawnableArea2.m_Placeholders = new AreaPrefab[1];
+			// 		spawnableArea2.m_Placeholders[0] = surfacePrefab;
 
 			// 		__instance.AddPrefab(surfacePrefab);
 			// 	}
@@ -170,32 +167,31 @@ namespace ExtraLandscapingTools.Patches
 	{
 		public static bool Prefix( PrefabSystem __instance, PrefabBase prefab)
 		{
-			if (ExtraLandscapingTools.removeTools.Contains(prefab.name) || (prefab is not TerraformingPrefab && prefab is not SurfacePrefab))
-			{
-				return true;
-			}
+			try {
+				if (ExtraLandscapingTools.removeTools.Contains(prefab.name) || (prefab is not TerraformingPrefab && prefab is not SurfacePrefab))
+				{
+					return true;
+				}
 
-			var spawnableArea = prefab.GetComponent<SpawnableArea>();
-			if (prefab is SurfacePrefab && spawnableArea == null)
-			{
-				return true;
-			}
+				var spawnableArea = prefab.GetComponent<SpawnableArea>();
+				if (prefab is SurfacePrefab && spawnableArea == null)
+				{
+					return true;
+				}
 
-			// if(prefab is SurfacePrefab) UnityEngine.Debug.Log(prefab.prefab);
+				var TerraformingUI = prefab.GetComponent<UIObject>();
+				if (TerraformingUI == null)
+				{
+					TerraformingUI = prefab.AddComponent<UIObject>();
+					TerraformingUI.active = true;
+					TerraformingUI.m_IsDebugObject = false;
+					TerraformingUI.m_Icon = ExtraLandscapingTools.GetIcon(prefab);
+					TerraformingUI.m_Priority = 1;
+				}
 
-			var TerraformingUI = prefab.GetComponent<UIObject>();
-			if (TerraformingUI == null)
-			{
-				// UnityEngine.Debug.Log($"Not Found TerraformingPrefab UIObject: '{prefab.GetPrefabID()}'");
-				TerraformingUI = prefab.AddComponent<UIObject>();
-				TerraformingUI.active = true;
-				TerraformingUI.m_IsDebugObject = false;
-				TerraformingUI.m_Icon = ExtraLandscapingTools.GetIcon(prefab); // TODO actual icon?
-				TerraformingUI.m_Priority = 1;
-			}
-
-			if(prefab is TerraformingPrefab) TerraformingUI.m_Group = GetTerraformingToolCategory(__instance) ?? TerraformingUI.m_Group;
-			if(prefab is SurfacePrefab) TerraformingUI.m_Group = GetOrCreateNewToolCategory(__instance, "Surfaces") ?? TerraformingUI.m_Group;
+				if(prefab is TerraformingPrefab) TerraformingUI.m_Group = GetTerraformingToolCategory(__instance) ?? TerraformingUI.m_Group;
+				if(prefab is SurfacePrefab) TerraformingUI.m_Group = GetOrCreateNewToolCategory(__instance, "Surfaces") ?? TerraformingUI.m_Group;
+			} catch (Exception e) {UnityEngine.Debug.LogError(e);}
 
 			return true;
 		}
