@@ -23,6 +23,7 @@ namespace ExtraLandscapingTools.Patches
 		static private readonly string PathToParent = Directory.GetParent(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location)).FullName;
 		public static readonly string PathToMods = Path.Combine(PathToParent,"ExtraLandscapingTools_mods");
 		public static readonly string PathToCustomBrushes = Path.Combine(PathToMods,"CustomBrushes");
+		public static readonly string PathToCustomSurface = Path.Combine(PathToMods,"CustomSurfaces");
 
 		static internal readonly string resources = Path.Combine(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location), "resources");
 		static internal readonly string resourcesIcons = Path.Combine(resources, "Icons");
@@ -30,8 +31,9 @@ namespace ExtraLandscapingTools.Patches
 
 		static void Prefix(GameSystemBase __instance)
 		{		
-			if(!PrefabSystem_OnCreate.FolderToLoad.Contains(resourcesBrushes) && Directory.Exists(resourcesBrushes)) PrefabSystem_OnCreate.FolderToLoad.Add(resourcesBrushes);
-			if(!PrefabSystem_OnCreate.FolderToLoad.Contains(PathToCustomBrushes) && Directory.Exists(PathToCustomBrushes)) PrefabSystem_OnCreate.FolderToLoad.Add(PathToCustomBrushes);
+			if(!PrefabSystem_OnCreate.FolderToLoadBrush.Contains(resourcesBrushes) && Directory.Exists(resourcesBrushes)) PrefabSystem_OnCreate.FolderToLoadBrush.Add(resourcesBrushes);
+			if(!PrefabSystem_OnCreate.FolderToLoadBrush.Contains(PathToCustomBrushes) && Directory.Exists(PathToCustomBrushes)) PrefabSystem_OnCreate.FolderToLoadBrush.Add(PathToCustomBrushes);
+			if(!PrefabSystem_OnCreate.FolderToLoadSurface.Contains(PathToCustomSurface) && Directory.Exists(PathToCustomSurface)) PrefabSystem_OnCreate.FolderToLoadSurface.Add(PathToCustomSurface);
 
 			if(!Directory.Exists(resources)) {
 				Directory.CreateDirectory(resources);
@@ -41,7 +43,7 @@ namespace ExtraLandscapingTools.Patches
 					File.Move(file, Path.Combine(resourcesIcons,Path.GetFileName(file)));
 				}
 				foreach(string file in Directory.GetFiles(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location), "*.png")) {
-					File.Move(file, Path.Combine(resourcesBrushes,Path.GetFileName(file)));
+					if(Path.GetFileNameWithoutExtension(file) != "icon") File.Move(file, Path.Combine(resourcesBrushes,Path.GetFileName(file)));
 				}
 			}
 		}
@@ -121,10 +123,11 @@ namespace ExtraLandscapingTools.Patches
 	[HarmonyPatch(typeof(PrefabSystem), "OnCreate")]
 	public class PrefabSystem_OnCreate
 	{
-        internal static List<string> FolderToLoad = [];
+        internal static List<string> FolderToLoadBrush = [];
+        internal static List<string> FolderToLoadSurface = [];
         public static void Postfix( PrefabSystem __instance)
 		{
-			foreach(string folder in FolderToLoad) {;
+			foreach(string folder in FolderToLoadBrush) {;
 				foreach(string filePath in Directory.GetFiles(folder)) 
 				{
 					byte[] fileData = File.ReadAllBytes(filePath);
@@ -132,11 +135,29 @@ namespace ExtraLandscapingTools.Patches
 					if(!texture2D.LoadImage(fileData)) UnityEngine.Debug.LogError("Failed to Load Image");
 								
 					BrushPrefab brushPrefab = (BrushPrefab)ScriptableObject.CreateInstance("BrushPrefab");
-					brushPrefab.name = Path.GetFileName(filePath);
+					brushPrefab.name = Path.GetFileNameWithoutExtension(filePath);
 					brushPrefab.m_Texture = texture2D;
 					__instance.AddPrefab(brushPrefab);
 				}
 			}
+
+			// foreach(string folder in FolderToLoadSurface) {;
+			// 	foreach(string filePath in Directory.GetFiles(folder)) 
+			// 	{	
+			// 		UnityEngine.Debug.Log(Path.GetFileName(filePath));
+			// 		// byte[] fileData = File.ReadAllBytes(filePath);
+			// 		// Texture2D texture2D = new(1024, 1024);
+			// 		// if(!texture2D.LoadImage(fileData)) UnityEngine.Debug.LogError("Failed to Load Image");
+
+			// 		SurfacePrefab surfacePrefab = (SurfacePrefab)ScriptableObject.CreateInstance("SurfacePrefab");
+			// 		surfacePrefab.name = Path.GetFileNameWithoutExtension(filePath);
+			// 		SpawnableArea spawnableArea = surfacePrefab.AddComponent<SpawnableArea>();
+			// 		spawnableArea.m_Placeholders = new AreaPrefab[1];
+			// 		spawnableArea.m_Placeholders[0] = surfacePrefab;
+
+			// 		__instance.AddPrefab(surfacePrefab);
+			// 	}
+			// }
         }
 	}
 
