@@ -4,7 +4,7 @@ schemaVersion = "0.0.1"
 [package]
 namespace = "TritonSupreme"
 name = "ExtraLandscapingTools"
-versionNumber = "0.1.1"
+versionNumber = "0.1.2"
 description = "This mod aims to add features and improve existing ones for the game's landscaping tool."
 websiteUrl = "https://github.com/AlphaGaming7780/ExtraLandscapingTools"
 containsNsfwContent = false

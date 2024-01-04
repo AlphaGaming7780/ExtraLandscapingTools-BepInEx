@@ -151,6 +151,9 @@ namespace ExtraLandscapingTools.Patches
 
 			// 		SurfacePrefab surfacePrefab = (SurfacePrefab)ScriptableObject.CreateInstance("SurfacePrefab");
 			// 		surfacePrefab.name = Path.GetFileNameWithoutExtension(filePath);
+
+			// 		// surfacePrefab.prefab = surfacePrefab;
+
 			// 		SpawnableArea spawnableArea = surfacePrefab.AddComponent<SpawnableArea>();
 			// 		spawnableArea.m_Placeholders = new AreaPrefab[1];
 			// 		spawnableArea.m_Placeholders[0] = surfacePrefab;
@@ -177,6 +180,8 @@ namespace ExtraLandscapingTools.Patches
 			{
 				return true;
 			}
+
+			// if(prefab is SurfacePrefab) UnityEngine.Debug.Log(prefab.prefab);
 
 			var TerraformingUI = prefab.GetComponent<UIObject>();
 			if (TerraformingUI == null)
