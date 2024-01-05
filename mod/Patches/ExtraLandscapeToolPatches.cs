@@ -13,6 +13,9 @@ using Game.UI;
 using System.Linq;
 using Game;
 using System;
+using Colossal.Localization;
+using Colossal.IO.AssetDatabase;
+using Colossal.Json;
 
 namespace ExtraLandscapingTools.Patches
 {
@@ -20,7 +23,6 @@ namespace ExtraLandscapingTools.Patches
 	[HarmonyPatch(typeof(GameSystemBase), "OnCreate")]
 	internal class GameSystemBase_OnCreate
 	{	
-
 		static private readonly string PathToParent = Directory.GetParent(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location)).FullName;
 		public static readonly string PathToMods = Path.Combine(PathToParent,"ExtraLandscapingTools_mods");
 		public static readonly string PathToCustomBrushes = Path.Combine(PathToMods,"CustomBrushes");
@@ -50,10 +52,22 @@ namespace ExtraLandscapingTools.Patches
 		}
 	}
 
+	[HarmonyPatch(typeof(LocalizationManager), "AddLocale", typeof(LocaleAsset))]
+	internal class LocalizationManager_AddLocale
+	{	
+		static void Prefix(LocaleAsset asset)
+		{	
+			try {
+				// Localization.Data.Add(asset.localizedName, asset.data.entries);
+				// File.WriteAllText(GameSystemBase_OnCreate.resources+"\\loc.json", Encoder.Encode(Localization.Data, EncodeOptions.None));
+			} catch (Exception e) {UnityEngine.Debug.Log(e);}
+		}
+
+	}
+
 	[HarmonyPatch(typeof(GameManager), "InitializeThumbnails")]
 	internal class GameManager_InitializeThumbnails
 	{	
-		internal static  GameObject extendedRadioGameObject = new();
 		static readonly string IconsResourceKey = $"{MyPluginInfo.PLUGIN_NAME.ToLower()}";
 
 		public static readonly string COUIBaseLocation = $"coui://{IconsResourceKey}";
@@ -165,11 +179,29 @@ namespace ExtraLandscapingTools.Patches
 	[HarmonyPatch(typeof(PrefabSystem), nameof(PrefabSystem.AddPrefab))]
 	public class PrefabSystem_AddPrefab
 	{
+		private static bool isLandscapingCreated = false;
+		private static readonly List<PrefabBase> failedSurfacePrefabs = [];
+
 		public static bool Prefix( PrefabSystem __instance, PrefabBase prefab)
 		{
 			try {
+
+				if(isLandscapingCreated) {
+					PrefabBase[] temp = new PrefabBase[failedSurfacePrefabs.Count];
+					failedSurfacePrefabs.CopyTo(temp);
+					foreach(PrefabBase prefabBase in temp) {
+						failedSurfacePrefabs.Remove(prefabBase);
+						__instance.AddPrefab(prefabBase);
+					}
+					isLandscapingCreated = false;
+				}
+
 				if (ExtraLandscapingTools.removeTools.Contains(prefab.name) || (prefab is not TerraformingPrefab && prefab is not SurfacePrefab))
 				{
+
+					if(prefab.name == "Landscaping") {
+						isLandscapingCreated = true;
+					}
 					return true;
 				}
 
@@ -191,6 +223,12 @@ namespace ExtraLandscapingTools.Patches
 
 				if(prefab is TerraformingPrefab) TerraformingUI.m_Group = GetTerraformingToolCategory(__instance) ?? TerraformingUI.m_Group;
 				if(prefab is SurfacePrefab) TerraformingUI.m_Group = GetOrCreateNewToolCategory(__instance, "Surfaces") ?? TerraformingUI.m_Group;
+
+				if(prefab is SurfacePrefab && TerraformingUI.m_Group == null) {
+					failedSurfacePrefabs.Add(prefab);
+					return false;
+				}
+
 			} catch (Exception e) {UnityEngine.Debug.LogError(e);}
 
 			return true;
