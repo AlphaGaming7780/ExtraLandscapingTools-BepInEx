@@ -15,7 +15,6 @@ using Game;
 using System;
 using Colossal.Localization;
 using Colossal.IO.AssetDatabase;
-using Colossal.Json;
 
 namespace ExtraLandscapingTools.Patches
 {
@@ -194,7 +193,7 @@ namespace ExtraLandscapingTools.Patches
 					}
 				}
 
-				if (ExtraLandscapingTools.removeTools.Contains(prefab.name) || (prefab is not TerraformingPrefab && prefab is not SurfacePrefab))
+				if (ExtraLandscapingTools.removeTools.Contains(prefab.name) || (prefab is not TerraformingPrefab && prefab is not SurfacePrefab)) //&& prefab is not ObjectPrefab
 				{
 
 					if(prefab.name == "Terraforming") {
@@ -202,6 +201,15 @@ namespace ExtraLandscapingTools.Patches
 					}
 					return true;
 				}
+
+				// try {
+				// 	var waterSource = prefab.GetComponent<WaterSource>();
+				// 	// var CreatureSpawner = prefab.GetComponent<CreatureSpawner>();
+				// 	if (prefab is ObjectPrefab && waterSource == null)
+				// 	{
+				// 		return true;
+				// 	}
+				// } catch (Exception e) { return true;}
 
 				var spawnableArea = prefab.GetComponent<SpawnableArea>();
 				if (prefab is SurfacePrefab && spawnableArea == null)
@@ -220,8 +228,10 @@ namespace ExtraLandscapingTools.Patches
 				}
 
 				if(prefab is TerraformingPrefab) TerraformingUI.m_Group = GetTerraformingToolCategory(__instance) ?? TerraformingUI.m_Group;
-				if(prefab is SurfacePrefab) TerraformingUI.m_Group = GetOrCreateNewToolCategory(__instance, "Surfaces") ?? TerraformingUI.m_Group;
-
+				else if(prefab is SurfacePrefab) TerraformingUI.m_Group = GetOrCreateNewToolCategory(__instance, "Surfaces") ?? TerraformingUI.m_Group;
+				// else if(prefab.GetComponent<WaterSource>() != null) TerraformingUI.m_Group ??= GetOrCreateNewToolCategory(__instance, "Water");
+				// else if(prefab.name.ToLower().Contains("spawner")) TerraformingUI.m_Group ??= GetOrCreateNewToolCategory(__instance, "Spawner");
+				
 				if(TerraformingUI.m_Group == null) {
 					// Plugin.Logger.LogWarning($"Failed to add {prefab.GetType()} | {prefab.name} to the game.");
 					failedSurfacePrefabs.Add(prefab);
