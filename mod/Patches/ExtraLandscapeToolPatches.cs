@@ -225,8 +225,11 @@ namespace ExtraLandscapingTools.Patches
 				if(prefab is SurfacePrefab) TerraformingUI.m_Group = GetOrCreateNewToolCategory(__instance, "Surfaces") ?? TerraformingUI.m_Group;
 
 				if(prefab is SurfacePrefab && TerraformingUI.m_Group == null) {
+					Plugin.Logger.LogWarning($"Failed to add {prefab.GetType()} | {prefab.name} to the game.");
 					failedSurfacePrefabs.Add(prefab);
 					return false;
+				} else if(prefab is SurfacePrefab) {
+					Plugin.Logger.LogMessage($"Success to add {prefab.GetType()} | {prefab.name} to the game.");
 				}
 
 			} catch (Exception e) {UnityEngine.Debug.LogError(e);}
