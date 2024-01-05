@@ -1,0 +1,52 @@
+{
+    "Localization": {
+        "English": {
+            "Assets.DESCRIPTION[Ore Resource Tool]": "Ore Resource Tool",
+            "Assets.DESCRIPTION[Oil Resource Tool]": "Oil Resource Tool",
+            "Assets.DESCRIPTION[FertileLand Resource Tool]": "FertileLand Resource Tool",
+            "Assets.DESCRIPTION[GroundWater Resource Tool]": "GroundWater Resource Tool",
+            "SubServices.NAME[Surfaces]": "Surfaces",
+            "Assets.SUB_SERVICE_DESCRIPTION[Surfaces]": "Surfaces",
+            "Assets.DESCRIPTION[Agriculture Surface 01]": "Agriculture Surface 01",
+            "Assets.DESCRIPTION[Concrete Surface 01]": "Concrete Surface 01",
+            "Assets.DESCRIPTION[Concrete Surface 02]": "Concrete Surface 02",
+            "Assets.DESCRIPTION[Grass Surface 01]": "Grass Surface 01",
+            "Assets.DESCRIPTION[Grass Surface 02]": "Grass Surface 02",
+            "Assets.DESCRIPTION[Pavement Surface 01]": "Pavement Surface 01",
+            "Assets.DESCRIPTION[Pavement Surface 02]": "Pavement Surface 02",
+            "Assets.DESCRIPTION[Sand Surface 01]": "Sand Surface 01",
+            "Assets.DESCRIPTION[Sand Surface 02]": "Sand Surface 02",
+            "Assets.DESCRIPTION[Tiles Surface 01]": "Tile Surface 01",
+            "Assets.DESCRIPTION[Tiles Surface 02]": "Tile Surface 02",
+            "Assets.DESCRIPTION[Tiles Surface 03]": "Tile Surface 03",
+            "Assets.DESCRIPTION[Forestry Surface 01]": "Forestry Surface 01",
+            "Assets.DESCRIPTION[Landfill Surface 01]": "Landfill Surface 01",
+            "Assets.DESCRIPTION[Oil Surface 01]": "Oil Surface 01",
+            "Assets.DESCRIPTION[Ore Surface 01]": "Ore Surface 01"
+        },
+        "German": {
+            "Assets.DESCRIPTION[Ore Resource Tool]": "Erz-Ressourcenwerkzeug",
+            "Assets.DESCRIPTION[Oil Resource Tool]": "Öl-Ressourcenwerkzeug",
+            "Assets.DESCRIPTION[FertileLand Resource Tool]": "Fruchtbares Land-Ressourcenwerkzeug",
+            "Assets.DESCRIPTION[GroundWater Resource Tool]": "Grundwasser-Ressourcenwerkzeug",
+            "SubServices.NAME[Surfaces]": "Oberflächen",
+            "Assets.SUB_SERVICE_DESCRIPTION[Surfaces]": "Oberflächen",
+            "Assets.DESCRIPTION[Agriculture Surface 01]": "Landwirtschafts-Fläche 01",
+            "Assets.DESCRIPTION[Concrete Surface 01]": "Beton-Fläche 01",
+            "Assets.DESCRIPTION[Concrete Surface 02]": "Beton-Fläche 02",
+            "Assets.DESCRIPTION[Grass Surface 01]": "Gras-Fläche 01",
+            "Assets.DESCRIPTION[Grass Surface 02]": "Gras-Fläche 02",
+            "Assets.DESCRIPTION[Pavement Surface 01]": "Pflasterstein-Fläche 01",
+            "Assets.DESCRIPTION[Pavement Surface 02]": "Pflasterstein-Fläche 02",
+            "Assets.DESCRIPTION[Sand Surface 01]": "Sand-Fläche 01",
+            "Assets.DESCRIPTION[Sand Surface 02]": "Sand-Fläche 02",
+            "Assets.DESCRIPTION[Tiles Surface 01]": "Fliesen-Fläche 01",
+            "Assets.DESCRIPTION[Tiles Surface 02]": "Fliesen-Fläche 02",
+            "Assets.DESCRIPTION[Tiles Surface 03]": "Fliesen-Fläche 03",
+            "Assets.DESCRIPTION[Forestry Surface 01]": "Forst-Fläche 01",
+            "Assets.DESCRIPTION[Landfill Surface 01]": "Deponie-Fläche 01",
+            "Assets.DESCRIPTION[Oil Surface 01]": "Öl-Fläche 01",
+            "Assets.DESCRIPTION[Ore Surface 01]": "Erz-Fläche 01"
+        }
+    }
+}

@@ -58,11 +58,9 @@ namespace ExtraLandscapingTools.Patches
 		static void Prefix(LocaleAsset asset)
 		{	
 			try {
-				// Localization.Data.Add(asset.localizedName, asset.data.entries);
-				// File.WriteAllText(GameSystemBase_OnCreate.resources+"\\loc.json", Encoder.Encode(Localization.Data, EncodeOptions.None));
+				Localization.AddCustomLocal(asset);
 			} catch (Exception e) {UnityEngine.Debug.Log(e);}
 		}
-
 	}
 
 	[HarmonyPatch(typeof(GameManager), "InitializeThumbnails")]
@@ -187,19 +185,19 @@ namespace ExtraLandscapingTools.Patches
 			try {
 
 				if(isLandscapingCreated) {
+					isLandscapingCreated = false;
 					PrefabBase[] temp = new PrefabBase[failedSurfacePrefabs.Count];
 					failedSurfacePrefabs.CopyTo(temp);
 					foreach(PrefabBase prefabBase in temp) {
 						failedSurfacePrefabs.Remove(prefabBase);
 						__instance.AddPrefab(prefabBase);
 					}
-					isLandscapingCreated = false;
 				}
 
 				if (ExtraLandscapingTools.removeTools.Contains(prefab.name) || (prefab is not TerraformingPrefab && prefab is not SurfacePrefab))
 				{
 
-					if(prefab.name == "Landscaping") {
+					if(prefab.name == "Terraforming") {
 						isLandscapingCreated = true;
 					}
 					return true;
@@ -224,12 +222,12 @@ namespace ExtraLandscapingTools.Patches
 				if(prefab is TerraformingPrefab) TerraformingUI.m_Group = GetTerraformingToolCategory(__instance) ?? TerraformingUI.m_Group;
 				if(prefab is SurfacePrefab) TerraformingUI.m_Group = GetOrCreateNewToolCategory(__instance, "Surfaces") ?? TerraformingUI.m_Group;
 
-				if(prefab is SurfacePrefab && TerraformingUI.m_Group == null) {
-					Plugin.Logger.LogWarning($"Failed to add {prefab.GetType()} | {prefab.name} to the game.");
+				if(TerraformingUI.m_Group == null) {
+					// Plugin.Logger.LogWarning($"Failed to add {prefab.GetType()} | {prefab.name} to the game.");
 					failedSurfacePrefabs.Add(prefab);
 					return false;
-				} else if(prefab is SurfacePrefab) {
-					Plugin.Logger.LogMessage($"Success to add {prefab.GetType()} | {prefab.name} to the game.");
+				} else {
+					// Plugin.Logger.LogMessage($"Success to add {prefab.GetType()} | {prefab.name} to the game.");
 				}
 
 			} catch (Exception e) {UnityEngine.Debug.LogError(e);}
@@ -261,12 +259,19 @@ namespace ExtraLandscapingTools.Patches
 				return null;
 			}
 
+			if (!prefabSystem.TryGetPrefab(new PrefabID(nameof(UIAssetCategoryPrefab), "Terraforming"), out var p3)
+				|| p3 is not UIAssetCategoryPrefab terraformingCategory)
+			{
+				// it can happen that the "landscaping" menu isn't added yet, as is the case on the first run through
+				return null;
+			}
+
 			surfaceCategory = ScriptableObject.CreateInstance<UIAssetCategoryPrefab>();
 			surfaceCategory.name = cat;
 			surfaceCategory.m_Menu = landscapingMenu;
 			var surfaceCategoryUI = surfaceCategory.AddComponent<UIObject>();
 			surfaceCategoryUI.m_Icon = "Media/Game/Icons/LotTool.svg";
-			surfaceCategoryUI.m_Priority = 10;
+			surfaceCategoryUI.m_Priority = terraformingCategory.GetComponent<UIObject>().m_Priority+1;
 			surfaceCategoryUI.active = true;
 			surfaceCategoryUI.m_IsDebugObject = false;
 
