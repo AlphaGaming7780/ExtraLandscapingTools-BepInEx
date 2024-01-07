@@ -8,42 +8,42 @@ using UnityEngine;
 
 namespace ExtraLandscapingTools
 {
-    class Localization
-    {
+	class Localization
+	{
 
-        internal static Dictionary<string, Dictionary<string, string>> localization;
+		internal static Dictionary<string, Dictionary<string, string>> localization;
 
-        internal static void AddCustomLocal(LocaleAsset localeAsset) { //Dictionary<string, string>
+		internal static void AddCustomLocal(LocaleAsset localeAsset) { //Dictionary<string, string>
 
-            if(localization == null) {
-                LoadLocalization();
-            }
+			if(localization == null) {
+				LoadLocalization();
+			}
 
-            string loc = localeAsset.localizedName;
+			string loc = localeAsset.localizedName;
 
-            if(!localization.ContainsKey(loc)) loc = "English";
+			if(!localization.ContainsKey(loc)) loc = "English";
 
-            foreach(string key in localization[loc].Keys) {
-                if(localeAsset.data.entries.ContainsKey(key)) localeAsset.data.entries[key] = localization[loc][key];
-                else localeAsset.data.entries.Add(key, localization[loc][key]);
+			foreach(string key in localization[loc].Keys) {
+				if(localeAsset.data.entries.ContainsKey(key)) localeAsset.data.entries[key] = localization[loc][key];
+				else localeAsset.data.entries.Add(key, localization[loc][key]);
 
-                if(localeAsset.data.indexCounts.ContainsKey(key)) localeAsset.data.indexCounts[key] = localeAsset.data.indexCounts.Count;
-                else localeAsset.data.indexCounts.Add(key, localeAsset.data.indexCounts.Count);
-                
-            }
+				if(localeAsset.data.indexCounts.ContainsKey(key)) localeAsset.data.indexCounts[key] = localeAsset.data.indexCounts.Count;
+				else localeAsset.data.indexCounts.Add(key, localeAsset.data.indexCounts.Count);
+				
+			}
 
-        }
+		}
 
-        internal static void LoadLocalization() {
-            localization = Decoder.Decode(new StreamReader(ExtraLandscapingTools.GetEmbedded("Localization.Localization.json")).ReadToEnd()).Make<LocalizationJS>().Localization;
-        }
+		internal static void LoadLocalization() {
+			localization = Decoder.Decode(new StreamReader(ExtraLandscapingTools.GetEmbedded("Localization.Localization.json")).ReadToEnd()).Make<LocalizationJS>().Localization;
+		}
 
-    }
+	}
 
-    [Serializable]
+	[Serializable]
 	internal class LocalizationJS
 	{	
-        public Dictionary<string, Dictionary<string, string>> Localization = [];
+		public Dictionary<string, Dictionary<string, string>> Localization = [];
 
-    }
+	}
 }
