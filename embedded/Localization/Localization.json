@@ -47,6 +47,30 @@
             "Assets.DESCRIPTION[Landfill Surface 01]": "Deponie-Fläche 01",
             "Assets.DESCRIPTION[Oil Surface 01]": "Öl-Fläche 01",
             "Assets.DESCRIPTION[Ore Surface 01]": "Erz-Fläche 01"
-        }
+        },
+        "Korean": {
+            "Assets.DESCRIPTION[Ore Resource Tool]": "광석 자원 도구",
+            "Assets.DESCRIPTION[Oil Resource Tool]": "석유 자원 도구",
+            "Assets.DESCRIPTION[FertileLand Resource Tool]": "비옥지 자원 도구",
+            "Assets.DESCRIPTION[GroundWater Resource Tool]": "지하수 자원 도구",
+            "SubServices.NAME[Surfaces]": "지면 도구",
+            "Assets.SUB_SERVICE_DESCRIPTION[Surfaces]": "지면을 포장하여 꾸밀 수 있습니다.",
+            "Assets.DESCRIPTION[Agriculture Surface 01]": "농업 지면 01",
+            "Assets.DESCRIPTION[Concrete Surface 01]": "콘크리트 지면 01",
+            "Assets.DESCRIPTION[Concrete Surface 02]": "콘크리트 지면 02",
+            "Assets.DESCRIPTION[Grass Surface 01]": "초원 지면 01",
+            "Assets.DESCRIPTION[Grass Surface 02]": "초원 지면 02",
+            "Assets.DESCRIPTION[Pavement Surface 01]": "포장도로 지면 01",
+            "Assets.DESCRIPTION[Pavement Surface 02]": "포장도로 지면 02",
+            "Assets.DESCRIPTION[Sand Surface 01]": "모래 지면 01",
+            "Assets.DESCRIPTION[Sand Surface 02]": "모래 지면 02",
+            "Assets.DESCRIPTION[Tiles Surface 01]": "타일 지면 01",
+            "Assets.DESCRIPTION[Tiles Surface 02]": "타일 지면 02",
+            "Assets.DESCRIPTION[Tiles Surface 03]": "타일 지면 03",
+            "Assets.DESCRIPTION[Forestry Surface 01]": "임업 지면 01",
+            "Assets.DESCRIPTION[Landfill Surface 01]": "매립지 지 01",
+            "Assets.DESCRIPTION[Oil Surface 01]": "석유 지면 01",
+            "Assets.DESCRIPTION[Ore Surface 01]": "광석 지면 01"
+            }
     }
 }

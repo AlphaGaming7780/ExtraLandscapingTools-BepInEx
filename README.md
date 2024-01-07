@@ -28,6 +28,7 @@ Add different materials to your map using the area tool. (This is a new tab in t
 You can add custom brush into the game. To add a custom brush to your game. Create a folder in the BepInEx/Plugins folder and name it `ExtraLandscapingTools_mods`. Inside this folder create another folder and name it `CustomBrushes`. You can now add your custom brushes into the CustomBrushes folder. All custom brushes must be png format, with a transparent background, and 512x512 in size.
 
 ## Feature roadmap
+- ✔️ Translation support
 - ✔️ Custom brush
 - ✔️ Brush angle
 - ✔️ Surface Tools

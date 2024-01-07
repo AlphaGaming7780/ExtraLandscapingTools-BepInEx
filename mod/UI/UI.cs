@@ -17,10 +17,10 @@ namespace ExtraLandscapingTools
         private static readonly GameObject eLT_UI_Object = new();
         internal static ELT_UI_Mono eLT_UI_Mono;
 
-		GetterValueBinding<float3> CameraRotation;
-		CameraUpdateSystem m_CameraUpdateSystem;
+		// GetterValueBinding<float3> CameraRotation;
+		// CameraUpdateSystem m_CameraUpdateSystem;
 
-		static bool angleBrushWithCamera = false;
+		// static bool angleBrushWithCamera = false;
 
         protected override void OnCreate() {
 

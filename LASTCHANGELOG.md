@@ -1,4 +1,3 @@
-# v0.1.1
-- Update: The Surface tool is now after the terraforming tool.
-- Update: Readme.
-- Update: Thunderstore page.
+# v0.1.3
+- Fixed: Surfaces Tab not being created.
+- Add: Translation support.
