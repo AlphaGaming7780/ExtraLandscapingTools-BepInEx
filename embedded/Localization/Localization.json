@@ -1,6 +1,6 @@
 {
 	"Localization": {
-		"English": {
+		"en-US": {
 			"Assets.DESCRIPTION[Ore Resource Tool]": "Ore Resource Tool",
 			"Assets.DESCRIPTION[Oil Resource Tool]": "Oil Resource Tool",
 			"Assets.DESCRIPTION[FertileLand Resource Tool]": "FertileLand Resource Tool",
@@ -24,7 +24,7 @@
 			"Assets.DESCRIPTION[Oil Surface 01]": "Oil Surface 01",
 			"Assets.DESCRIPTION[Ore Surface 01]": "Ore Surface 01"
 		},
-		"French": {
+		"fr-FR": {
 			"Assets.DESCRIPTION[Ore Resource Tool]": "Outil de Ressources Minières",
 			"Assets.DESCRIPTION[Oil Resource Tool]": "Outil de Ressources Pétrolières",
 			"Assets.DESCRIPTION[FertileLand Resource Tool]": "Outil de Ressources en Terres Fertiles",
@@ -48,7 +48,7 @@
 			"Assets.DESCRIPTION[Oil Surface 01]": "Surface Pétrolière 01",
 			"Assets.DESCRIPTION[Ore Surface 01]": "Surface Minière 01"
 		},
-		"German": {
+		"de-DE": {
 			"Assets.DESCRIPTION[Ore Resource Tool]": "Erz-Ressourcenwerkzeug",
 			"Assets.DESCRIPTION[Oil Resource Tool]": "Öl-Ressourcenwerkzeug",
 			"Assets.DESCRIPTION[FertileLand Resource Tool]": "Fruchtbares Land-Ressourcenwerkzeug",
@@ -72,7 +72,7 @@
 			"Assets.DESCRIPTION[Oil Surface 01]": "Öl-Fläche 01",
 			"Assets.DESCRIPTION[Ore Surface 01]": "Erz-Fläche 01"
 		},
-		"Korean": {
+		"ko-KR": {
 			"Assets.DESCRIPTION[Ore Resource Tool]": "광석 자원 도구",
 			"Assets.DESCRIPTION[Oil Resource Tool]": "석유 자원 도구",
 			"Assets.DESCRIPTION[FertileLand Resource Tool]": "비옥지 자원 도구",
