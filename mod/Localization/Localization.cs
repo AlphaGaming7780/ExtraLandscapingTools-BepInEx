@@ -19,9 +19,9 @@ namespace ExtraLandscapingTools
 				LoadLocalization();
 			}
 
-			string loc = localeAsset.localizedName;
+			string loc = localeAsset.localeId;
 
-			if(!localization.ContainsKey(loc)) loc = "English";
+			if(!localization.ContainsKey(loc)) {loc = "en-US";}
 
 			foreach(string key in localization[loc].Keys) {
 				if(localeAsset.data.entries.ContainsKey(key)) localeAsset.data.entries[key] = localization[loc][key];

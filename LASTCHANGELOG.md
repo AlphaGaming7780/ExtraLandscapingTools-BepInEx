@@ -1,3 +1,2 @@
-# v0.1.4
-- Add: Korean translation 
-- Add: French Translation
+# v0.1.5
+- Fixed: Translation always using english.
