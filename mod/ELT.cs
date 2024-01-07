@@ -1,6 +1,7 @@
 using System.Reflection;
 using ExtraLandscapingTools.Patches;
 using Game.Prefabs;
+using Game.Tools;
 
 namespace ExtraLandscapingTools 
 {
@@ -8,7 +9,6 @@ namespace ExtraLandscapingTools
 	{
 
         internal static readonly string[] removeTools = ["Material 1", "Material 2"];
-
 		internal static System.IO.Stream GetEmbedded(string embeddedPath) {
 			return Assembly.GetExecutingAssembly().GetManifestResourceStream("ExtraLandscapingTools.embedded."+embeddedPath);
 		}

@@ -220,8 +220,11 @@ namespace ExtraLandscapingTools.Patches
 				}
 
 				if(prefab is TerraformingPrefab) TerraformingUI.m_Group = GetTerraformingToolCategory(__instance) ?? TerraformingUI.m_Group;
-				if(prefab is SurfacePrefab) TerraformingUI.m_Group = GetOrCreateNewToolCategory(__instance, "Surfaces") ?? TerraformingUI.m_Group;
-
+				else if(prefab is SurfacePrefab) TerraformingUI.m_Group = GetOrCreateNewToolCategory(__instance, "Surfaces") ?? TerraformingUI.m_Group;
+				// else if(prefab is AreaPrefab) TerraformingUI.m_Group ??= GetOrCreateNewToolCategory(__instance, "Area Prefab");
+				// else if(prefab.GetComponent<WaterSource>() != null) TerraformingUI.m_Group ??= GetOrCreateNewToolCategory(__instance, "Water");
+				// else if(prefab.name.ToLower().Contains("spawner")) TerraformingUI.m_Group ??= GetOrCreateNewToolCategory(__instance, "Spawner");
+				
 				if(TerraformingUI.m_Group == null) {
 					// Plugin.Logger.LogWarning($"Failed to add {prefab.GetType()} | {prefab.name} to the game.");
 					failedSurfacePrefabs.Add(prefab);
