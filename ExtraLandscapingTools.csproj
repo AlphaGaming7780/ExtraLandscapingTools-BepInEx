@@ -12,7 +12,7 @@
 		<AssemblyName>ExtraLandscapingTools</AssemblyName>
 		<RootNamespace>ExtraLandscapingTools</RootNamespace>
 		<Description>This mod aims to add features and improve existing ones for the game's landscaping tool.</Description>
-		<Version>0.1.3</Version>
+		<Version>0.1.4</Version>
 		<AllowUnsafeBlocks>true</AllowUnsafeBlocks>
 		<LangVersion>preview</LangVersion>
 		<RestoreAdditionalProjectSources>
@@ -31,106 +31,6 @@
 		<EmbeddedResource Include="embedded\UI\REMOVE_UI.js"></EmbeddedResource>
 		<EmbeddedResource Include="embedded\Localization\Localization.json"></EmbeddedResource>
 	</ItemGroup>
-
-	<!-- <ItemGroup>
-		<None Remove="resources\Icons\Agriculture Surface 01.svg" />
-		<None Remove="resources\Icons\Concrete Surface 01.svg" />
-		<None Remove="resources\Icons\Concrete Surface 02.svg" />
-		<None Remove="resources\Icons\Grass Surface 01.svg" />
-		<None Remove="resources\Icons\Grass Surface 02.svg" />
-		<None Remove="resources\Icons\Pavement Surface 01.svg" />
-		<None Remove="resources\Icons\Pavement Surface 02.svg" />
-		<None Remove="resources\Icons\Sand Surface 01.svg" />
-		<None Remove="resources\Icons\Sand Surface 02.svg" />
-		<None Remove="resources\Icons\Tiles Surface 01.svg" />
-		<None Remove="resources\Icons\Tiles Surface 02.svg" />
-		<None Remove="resources\Icons\Tiles Surface 03.svg" />
-		<None Remove="resources\Icons\Forestry Surface 01.svg" />
-		<None Remove="resources\Icons\Landfill Surface 01.svg" />
-		<None Remove="resources\Icons\Oil Surface 01.svg" />
-		<None Remove="resources\Icons\Ore Surface 01.svg" />
-		<None Remove="resources\Brushes\Custom 01.png" />
-		<None Remove="resources\Brushes\Mountain 01.png" />
-		<None Remove="resources\Brushes\Mountain 02.png" />
-		<None Remove="resources\Brushes\Mountain 03.png" />
-		<None Remove="resources\Brushes\Plateau 01.png" />
-		<None Remove="resources\Brushes\River 01.png" />
-		<None Remove="resources\Brushes\River 02.png" />
-	</ItemGroup>
-	<ItemGroup>
-		<Content Include="resources\Icons\Agriculture Surface 01.svg">
-		  	<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-		</Content>
-		<Content Include="resources\Icons\Concrete Surface 01.svg">
-			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-	  	</Content>
-	  	<Content Include="resources\Icons\Concrete Surface 02.svg">
-			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
- 		</Content>
-		 <Content Include="resources\Icons\Grass Surface 01.svg">
-			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-	  	</Content>
-	  	<Content Include="resources\Icons\Grass Surface 02.svg">
-			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
- 		</Content>
-		 <Content Include="resources\Icons\Pavement Surface 01.svg">
-			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-	  	</Content>
-	  	<Content Include="resources\Icons\Pavement Surface 02.svg">
-			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
- 		</Content>
-		 <Content Include="resources\Icons\Sand Surface 01.svg">
-			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-	  	</Content>
-	  	<Content Include="resources\Icons\Sand Surface 02.svg">
-			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
- 		</Content>
-		 <Content Include="resources\Icons\Pavement Surface 02.svg">
-			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
- 		</Content>
-		 <Content Include="resources\Icons\Tiles Surface 01.svg">
-			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-	  	</Content>
-	  	<Content Include="resources\Icons\Tiles Surface 02.svg">
-			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
- 		</Content>
-		 <Content Include="resources\Icons\Tiles Surface 03.svg">
-			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
- 		</Content>
-		 <Content Include="resources\Icons\Forestry Surface 01.svg">
-			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
- 		</Content>
-		 <Content Include="resources\Icons\Landfill Surface 01.svg">
-			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
- 		</Content>
-		 <Content Include="resources\Icons\Oil Surface 01.svg">
-			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
- 		</Content>
-		 <Content Include="resources\Icons\Ore Surface 01.svg">
-			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
- 		</Content>
-		 <Content Include="resources\Brushes\Custom 01.png">
-			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-	  	</Content>
-	  	<Content Include="resources\Brushes\Mountain 01.png">
-			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
- 		</Content>
-		 <Content Include="resources\Brushes\Mountain 02.png">
-			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
- 		</Content>
-		 <Content Include="resources\Brushes\Mountain 03.png">
-			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
- 		</Content>
-		 <Content Include="resources\Brushes\Plateau 01.png">
-			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
- 		</Content>
-		 <Content Include="resources\Brushes\River 01.png">
-			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
- 		</Content>
-		 <Content Include="resources\Brushes\River 02.png">
-			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
- 		</Content>
-	</ItemGroup> -->
 
 	<!--
 		Uncomment this PropertyGroup to let the C# project read DLLs directory from your game directory,
