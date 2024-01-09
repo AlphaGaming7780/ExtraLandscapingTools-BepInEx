@@ -26,8 +26,13 @@ You can now add resources to your map using this tool.
 Add different materials to your map using the area tool. (This is a new tab in the landscape tool user interface)
 ### Custom brush
 You can add custom brush into the game. To add a custom brush to your game. Create a folder in the BepInEx/Plugins folder and name it `ExtraLandscapingTools_mods`. Inside this folder create another folder and name it `CustomBrushes`. You can now add your custom brushes into the CustomBrushes folder. All custom brushes must be png format, with a transparent background, and 512x512 in size.
+### Custom surface
+You can add custom surface into the game. To add a custom surface to your game. Create a folder in the BepInEx/Plugins folder and name it `ExtraLandscapingTools_mods`. Inside this folder create another folder and name it `CustomSurfaces`. You can now create a new folder named the name of you surface and in the folder you need to have at least one of this file whit the same name `_BaseColorMap.png`, `_MaskMap.png`, `_NormalMap.png`. If you wan a custom icon for you surface just put your icon.svg in the same folder.
 
 ## Feature roadmap
+- ✔️ More Pathway
+- ✔️ Custom Surfaces
+- ✔️ Decals
 - ✔️ Translation support
 - ✔️ Custom brush
 - ✔️ Brush angle
