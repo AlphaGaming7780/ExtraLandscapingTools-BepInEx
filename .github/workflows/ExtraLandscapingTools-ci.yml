@@ -43,6 +43,12 @@ jobs:
           mkdir -p ${{ github.workspace }}/${{ github.event.repository.name }}
           mv resources.zip ${{ github.workspace }}/${{ github.event.repository.name }}/resources.zip
           mv ${{ github.workspace }}/dist ${{ github.workspace }}/${{ github.event.repository.name }}
+      - name: Zip Release
+        uses: thedoctor0/zip-release@0.7.5
+        with:
+          type: 'zip'
+          filename: "${{ github.event.repository.name }}-${{ env.RELEASE_TAG }}_BepInEx-${{ matrix.bepinex-version }}.zip"
+          path: "${{ github.event.repository.name }}"
       - name: Upload Artifact (Zip Release BepInEx ${{ matrix.bepinex-version }})
         uses: actions/upload-artifact@v3
         with:
