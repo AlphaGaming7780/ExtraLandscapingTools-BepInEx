@@ -43,6 +43,7 @@ You can add custom surface into the game. To add a custom surface to your game. 
 # Acknowledgment
 - [CynicalBusiness](https://lab.vevox.io/games/cities-skylines-2/surface-tools/-/tree/develop?ref_type=heads) For its surface tools which help me a lot to make this mod.
 - [CityRat](https://thunderstore.io/c/cities-skylines-ii/p/CityRat/) For all the custom icons.
+- [optimus-code](https://thunderstore.io/c/cities-skylines-ii/p/Cities2Modding/)
 
 # Community
 Looking to discuss Cities: Skylines 2 Unofficial modding together with other modders? You're welcome to join [Cities 2 Modding Discord](https://discord.gg/vd7HXnpPJf) or the [Cities: Skylines Modding Discord](https://discord.gg/27CVdGFA47).

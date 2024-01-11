@@ -1,12 +1,7 @@
-using System;
 using System.Collections;
 using System.IO;
-using Colossal.UI.Binding;
-using Game;
-using Game.Rendering;
 using Game.SceneFlow;
 using Game.UI;
-using Unity.Mathematics;
 using UnityEngine;
 
 namespace ExtraLandscapingTools
@@ -19,13 +14,19 @@ namespace ExtraLandscapingTools
 
 		// GetterValueBinding<float3> CameraRotation;
 		// CameraUpdateSystem m_CameraUpdateSystem;
+		// RenderingSystem m_RenderingSystem;
 
 		// static bool angleBrushWithCamera = false;
 
         protected override void OnCreate() {
 
 			base.OnCreate();
-			// m_CameraUpdateSystem = base.World.GetOrCreateSystemManaged<CameraUpdateSystem>();
+			// m_RenderingSystem = base.World.GetOrCreateSystemManaged<RenderingSystem>();
+			
+			// foreach(Shader shader in m_RenderingSystem.enabledShaders.Keys) {
+			// 	Plugin.Logger.LogMessage(shader.name);
+			// }
+
             eLT_UI_Mono = eLT_UI_Object.AddComponent<ELT_UI_Mono>();
 			// AddBinding(CameraRotation = new GetterValueBinding<float3>("extralandscapingtools", "camerarotation", () => m_CameraUpdateSystem.direction));
 			// AddBinding(new TriggerBinding<bool>("extralandscapingtools", "enablecamrot", new Action<bool>(EnableCamRot)));
@@ -42,7 +43,7 @@ namespace ExtraLandscapingTools
 		// }
 
 		internal static string GetStringFromEmbbededJSFile(string path) {
-			return new StreamReader(ExtraLandscapingTools.GetEmbedded("UI."+path)).ReadToEnd();
+			return new StreamReader(ELT.GetEmbedded("UI."+path)).ReadToEnd();
 		}
 
 	}

@@ -3,8 +3,6 @@ using System.Collections.Generic;
 using System.IO;
 using Colossal.IO.AssetDatabase;
 using Colossal.Json;
-using MonoMod.Utils;
-using UnityEngine;
 
 namespace ExtraLandscapingTools
 {
@@ -35,7 +33,7 @@ namespace ExtraLandscapingTools
 		}
 
 		internal static void LoadLocalization() {
-			localization = Decoder.Decode(new StreamReader(ExtraLandscapingTools.GetEmbedded("Localization.Localization.json")).ReadToEnd()).Make<LocalizationJS>().Localization;
+			localization = Decoder.Decode(new StreamReader(ELT.GetEmbedded("Localization.Localization.json")).ReadToEnd()).Make<LocalizationJS>().Localization;
 		}
 
 	}

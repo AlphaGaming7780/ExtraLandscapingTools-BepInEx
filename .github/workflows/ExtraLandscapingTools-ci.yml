@@ -5,7 +5,7 @@ on:
     # branches: [ "DEV" ]
     tags: [ "v*" ]
 env:
-  RELEASE_TAG: ${{ github.ref == 'refs/heads/DEV' && 'v0.2.0-pre-1' || github.ref_name }}
+  RELEASE_TAG: ${{ github.ref == 'refs/heads/DEV' && 'v0.2.0-pre-2' || github.ref_name }}
 
 jobs:
   build:
@@ -32,17 +32,16 @@ jobs:
         run: dotnet add package TagLibSharp --version 2.3.0
       - name: Build (BepInEx ${{ matrix.bepinex-version }})
         run: make package-unix BEPINEX_VERSION=${{ matrix.bepinex-version }}
-      - name: Coping All the default elements
-        run: |
-          mkdir -p  ${{ github.workspace }}/dist/resources/;
-          cp -a ${{ github.workspace }}/resources/. ${{ github.workspace }}/dist/resources/
-          mv ${{ github.workspace }}/dist ${{ github.workspace }}/${{ github.event.repository.name }}
-      - name: Archive Release
+      - name: Zip Resources folder
         uses: thedoctor0/zip-release@0.7.5
         with:
           type: 'zip'
-          filename: "${{ github.event.repository.name }}-${{ env.RELEASE_TAG }}_BepInEx-${{ matrix.bepinex-version }}.zip"
-          path: "${{ github.event.repository.name }}"
+          filename: "resources.zip"
+          path: "${{ github.workspace }}/resources"
+      - name: Setup for ziping the release
+        run: |
+          mv "resources.zip" ${{ github.workspace }}/${{ github.event.repository.name }}
+          mv ${{ github.workspace }}/dist ${{ github.workspace }}/${{ github.event.repository.name }}
       - name: Upload Artifact (Zip Release BepInEx ${{ matrix.bepinex-version }})
         uses: actions/upload-artifact@v3
         with:

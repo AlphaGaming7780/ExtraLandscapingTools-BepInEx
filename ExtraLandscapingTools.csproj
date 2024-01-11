@@ -45,9 +45,9 @@
 		above needs to be uncommented for this to work
 	-->
 	<ItemGroup>
-        <Reference Include="$(Cities2_Location)\Cities2_Data\Managed\Colossal.*.dll" Private="False"/>
-        <Reference Include="$(Cities2_Location)\Cities2_Data\Managed\Game*.dll" Private="False"/>
-        <Reference Include="$(Cities2_Location)\Cities2_Data\Managed\Unity.*.dll" Private="False"/>
+        <Reference Include="$(Cities2_Location)\Cities2_Data\Managed\Colossal.*.dll" Private="False" />
+        <Reference Include="$(Cities2_Location)\Cities2_Data\Managed\Game*.dll" Private="False" />
+        <Reference Include="$(Cities2_Location)\Cities2_Data\Managed\Unity.*.dll" Private="False" />
 		<Reference Include="cohtml.Net"><HintPath>$(Cities2_Location)\Cities2_Data\Managed\cohtml.Net.dll</HintPath><Private>False</Private></Reference>
 	</ItemGroup>
 	
@@ -58,9 +58,9 @@
 		DO NOT make the proprietary DLLs for the game public, as the files are owned by PDX/CO. 
 	-->
 	<ItemGroup>
-		<Reference Include="libcs2/Colossal.*.dll" Private="False"/>
-		<Reference Include="libcs2/Game*.dll" Private="False"/>
-		<Reference Include="libcs2/Unity.*.dll" Private="False"/>
+		<Reference Include="libcs2/Colossal.*.dll" Private="False" />
+		<Reference Include="libcs2/Game*.dll" Private="False" />
+		<Reference Include="libcs2/Unity.*.dll" Private="False" />
 	</ItemGroup>
 
 	<!--
@@ -87,7 +87,7 @@
 	</ItemGroup>
 
 	<ItemGroup Condition="'$(BepInExVersion)' == '5'">
-		<PackageReference Include="BepInEx.Core" Version="5.4.*" IncludeAssets="compile"/>
+		<PackageReference Include="BepInEx.Core" Version="5.4.*" IncludeAssets="compile" />
 	</ItemGroup>
 
 	<PropertyGroup Condition="'$(BepInExVersion)' == '6'">

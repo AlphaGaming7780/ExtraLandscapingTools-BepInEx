@@ -15,6 +15,8 @@ using Game;
 using System;
 using Colossal.Localization;
 using Colossal.IO.AssetDatabase;
+using Game.UI.Debug;
+using System.IO.Compression;
 
 namespace ExtraLandscapingTools.Patches
 {
@@ -27,27 +29,36 @@ namespace ExtraLandscapingTools.Patches
 		public static readonly string PathToCustomBrushes = Path.Combine(PathToMods,"CustomBrushes");
 		public static readonly string PathToCustomSurface = Path.Combine(PathToMods,"CustomSurfaces");
 
+		static readonly string pathToZip = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location)+"\\resources.zip";
+
 		static internal readonly string resources = Path.Combine(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location), "resources");
 		static internal readonly string resourcesIcons = Path.Combine(resources, "Icons");
 		static internal readonly string resourcesBrushes = Path.Combine(resources, "Brushes");
 
 		static void Prefix(GameSystemBase __instance)
-		{		
+		{
+
+			if(File.Exists(pathToZip)) {
+				if(Directory.Exists(resources)) Directory.Delete(resources, true);
+				ZipFile.ExtractToDirectory(pathToZip, Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location));
+				File.Delete(pathToZip);
+			}
+
 			if(!PrefabSystem_OnCreate.FolderToLoadBrush.Contains(resourcesBrushes) && Directory.Exists(resourcesBrushes)) PrefabSystem_OnCreate.FolderToLoadBrush.Add(resourcesBrushes);
 			if(!PrefabSystem_OnCreate.FolderToLoadBrush.Contains(PathToCustomBrushes) && Directory.Exists(PathToCustomBrushes)) PrefabSystem_OnCreate.FolderToLoadBrush.Add(PathToCustomBrushes);
 			if(!PrefabSystem_OnCreate.FolderToLoadSurface.Contains(PathToCustomSurface) && Directory.Exists(PathToCustomSurface)) PrefabSystem_OnCreate.FolderToLoadSurface.Add(PathToCustomSurface);
 
-			if(!Directory.Exists(resources)) {
-				Directory.CreateDirectory(resources);
-				Directory.CreateDirectory(resourcesBrushes);
-				Directory.CreateDirectory(resourcesIcons);
-				foreach(string file in Directory.GetFiles(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location), "*.svg")) {
-					File.Move(file, Path.Combine(resourcesIcons,Path.GetFileName(file)));
-				}
-				foreach(string file in Directory.GetFiles(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location), "*.png")) {
-					if(Path.GetFileNameWithoutExtension(file) != "icon") File.Move(file, Path.Combine(resourcesBrushes,Path.GetFileName(file)));
-				}
-			}
+			// if(!Directory.Exists(resources)) {
+			// 	Directory.CreateDirectory(resources);
+			// 	Directory.CreateDirectory(resourcesBrushes);
+			// 	Directory.CreateDirectory(resourcesIcons);
+			// 	foreach(string file in Directory.GetFiles(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location), "*.svg")) {
+			// 		File.Move(file, Path.Combine(resourcesIcons,Path.GetFileName(file)));
+			// 	}
+			// 	foreach(string file in Directory.GetFiles(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location), "*.png")) {
+			// 		if(Path.GetFileNameWithoutExtension(file) != "icon") File.Move(file, Path.Combine(resourcesBrushes,Path.GetFileName(file)));
+			// 	}
+			// }
 		}
 	}
 
@@ -169,7 +180,7 @@ namespace ExtraLandscapingTools.Patches
 			__instance.AddPrefab(staticObjectPrefab);
 		}
 
-		internal static void CreateCustomSurfaces(Material material, Material materialPlaceHolder) {
+		internal static void CreateCustomSurfaces(Material material) {
 			foreach(string folder in FolderToLoadSurface) {;
 				foreach(string filePath in Directory.GetDirectories( folder )) 
 				{	
@@ -191,21 +202,27 @@ namespace ExtraLandscapingTools.Patches
 
 					try {
 						fileData = File.ReadAllBytes(filePath+"\\_BaseColorMap.png");
-						Texture2D texture2D_BaseColorMap = new(1024, 1024);
+						// int imageSize = ExtraLandscapingTools.GetImageSize(filePath);
+						Texture2D texture2D_BaseColorMap = new(1, 1);
 						if(!texture2D_BaseColorMap.LoadImage(fileData)) UnityEngine.Debug.LogError("Failed to Load Image");
+
+						if(!File.Exists(filePath+"\\icon.png") && texture2D_BaseColorMap.width > 64) ELT.CreateIcon(filePath, texture2D_BaseColorMap, 64);
+
+						// Plugin.Logger.LogMessage(imageSize);
+
 						newMaterial.SetTexture("_BaseColorMap", texture2D_BaseColorMap);
-					} catch {}
+					} catch (Exception e) {Plugin.Logger.LogWarning(e); return;}
 
 					try {
 						fileData = File.ReadAllBytes(filePath+"\\_NormalMap.png");
-						Texture2D texture2D_NormalMap = new(1024, 1024);
+						Texture2D texture2D_NormalMap = new(1, 1);
 						if(!texture2D_NormalMap.LoadImage(fileData)) UnityEngine.Debug.LogError("Failed to Load Image");
 						newMaterial.SetTexture("_NormalMap", texture2D_NormalMap);
 					} catch {}
 
 					try {
 						fileData = File.ReadAllBytes(filePath+"\\_MaskMap.png");
-						Texture2D texture2D_MaskMap = new(1024, 1024);
+						Texture2D texture2D_MaskMap = new(1, 1);
 						if(!texture2D_MaskMap.LoadImage(fileData)) UnityEngine.Debug.LogError("Failed to Load Image");
 						newMaterial.SetTexture("_MaskMap", texture2D_MaskMap);
 						newMaterial.SetFloat("_Metallic", 1f);
@@ -252,9 +269,8 @@ namespace ExtraLandscapingTools.Patches
 					UIObject surfacePrefabUI = surfacePrefab.AddComponent<UIObject>();
 					surfacePrefabUI.active = true;
 					surfacePrefabUI.m_IsDebugObject = false;
-					surfacePrefabUI.m_Icon = File.Exists(filePath+"\\icon.svg") ? $"{GameManager_InitializeThumbnails.COUIBaseLocation}/CustomSurfaces/{new DirectoryInfo(filePath).Name}/icon.svg" : ExtraLandscapingTools.GetIcon(surfacePrefab);
-					surfacePrefabUI.m_Priority = 0;
-
+					surfacePrefabUI.m_Icon = File.Exists(filePath+"\\icon.png") ? $"{GameManager_InitializeThumbnails.COUIBaseLocation}/CustomSurfaces/{new DirectoryInfo(filePath).Name}/icon.png" : ELT.GetIcon(surfacePrefab);
+					surfacePrefabUI.m_Priority = -1;
 
 					// foreach(PrefabBase prefabBase in spawnableArea.m_Placeholders) Plugin.Logger.LogMessage(prefabBase.name);
 
@@ -280,6 +296,8 @@ namespace ExtraLandscapingTools.Patches
 	[HarmonyPatch(typeof(PrefabSystem), nameof(PrefabSystem.AddPrefab))]
 	public class PrefabSystem_AddPrefab
 	{
+		private static readonly string[] removeTools = ["Material 1", "Material 2"];
+
 		private static string UIAssetCategoryPrefabName = "";
 		private static readonly Dictionary<string, List<PrefabBase>> failedSurfacePrefabs = [];
 
@@ -307,7 +325,7 @@ namespace ExtraLandscapingTools.Patches
 					}
 				}
 
-				if (ExtraLandscapingTools.removeTools.Contains(prefab.name) || (prefab is not TerraformingPrefab && prefab is not SpacePrefab && prefab is not SurfacePrefab && prefab is not PathwayPrefab && prefab is not ObjectPrefab/* && prefab is not TaxiwayPrefab && prefab is not TrackPrefab && prefab is not NetLanePrefab*/))
+				if (removeTools.Contains(prefab.name) || (prefab is not TerraformingPrefab && prefab is not SpacePrefab && prefab is not SurfacePrefab && prefab is not ObjectPrefab/* && prefab is not TaxiwayPrefab && prefab is not NetLanePrefab*/))
 				{	
 
 					// if(prefab is UIAssetCategoryPrefab uIAssetCategoryPrefab2) Plugin.Logger.LogMessage(uIAssetCategoryPrefab2.name);
@@ -392,7 +410,7 @@ namespace ExtraLandscapingTools.Patches
 				} else if(prefab is SurfacePrefab && spawnableArea != null && setupCustomSurfaces) {
 					setupCustomSurfaces = false;
 					try {
-						PrefabSystem_OnCreate.CreateCustomSurfaces(prefab.GetComponent<RenderedArea>().m_Material, spawnableArea.m_Placeholders[0].GetComponent<RenderedArea>().m_Material);
+						PrefabSystem_OnCreate.CreateCustomSurfaces(prefab.GetComponent<RenderedArea>().m_Material);
 					} catch (Exception e) {Plugin.Logger.LogWarning(e);}
 
 				}
@@ -403,14 +421,13 @@ namespace ExtraLandscapingTools.Patches
 					TerraformingUI = prefab.AddComponent<UIObject>();
 					TerraformingUI.active = true;
 					TerraformingUI.m_IsDebugObject = false;
-					TerraformingUI.m_Icon = ExtraLandscapingTools.GetIcon(prefab);
+					TerraformingUI.m_Icon = ELT.GetIcon(prefab);
 					TerraformingUI.m_Priority = 1;
 				}
 
 				if(prefab is TerraformingPrefab) TerraformingUI.m_Group = GetExistingToolCategory(__instance, prefab, "Terraforming") ?? TerraformingUI.m_Group;
 				else if(prefab is SurfacePrefab) TerraformingUI.m_Group = GetOrCreateNewToolCategory(__instance, prefab, "Surfaces", "Terraforming"); //?? TerraformingUI.m_Group;
 				else if(prefab is SpacePrefab) TerraformingUI.m_Group ??= GetOrCreateNewToolCategory(__instance, prefab, "Spaces", "Decals");
-				else if(prefab is PathwayPrefab) TerraformingUI.m_Group = GetExistingToolCategory(__instance, prefab, "Pathways") ?? TerraformingUI.m_Group;
 				// else if(prefab is AreaPrefab) TerraformingUI.m_Group ??= GetOrCreateNewToolCategory(__instance, prefab, "AreaPrefab", "Decals");
 				// else if(prefab is NetLanePrefab) TerraformingUI.m_Group = GetOrCreateNewToolCategory(__instance, prefab, "NetLanePrefab", "Pathways") ?? TerraformingUI.m_Group;
 				// else if(prefab is NetLaneGeometryPrefab) TerraformingUI.m_Group = GetOrCreateNewToolCategory(__instance, prefab, "NetLaneGeometryPrefab", "Pathways") ?? TerraformingUI.m_Group;
@@ -479,7 +496,7 @@ namespace ExtraLandscapingTools.Patches
 			surfaceCategory.name = cat;
 			surfaceCategory.m_Menu = landscapingMenu;
 			var surfaceCategoryUI = surfaceCategory.AddComponent<UIObject>();
-			surfaceCategoryUI.m_Icon = "Media/Game/Icons/LotTool.svg";
+			surfaceCategoryUI.m_Icon = ELT.GetIcon(surfaceCategory);
 			surfaceCategoryUI.m_Priority = behindCategory.GetComponent<UIObject>().m_Priority+1;
 			surfaceCategoryUI.active = true;
 			surfaceCategoryUI.m_IsDebugObject = false;
