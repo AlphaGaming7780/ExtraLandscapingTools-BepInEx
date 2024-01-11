@@ -40,7 +40,7 @@ jobs:
           path: "${{ github.workspace }}/resources"
       - name: Setup for ziping the release
         run: |
-          mv "resources.zip" ${{ github.workspace }}/${{ github.event.repository.name }}
+          mv resources.zip ${{ github.workspace }}/${{ github.event.repository.name }}/resources.zip
           mv ${{ github.workspace }}/dist ${{ github.workspace }}/${{ github.event.repository.name }}
       - name: Upload Artifact (Zip Release BepInEx ${{ matrix.bepinex-version }})
         uses: actions/upload-artifact@v3
