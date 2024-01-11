@@ -40,9 +40,8 @@ jobs:
           path: "${{ github.workspace }}/resources"
       - name: Setup for ziping the release
         run: |
-          mkdir -p ${{ github.workspace }}/${{ github.event.repository.name }}
-          mv resources.zip ${{ github.workspace }}/${{ github.event.repository.name }}/resources.zip
           mv ${{ github.workspace }}/dist ${{ github.workspace }}/${{ github.event.repository.name }}
+          mv resources.zip ${{ github.workspace }}/${{ github.event.repository.name }}/resources.zip
       - name: Zip Release
         uses: thedoctor0/zip-release@0.7.5
         with:
