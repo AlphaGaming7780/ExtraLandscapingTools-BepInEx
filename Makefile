@@ -13,13 +13,11 @@ build: clean restore
 package-win:
 	@-mkdir dist
 	@cmd /c copy /y "bin\Debug\netstandard2.1\0Harmony.dll" "dist\"
-	# @cmd /c copy /y "bin\Debug\netstandard2.1\System.Drawing.Common.dll" "dist\"
 	@cmd /c copy /y "bin\Debug\netstandard2.1\ExtraLandscapingTools.dll" "dist\"
 	@echo Packaged to dist/
 
 package-unix: build
 	@-mkdir dist
 	@cp bin/Debug/netstandard2.1/0Harmony.dll dist
-	# @cp bin/Debug/netstandard2.1/System.Drawing.Common.dll dist
 	@cp bin/Debug/netstandard2.1/ExtraLandscapingTools.dll dist
 	@echo Packaged to dist/

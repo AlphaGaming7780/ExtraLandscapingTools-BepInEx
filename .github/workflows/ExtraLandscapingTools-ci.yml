@@ -37,7 +37,8 @@ jobs:
         with:
           type: 'zip'
           filename: "resources.zip"
-          path: "${{ github.workspace }}/resources"
+          path: resources/
+          directory: ${{ github.workspace }}
       - name: Setup for ziping the release
         run: |
           mv ${{ github.workspace }}/dist ${{ github.workspace }}/${{ github.event.repository.name }}
