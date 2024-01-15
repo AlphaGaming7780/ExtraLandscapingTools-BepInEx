@@ -57,9 +57,9 @@ public class CustomSurfaces
 			fileData = File.ReadAllBytes(folderPath+"\\_BaseColorMap.png");
 			// int imageSize = ExtraLandscapingTools.GetImageSize(filePath);
 			Texture2D texture2D_BaseColorMap = new(1, 1);
-			if(!texture2D_BaseColorMap.LoadImage(fileData)) UnityEngine.Debug.LogError("Failed to Load Image");
+			if(!texture2D_BaseColorMap.LoadImage(fileData)) {UnityEngine.Debug.LogError("Failed to Load Image"); return;}
 
-			if(!File.Exists(folderPath+"\\icon.png") && texture2D_BaseColorMap.width > 64) ELT.CreateIcon(folderPath, texture2D_BaseColorMap, 64);
+			if(!File.Exists(folderPath+"\\icon.png")) ELT.CreateIcon(folderPath, texture2D_BaseColorMap, 64);
 
 			// Plugin.Logger.LogMessage(imageSize);
 
@@ -69,17 +69,17 @@ public class CustomSurfaces
 		try {
 			fileData = File.ReadAllBytes(folderPath+"\\_NormalMap.png");
 			Texture2D texture2D_NormalMap = new(1, 1);
-			if(!texture2D_NormalMap.LoadImage(fileData)) UnityEngine.Debug.LogError("Failed to Load Image");
-			newMaterial.SetTexture("_NormalMap", texture2D_NormalMap);
+			if(texture2D_NormalMap.LoadImage(fileData)) newMaterial.SetTexture("_NormalMap", texture2D_NormalMap);
 		} catch {}
 
 		try {
 			fileData = File.ReadAllBytes(folderPath+"\\_MaskMap.png");
 			Texture2D texture2D_MaskMap = new(1, 1);
-			if(!texture2D_MaskMap.LoadImage(fileData)) UnityEngine.Debug.LogError("Failed to Load Image");
-			newMaterial.SetTexture("_MaskMap", texture2D_MaskMap);
-			newMaterial.SetFloat("_Metallic", 0.75f);
-			newMaterial.SetFloat("_Smoothness", 0.75f);
+			if(texture2D_MaskMap.LoadImage(fileData)) {
+				newMaterial.SetTexture("_MaskMap", texture2D_MaskMap);
+				newMaterial.SetFloat("_Metallic", 0.75f);
+				newMaterial.SetFloat("_Smoothness", 0.75f);
+			}
 		} catch {}
 
 		RenderedArea renderedArea = surfacePrefabPlaceHolder.AddComponent<RenderedArea>();
@@ -118,6 +118,17 @@ public class CustomSurfaces
 		renderedArea1.m_LodBias = 0;
 		renderedArea1.m_Roundness = 1;
 		renderedArea1.m_Material = newMaterial;
+
+		if(File.Exists(folderPath+"\\icon.png")) {
+			fileData = File.ReadAllBytes(folderPath+"\\icon.png");
+			Texture2D texture2D_Icon = new(1, 1);
+			if(texture2D_Icon.LoadImage(fileData)) {
+				if(texture2D_Icon.width > 64 || texture2D_Icon.height > 64) {
+					ELT.CreateIcon(folderPath, texture2D_Icon, 64);
+				}
+			}
+
+		}
 
 		UIObject surfacePrefabUI = surfacePrefab.AddComponent<UIObject>();
 		surfacePrefabUI.active = true;
