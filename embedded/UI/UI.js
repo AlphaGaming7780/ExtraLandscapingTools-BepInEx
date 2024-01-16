@@ -44,9 +44,6 @@ ExtraLandscapingTools_brushOption_content_buttonUp.className = "button_KVN butto
 ExtraLandscapingTools_brushOption_content_buttonUp_img.className = "icon_Ysc"
 ExtraLandscapingTools_brushOption_content_buttonUp_img.src = "Media/Glyphs/ThickStrokeArrowUp.svg"
 
-ExtraLandscapingTools_getBrush("tool.brushes")
-ExtraLandscapingTools_getSelectedBrush("tool.selectedBrush")
-
 ExtraLandscapingTools_brushAngle_item.className = "item_bZY"
 ExtraLandscapingTools_brushAngle_itemContent.className = "item-content_nNz"
 ExtraLandscapingTools_brushAngle_label.className = "label_RZX"
@@ -67,6 +64,10 @@ ExtraLandscapingTools_brushAngle_content_input.setAttributeNS(null, "vk-title", 
 ExtraLandscapingTools_brushAngle_content_input.setAttributeNS(null, "vk-description", "")
 ExtraLandscapingTools_brushAngle_content_input.setAttributeNS(null, "vk-type", "text")
 ExtraLandscapingTools_brushAngle_content_input.setAttributeNS(null, "rows", "5")
+
+ExtraLandscapingTools_getBrush("tool.brushes")
+ExtraLandscapingTools_getSelectedBrush("tool.selectedBrush")
+ExtraLandscapingTools_getBrushAngle("tool.brushAngle")
 
 ExtraLandscapingTools_toolOption.insertBefore(ExtraLandscapingTools_brushOption_item, ExtraLandscapingTools_toolOption_first)
 ExtraLandscapingTools_brushOption_item.appendChild(ExtraLandscapingTools_brushOption_itemContent)
@@ -90,8 +91,6 @@ ExtraLandscapingTools_brushAngle_content_SliderContainer_slider_track_rangeBound
 ExtraLandscapingTools_brushAngle_content_SliderContainer_slider_track_rangeBounds.appendChild(ExtraLandscapingTools_brushAngle_content_SliderContainer_slider_track_rangeBounds_thumbContainer)
 ExtraLandscapingTools_brushAngle_content_SliderContainer_slider_track_rangeBounds_thumbContainer.appendChild(ExtraLandscapingTools_brushAngle_content_SliderContainer_slider_track_rangeBounds_thumbContainer_thumb)
 ExtraLandscapingTools_brushAngle_content.appendChild(ExtraLandscapingTools_brushAngle_content_input)
-
-ExtraLandscapingTools_getBrushAngle("tool.brushAngle")
 
 ExtraLandscapingTools_brushAngle_content_SliderContainer_slider_track_rangeBounds_thumbContainer_thumb.addEventListener("mousedown", (e) => {
     ExtraLandscapingTools_isPressed = true;

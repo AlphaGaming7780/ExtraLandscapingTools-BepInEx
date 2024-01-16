@@ -138,11 +138,18 @@ namespace ExtraLandscapingTools.Patches
 	{
 		private static void Postfix( ToolBaseSystem tool ) {
 
-			if(tool.toolID == "Terrain Tool") {
+			if(tool is TerrainToolSystem) {
 				ELT_UI.eLT_UI_Mono.ChangeUiNextFrame(ELT_UI.GetStringFromEmbbededJSFile("UI.js"));
 			} else {
 				ELT_UI.eLT_UI_Mono.ChangeUiNextFrame(ELT_UI.GetStringFromEmbbededJSFile("REMOVE_UI.js"));
 			}
+
+			if(tool is AreaToolSystem) {
+				ELT_UI.eLT_UI_Mono.ChangeUiNextFrame(ELT_UI.GetStringFromEmbbededJSFile("ShowMarker.js"));
+			} else {
+				ELT_UI.eLT_UI_Mono.ChangeUiNextFrame(ELT_UI.GetStringFromEmbbededJSFile("REMOVE_UI.js"));
+			}
+
 		}
 	}
 
@@ -260,7 +267,7 @@ namespace ExtraLandscapingTools.Patches
 					}
 				}
 
-				if (removeTools.Contains(prefab.name) || (prefab is not TerraformingPrefab && prefab is not SpacePrefab && prefab is not SurfacePrefab && prefab is not ObjectPrefab/* && prefab is not TaxiwayPrefab && prefab is not NetLanePrefab*/))
+				if (removeTools.Contains(prefab.name) || (prefab is not TerraformingPrefab && prefab is not SpacePrefab && prefab is not SurfacePrefab && prefab is not ObjectPrefab /* && prefab is not TaxiwayPrefab && prefab is not NetLanePrefab*/))
 				{	
 
 					// if(prefab is UIAssetCategoryPrefab uIAssetCategoryPrefab2) Plugin.Logger.LogMessage(uIAssetCategoryPrefab2.name);
@@ -347,7 +354,6 @@ namespace ExtraLandscapingTools.Patches
 					try {
 						PrefabSystem_OnCreate.CreateCustomSurfaces(prefab.GetComponent<RenderedArea>().m_Material);
 					} catch (Exception e) {Plugin.Logger.LogWarning(e);}
-
 				}
 
 				var TerraformingUI = prefab.GetComponent<UIObject>();

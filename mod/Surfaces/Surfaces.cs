@@ -83,7 +83,7 @@ public class CustomSurfaces
 		} catch {}
 
 		RenderedArea renderedArea = surfacePrefabPlaceHolder.AddComponent<RenderedArea>();
-		renderedArea.m_RendererPriority = -100;
+		renderedArea.m_RendererPriority = GetRendererPriorityByCat(uIAssetCategoryPrefab);
 		renderedArea.m_LodBias = 0;
 		renderedArea.m_Roundness = 1;
 		renderedArea.m_Material = newMaterial;
@@ -114,7 +114,7 @@ public class CustomSurfaces
 		// spawnableArea.active = true;
 
 		RenderedArea renderedArea1 = surfacePrefab.AddComponent<RenderedArea>();
-		renderedArea1.m_RendererPriority = -100;
+		renderedArea1.m_RendererPriority = GetRendererPriorityByCat(uIAssetCategoryPrefab);
 		renderedArea1.m_LodBias = 0;
 		renderedArea1.m_Roundness = 1;
 		renderedArea1.m_Material = newMaterial;
@@ -154,7 +154,19 @@ public class CustomSurfaces
 		} else {
 			return Prefab.GetOrCreateNewToolCategory(prefabSystem, prefab, "Landscaping", "Surfaces", "Terraforming");
 		}
-
 	}
 
+	internal static int GetRendererPriorityByCat(string cat) {
+		return cat switch
+		{   
+			"Ground" => -100,
+			"Grass" => -99,
+			"Sand" => -98,
+			"Concrete" => -97,
+			"Wood" => -97,
+			"Pavement" => -96,
+			"Tiles" => -95,
+			_ => -100
+		};
+	}
 }

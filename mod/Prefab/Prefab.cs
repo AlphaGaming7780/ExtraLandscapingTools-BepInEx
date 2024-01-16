@@ -78,7 +78,7 @@ public class Prefab
             failedSurfacePrefabs[cat].Add(prefabBase);
         }
 
-        Plugin.Logger.LogMessage("Prefab " + prefabBase.name + " has been added to the failedPrefab " + cat + " " + failedSurfacePrefabs[cat].Contains(prefabBase));
+        // Plugin.Logger.LogMessage("Prefab " + prefabBase.name + " has been added to the failedPrefab " + cat + " " + failedSurfacePrefabs[cat].Contains(prefabBase));
 
     }
 }

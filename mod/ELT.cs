@@ -86,6 +86,7 @@ namespace ExtraLandscapingTools
 					"Misc Surfaces" => $"{GameManager_InitializeThumbnails.COUIBaseLocation}/resources/Icons/UIAssetCategoryPrefab/Misc Surfaces.svg",
 					"Concrete Surfaces" => $"{GameManager_InitializeThumbnails.COUIBaseLocation}/resources/Icons/UIAssetCategoryPrefab/Concrete Surfaces.svg",
 					"Rock Surfaces" => $"{GameManager_InitializeThumbnails.COUIBaseLocation}/resources/Icons/UIAssetCategoryPrefab/Rock Surfaces.svg",
+					"Wood Surfaces" => $"{GameManager_InitializeThumbnails.COUIBaseLocation}/resources/Icons/UIAssetCategoryPrefab/Wood Surfaces.svg",
 					"Ground Surfaces" => $"{GameManager_InitializeThumbnails.COUIBaseLocation}/resources/Icons/UIAssetCategoryPrefab/Ground Surfaces.svg",
 					"Tiles Surfaces" => $"{GameManager_InitializeThumbnails.COUIBaseLocation}/resources/Icons/UIAssetCategoryPrefab/Tiles Surfaces.svg",
 					"Decals" => $"{GameManager_InitializeThumbnails.COUIBaseLocation}/resources/Icons/UIAssetCategoryPrefab/Decals.svg",
@@ -109,32 +110,6 @@ namespace ExtraLandscapingTools
 			}
 
 			return "Media/Game/Icons/LotTool.svg";
-
-
-			// UnityEngine.Debug.Log(prefab.name);
-			// return prefab.name switch
-			// {   
-			// 	"Agriculture Surface 01" => $"{GameManager_InitializeThumbnails.COUIBaseLocation}/resources/Icons/{prefab.name}.svg",
-			// 	"Concrete Surface 01" => $"{GameManager_InitializeThumbnails.COUIBaseLocation}/resources/Icons/{prefab.name}.svg",
-			// 	"Concrete Surface 02" => $"{GameManager_InitializeThumbnails.COUIBaseLocation}/resources/Icons/{prefab.name}.svg",
-			// 	"Grass Surface 01" => $"{GameManager_InitializeThumbnails.COUIBaseLocation}/resources/Icons/{prefab.name}.svg",
-			// 	"Grass Surface 02" => $"{GameManager_InitializeThumbnails.COUIBaseLocation}/resources/Icons/{prefab.name}.svg",
-			// 	"Pavement Surface 01" => $"{GameManager_InitializeThumbnails.COUIBaseLocation}/resources/Icons/{prefab.name}.svg",
-			// 	"Pavement Surface 02" => $"{GameManager_InitializeThumbnails.COUIBaseLocation}/resources/Icons/{prefab.name}.svg",
-			// 	"Sand Surface 01" => $"{GameManager_InitializeThumbnails.COUIBaseLocation}/resources/Icons/{prefab.name}.svg",
-			// 	"Sand Surface 02" => $"{GameManager_InitializeThumbnails.COUIBaseLocation}/resources/Icons/{prefab.name}.svg",
-			// 	"Tiles Surface 01" => $"{GameManager_InitializeThumbnails.COUIBaseLocation}/resources/Icons/{prefab.name}.svg",
-			// 	"Tiles Surface 02" => $"{GameManager_InitializeThumbnails.COUIBaseLocation}/resources/Icons/{prefab.name}.svg",
-			// 	"Tiles Surface 03" => $"{GameManager_InitializeThumbnails.COUIBaseLocation}/resources/Icons/{prefab.name}.svg",
-			// 	"Forestry Surface 01" => $"{GameManager_InitializeThumbnails.COUIBaseLocation}/resources/Icons/{prefab.name}.svg",
-			// 	"Landfill Surface 01" => $"{GameManager_InitializeThumbnails.COUIBaseLocation}/resources/Icons/{prefab.name}.svg",
-			// 	"Oil Surface 01" => $"{GameManager_InitializeThumbnails.COUIBaseLocation}/resources/Icons/{prefab.name}.svg",
-			// 	"Ore Surface 01" => $"{GameManager_InitializeThumbnails.COUIBaseLocation}/resources/Icons/{prefab.name}.svg",
-			// 	"Decals" => $"{GameManager_InitializeThumbnails.COUIBaseLocation}/resources/Icons/{prefab.name}.svg",
-			// 	// "Material 1" => $"{GameManager_InitializeThumbnails.COUIBaseLocation}/resources/Icons/{prefab.name}.svg",
-			// 	// "Material 2" => $"{GameManager_InitializeThumbnails.COUIBaseLocation}/resources/Icons/{prefab.name}.svg",
-			// 	_ => "Media/Game/Icons/LotTool.svg",
-			// };
 		}
 
 		public static void RegisterELTExtension( string extensionID , ELT_ExtensionType eLT_ExtensionType ) {

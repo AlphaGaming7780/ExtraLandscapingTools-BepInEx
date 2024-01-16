@@ -1,5 +1,8 @@
+using System;
 using System.Collections;
 using System.IO;
+using Colossal.UI.Binding;
+using Game.Rendering;
 using Game.SceneFlow;
 using Game.UI;
 using UnityEngine;
@@ -12,24 +15,24 @@ namespace ExtraLandscapingTools
         private static readonly GameObject eLT_UI_Object = new();
         internal static ELT_UI_Mono eLT_UI_Mono;
 
-		// GetterValueBinding<float3> CameraRotation;
+		private static GetterValueBinding<bool> showMarker;
 		// CameraUpdateSystem m_CameraUpdateSystem;
-		// RenderingSystem m_RenderingSystem;
+		private static RenderingSystem m_RenderingSystem;
 
 		// static bool angleBrushWithCamera = false;
 
         protected override void OnCreate() {
 
 			base.OnCreate();
-			// m_RenderingSystem = base.World.GetOrCreateSystemManaged<RenderingSystem>();
+			m_RenderingSystem = base.World.GetOrCreateSystemManaged<RenderingSystem>();
 			
 			// foreach(Shader shader in m_RenderingSystem.enabledShaders.Keys) {
 			// 	Plugin.Logger.LogMessage(shader.name);
 			// }
 
             eLT_UI_Mono = eLT_UI_Object.AddComponent<ELT_UI_Mono>();
-			// AddBinding(CameraRotation = new GetterValueBinding<float3>("extralandscapingtools", "camerarotation", () => m_CameraUpdateSystem.direction));
-			// AddBinding(new TriggerBinding<bool>("extralandscapingtools", "enablecamrot", new Action<bool>(EnableCamRot)));
+			AddBinding(showMarker = new GetterValueBinding<bool>("elt", "showmarker", () => m_RenderingSystem.markersVisible));
+			AddBinding(new TriggerBinding<bool>("elt", "showmarker", new Action<bool>(ShowMarker)));
 
         }
 
@@ -41,6 +44,11 @@ namespace ExtraLandscapingTools
 		// private static void EnableCamRot(bool statu) {
 		// 	angleBrushWithCamera = statu;
 		// }
+
+		private static void ShowMarker(bool b) {
+			m_RenderingSystem.markersVisible = b;
+			showMarker.Update();
+		}
 
 		internal static string GetStringFromEmbbededJSFile(string path) {
 			return new StreamReader(ELT.GetEmbedded("UI."+path)).ReadToEnd();
