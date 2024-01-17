@@ -28,9 +28,13 @@ ExtraLandscapingTools_showMarker_content_button.appendChild(ExtraLandscapingTool
 
 
 ExtraLandscapingTools_showMarker_content_button.addEventListener("click", function() {
+	engine.trigger("audio.playSound", "select-item", 1);
 	engine.trigger("elt.showmarker", !this.classList.contains("selected"))
 })
 
+ExtraLandscapingTools_showMarker_content_button.addEventListener("mouseenter", function() {
+	engine.trigger("audio.playSound", "hover-item", 1);
+})
 
 function ExtraLandscapingTools_getShowMarker(event) {
 	const updateEvent = event + ".update"

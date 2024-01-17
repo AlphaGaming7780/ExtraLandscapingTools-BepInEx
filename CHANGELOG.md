@@ -1,6 +1,8 @@
-# v0.2.0-pre-2
+# v0.2.0-pre-5
 - Add: Custom Surface Support
-- Add: Support for Extension
+- Add: Support for Extension ([Assets](https://github.com/AlphaGaming7780/ELT-Assets) and [Surfaces](https://github.com/AlphaGaming7780/ELT-Surfaces))
+- Add: A button to toggle on/off the marker when placing surfaces
+- Add: UI make sounds now
 
 # v0.1.5
 - Fixed: Translation always using english.

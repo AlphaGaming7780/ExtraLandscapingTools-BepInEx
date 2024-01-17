@@ -93,7 +93,8 @@ ExtraLandscapingTools_brushAngle_content_SliderContainer_slider_track_rangeBound
 ExtraLandscapingTools_brushAngle_content.appendChild(ExtraLandscapingTools_brushAngle_content_input)
 
 ExtraLandscapingTools_brushAngle_content_SliderContainer_slider_track_rangeBounds_thumbContainer_thumb.addEventListener("mousedown", (e) => {
-    ExtraLandscapingTools_isPressed = true;
+    engine.trigger("audio.playSound", "grabSlider", 1);
+	ExtraLandscapingTools_isPressed = true;
     ExtraLandscapingTools_cursorX = e.clientX;
 	ExtraLandscapingTools_sliderX = ExtraLandscapingTools_brushAngle_content_SliderContainer_slider_track_rangeBounds.clientWidth
 });
@@ -105,11 +106,12 @@ document.addEventListener("mouseup", () => {
 ExtraLandscapingTools_toolOption.addEventListener("mousemove", (e) => {
 	if (!ExtraLandscapingTools_isPressed) return;
 	e.preventDefault();
-	let o = (ExtraLandscapingTools_sliderX + (e.clientX - ExtraLandscapingTools_cursorX))/ExtraLandscapingTools_brushAngle_content_SliderContainer_slider_track.clientWidth * 100
-	if(o > 100) o = 100
-	if(o < 0) o = 0
-	ExtraLandscapingTools_brushAngle_content_SliderContainer_slider_track_rangeBounds.style.width = `${o}%`
-	engine.trigger("tool.setBrushAngle", o*3.6)
+	let pourcent = (ExtraLandscapingTools_sliderX + (e.clientX - ExtraLandscapingTools_cursorX))/ExtraLandscapingTools_brushAngle_content_SliderContainer_slider_track.clientWidth * 100
+	if(pourcent > 100) pourcent = 100
+	if(pourcent < 0) pourcent = 0
+	ExtraLandscapingTools_brushAngle_content_SliderContainer_slider_track_rangeBounds.style.width = `${pourcent}%`
+    engine.trigger("audio.playSound", "drag-slider", pourcent/100);
+	engine.trigger("tool.setBrushAngle", pourcent*3.6)
 });
 
 ExtraLandscapingTools_brushAngle_content_input.addEventListener("input", function() {
@@ -121,12 +123,24 @@ ExtraLandscapingTools_brushAngle_content_input.addEventListener("input", functio
 
 ExtraLandscapingTools_brushOption_content_buttonDown.addEventListener("click", function() {
 	if(ExtraLandscapingTools_index == 0) return
+	engine.trigger("audio.playSound", "decrease-elevation", 1);
 	engine.trigger("tool.selectBrush", ExtraLandscapingTools_brushs[ExtraLandscapingTools_index-1].entity)
+})
+
+ExtraLandscapingTools_brushOption_content_buttonDown.addEventListener("mouseenter", function() {
+	if(ExtraLandscapingTools_index == 0) return
+	engine.trigger("audio.playSound", "hover-item", 1);
 })
 
 ExtraLandscapingTools_brushOption_content_buttonUp.addEventListener("click", function() {
 	if(ExtraLandscapingTools_index+1 == ExtraLandscapingTools_brushs.length) return
+	engine.trigger("audio.playSound", "increase-elevation", 1);
 	engine.trigger("tool.selectBrush", ExtraLandscapingTools_brushs[ExtraLandscapingTools_index+1].entity)
+})
+
+ExtraLandscapingTools_brushOption_content_buttonUp.addEventListener("mouseenter", function() {
+	if(ExtraLandscapingTools_index+1 == ExtraLandscapingTools_brushs.length) return
+	engine.trigger("audio.playSound", "hover-item", 1);
 })
 
 function ExtraLandscapingTools_selectedBrush(brush) {

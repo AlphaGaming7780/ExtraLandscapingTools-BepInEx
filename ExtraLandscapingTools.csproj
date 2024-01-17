@@ -30,6 +30,7 @@
 		<EmbeddedResource Include="embedded\UI\UI.js"></EmbeddedResource>
 		<EmbeddedResource Include="embedded\UI\ShowMarker.js"></EmbeddedResource>
 		<EmbeddedResource Include="embedded\UI\REMOVE_UI.js"></EmbeddedResource>
+		<EmbeddedResource Include="embedded\UI\REMOVE_ShowMarker.js"></EmbeddedResource>
 		<EmbeddedResource Include="embedded\Localization\Localization.json"></EmbeddedResource>
 	</ItemGroup>
 
