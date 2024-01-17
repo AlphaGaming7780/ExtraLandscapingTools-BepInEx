@@ -5,7 +5,7 @@ on:
     branches: [ "DEV" ]
     tags: [ "v*" ]
 env:
-  RELEASE_TAG: ${{ github.ref == 'refs/heads/DEV' && 'v0.2.0-pre-4' || github.ref_name }}
+  RELEASE_TAG: ${{ github.ref == 'refs/heads/DEV' && 'v0.2.0-pre-5' || github.ref_name }}
 
 jobs:
   build:
