@@ -4,14 +4,18 @@ using System.IO;
 using System.Reflection;
 using ExtraLandscapingTools.Patches;
 using Game.Prefabs;
-using Game.SceneFlow;
-using Game.UI;
+using Game.Rendering;
+using Unity.Entities;
 using UnityEngine;
 
 namespace ExtraLandscapingTools
 {
 	public class ELT
 	{
+
+		public static PrefabSystem m_PrefabSystem;
+		public static RenderingSystem m_RenderingSystem;
+		public static EntityManager m_EntityManager;
 
 		public enum ELT_ExtensionType : int
 		{
@@ -101,7 +105,7 @@ namespace ExtraLandscapingTools
 					"Custom Surfaces" => $"{GameManager_InitializeThumbnails.COUIBaseLocation}/resources/Icons/UIAssetMenuPrefab/Custom Surfaces.svg",
 					_ => "Media/Game/Icons/LotTool.svg"
 				};
-			} else if(prefab.name.ToLower().Contains("decal")) {
+			} else if(prefab.name.ToLower().Contains("decal") || prefab.name.ToLower().Contains("roadarrow")) {
 				return prefab.name switch
 				{   
 

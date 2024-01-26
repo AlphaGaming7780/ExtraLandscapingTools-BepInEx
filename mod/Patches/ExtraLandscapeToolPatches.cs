@@ -147,9 +147,9 @@ namespace ExtraLandscapingTools.Patches
 			if(tool is AreaToolSystem) {
 				ELT_UI.eLT_UI_Mono.ChangeUiNextFrame(ELT_UI.GetStringFromEmbbededJSFile("ShowMarker.js"));
 			} else {
+				ELT_UI.ShowMarker(false);
 				ELT_UI.eLT_UI_Mono.ChangeUiNextFrame(ELT_UI.GetStringFromEmbbededJSFile("REMOVE_ShowMarker.js"));
 			}
-
 		}
 	}
 
@@ -158,12 +158,10 @@ namespace ExtraLandscapingTools.Patches
 	{
 		internal static List<string> FolderToLoadBrush = [];
 
-		private static PrefabSystem prefabSystem;
-
 		public static void Postfix( PrefabSystem __instance)
 		{
 
-			prefabSystem = __instance;
+			ELT.m_PrefabSystem = __instance;
 
 			// CustomSurfaces.CallOnCustomSurfaces += LoadCustomSurfaces;
 
@@ -198,7 +196,7 @@ namespace ExtraLandscapingTools.Patches
 				foreach(string surfacesCat in Directory.GetDirectories( folder )) {
 					foreach(string filePath in Directory.GetDirectories( surfacesCat )) 
 					{	
-						CustomSurfaces.CreateCustomSurface(prefabSystem, filePath, material, new DirectoryInfo(surfacesCat).Name);
+						CustomSurfaces.CreateCustomSurface(ELT.m_PrefabSystem, filePath, material, new DirectoryInfo(surfacesCat).Name);
 					}
 				}
 			}
@@ -283,13 +281,13 @@ namespace ExtraLandscapingTools.Patches
 
 				try {
 					// WaterSource waterSource = prefab.GetComponent<WaterSource>(); && waterSource == null
-					if (prefab is ObjectPrefab && !prefab.name.ToLower().Contains("decal")) 
+					if (prefab is ObjectPrefab && !prefab.name.ToLower().Contains("decal") && !prefab.name.ToLower().Contains("roadarrow")) 
 					{
 						return true;
 					}
 				} catch { return true;}
 
-				if(prefab is StaticObjectPrefab staticObjectPrefab && prefab.name.ToLower().Contains("decal")) {
+				if(prefab is StaticObjectPrefab staticObjectPrefab && (prefab.name.ToLower().Contains("decal") || prefab.name.ToLower().Contains("roadarrow"))) {
 					if(prefab.name.ToLower().Contains("invisible")) {
 						return true;
 					}
@@ -371,6 +369,7 @@ namespace ExtraLandscapingTools.Patches
 				else if(prefab is SpacePrefab) TerraformingUI.m_Group ??= Prefab.GetOrCreateNewToolCategory(__instance, prefab, "Landscaping", "Spaces", "Decals");
 				// else if(prefab.name.ToLower().Contains("decal") && prefab.GetComponent<ObjectSubLanes>() != null) TerraformingUI.m_Group = Prefab.GetOrCreateNewToolCategory(__instance, prefab, "Landscaping", "Parkings Decals", "Pathways") ?? TerraformingUI.m_Group;
 				else if(prefab.name.ToLower().Contains("decal")) TerraformingUI.m_Group = Prefab.GetOrCreateNewToolCategory(__instance, prefab, "Landscaping", "Decals", "Pathways") ?? TerraformingUI.m_Group;
+				else if(prefab.name.ToLower().Contains("roadarrow")) TerraformingUI.m_Group = Prefab.GetOrCreateNewToolCategory(__instance, prefab, "Landscaping", "Decals", "Pathways") ?? TerraformingUI.m_Group;
 
 				if(TerraformingUI.m_Group == null) {
 					// Plugin.Logger.LogWarning($"Failed to add {prefab.GetType()} | {prefab.name} to the game.");
