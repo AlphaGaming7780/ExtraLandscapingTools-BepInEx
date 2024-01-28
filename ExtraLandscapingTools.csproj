@@ -31,7 +31,7 @@
 		<EmbeddedResource Include="embedded\UI\ShowMarker.js"></EmbeddedResource>
 		<EmbeddedResource Include="embedded\UI\REMOVE_UI.js"></EmbeddedResource>
 		<EmbeddedResource Include="embedded\UI\REMOVE_ShowMarker.js"></EmbeddedResource>
-		<EmbeddedResource Include="embedded\Localization\Localization.json"></EmbeddedResource>
+		<EmbeddedResource Include="embedded\Localization\Localization.jsonc"></EmbeddedResource>
 	</ItemGroup>
 
 	<!--
@@ -39,8 +39,9 @@
 		and also allow the build to move the mod DLLs into the plugins directory for you
 	-->
 	<PropertyGroup>
-		<Cities2_Location>C:\Program Files (x86)\Steam\steamapps\common\Cities Skylines II</Cities2_Location>
+		<Cities2_Location>E:\SteamLibrary\steamapps\common\Cities Skylines II</Cities2_Location> 
 	</PropertyGroup>
+	<!-- C:\Program Files (x86)\Steam\steamapps\common\Cities Skylines II -->
 
 	<!--
 		This is all the references to the DLLs directly from your game directory. The Cities2_Location property

@@ -26,6 +26,7 @@ namespace ExtraLandscapingTools
 			base.OnCreate();
 			ELT.m_RenderingSystem = base.World.GetOrCreateSystemManaged<RenderingSystem>();
 			ELT.m_EntityManager = EntityManager;
+
 			
 			// foreach(Shader shader in m_RenderingSystem.enabledShaders.Keys) {
 			// 	Plugin.Logger.LogMessage(shader.name);

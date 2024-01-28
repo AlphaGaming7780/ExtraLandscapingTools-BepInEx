@@ -33,14 +33,12 @@ namespace ExtraLandscapingTools
 			return Assembly.GetExecutingAssembly().GetManifestResourceStream("ExtraLandscapingTools.embedded."+embeddedPath);
 		}
 
-		internal static void CreateIcon(string imagePath, Texture2D texture2D, int newSize) {
-
-			Plugin.Logger.LogMessage($"Creating Surfaces Icon for {new DirectoryInfo(imagePath).Name}.");
+		internal static Texture2D ResizeTexture( Texture2D texture2D, int newSize, string savePath = null) {
 
 			RenderTexture scaledRT = RenderTexture.GetTemporary( newSize, newSize );
 			Graphics.Blit(texture2D, scaledRT);
 
-			Texture2D outputTexture = new( newSize, newSize, texture2D.format, false);
+			Texture2D outputTexture = new( newSize, newSize, texture2D.format, true);
 
 			RenderTexture.active = scaledRT;
 			outputTexture.ReadPixels( new Rect( 0, 0, newSize, newSize ), 0, 0 );
@@ -51,9 +49,12 @@ namespace ExtraLandscapingTools
 			RenderTexture.active = null;
 			RenderTexture.ReleaseTemporary( scaledRT );
 
-			string filename = $"{imagePath}\\icon.png";
+			if(savePath != null) {
+				File.WriteAllBytes( savePath, outputTexture.EncodeToPNG( ) );
+			}
 
-			File.WriteAllBytes( filename, outputTexture.EncodeToPNG( ) );
+			return outputTexture;
+
 		}
 
 		internal static string GetIcon(PrefabBase prefab) {
@@ -103,33 +104,22 @@ namespace ExtraLandscapingTools
 				return prefab.name switch
 				{   
 					"Custom Surfaces" => $"{GameManager_InitializeThumbnails.COUIBaseLocation}/resources/Icons/UIAssetMenuPrefab/Custom Surfaces.svg",
-					_ => "Media/Game/Icons/LotTool.svg"
+					_ => $"{GameManager_InitializeThumbnails.COUIBaseLocation}/resources/Icons/Misc/placeholder.svg"
 				};
 			} else if(prefab.name.ToLower().Contains("decal") || prefab.name.ToLower().Contains("roadarrow")) {
 				return prefab.name switch
 				{   
 
-					_ => $"{GameManager_InitializeThumbnails.COUIBaseLocation}/resources/Icons/Decals/Decal_Placeholder.svg"
+					_ => $"{GameManager_InitializeThumbnails.COUIBaseLocation}/resources/Icons/Misc/placeholder.svg"
 				};
 			}
 
-			return "Media/Game/Icons/LotTool.svg";
+			return $"{GameManager_InitializeThumbnails.COUIBaseLocation}/resources/Icons/Misc/placeholder.svg";
 		}
 
 		public static void RegisterELTExtension( string extensionID , ELT_ExtensionType eLT_ExtensionType ) {
-			// if(NumberOfThisExtensionType.ContainsKey(eLT_ExtensionType)) NumberOfThisExtensionType[eLT_ExtensionType]++;
-			// else NumberOfThisExtensionType.Add(eLT_ExtensionType, 1);
 			if(ELT_Extensions.ContainsKey(extensionID)) return;
 			ELT_Extensions.Add(extensionID, eLT_ExtensionType);
-			// ELT_Extensions.Add(extensionID);
 		}
-
-		// public static bool IsThereExtensionType(ELT_ExtensionType eLT_ExtensionType) {
-		// 	foreach(string key in ELT_Extensions.Keys) {
-		// 		if(ELT_Extensions[key] == eLT_ExtensionType) return true;
-		// 	}
-		// 	return true;
-		// }
-
 	}
 }

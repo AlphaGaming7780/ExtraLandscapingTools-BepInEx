@@ -20,7 +20,7 @@ using System.IO.Compression;
 namespace ExtraLandscapingTools.Patches
 {
 
-	[HarmonyPatch(typeof(GameSystemBase), "OnCreate")]
+	[HarmonyPatch(typeof(GameManager), "Awake")]
 	internal class GameSystemBase_OnCreate
 	{	
 		static private readonly string PathToParent = Directory.GetParent(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location)).FullName;
@@ -34,9 +34,9 @@ namespace ExtraLandscapingTools.Patches
 		static internal readonly string resourcesIcons = Path.Combine(resources, "Icons");
 		static internal readonly string resourcesBrushes = Path.Combine(resources, "Brushes");
 
-		static void Prefix(GameSystemBase __instance)
+		static void Postfix(GameSystemBase __instance)
 		{
-
+			Plugin.Logger.LogMessage("YEET");
 			if(File.Exists(pathToZip)) {
 				if(Directory.Exists(resources)) Directory.Delete(resources, true);
 				ZipFile.ExtractToDirectory(pathToZip, Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location));
@@ -47,17 +47,6 @@ namespace ExtraLandscapingTools.Patches
 			if(!PrefabSystem_OnCreate.FolderToLoadBrush.Contains(PathToCustomBrushes) && Directory.Exists(PathToCustomBrushes)) PrefabSystem_OnCreate.FolderToLoadBrush.Add(PathToCustomBrushes);
 			if(!CustomSurfaces.FolderToLoadSurface.Contains(PathToCustomSurface) && Directory.Exists(PathToCustomSurface)) CustomSurfaces.FolderToLoadSurface.Add(PathToCustomSurface);
 
-			// if(!Directory.Exists(resources)) {
-			// 	Directory.CreateDirectory(resources);
-			// 	Directory.CreateDirectory(resourcesBrushes);
-			// 	Directory.CreateDirectory(resourcesIcons);
-			// 	foreach(string file in Directory.GetFiles(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location), "*.svg")) {
-			// 		File.Move(file, Path.Combine(resourcesIcons,Path.GetFileName(file)));
-			// 	}
-			// 	foreach(string file in Directory.GetFiles(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location), "*.png")) {
-			// 		if(Path.GetFileNameWithoutExtension(file) != "icon") File.Move(file, Path.Combine(resourcesBrushes,Path.GetFileName(file)));
-			// 	}
-			// }
 		}
 	}
 
@@ -66,9 +55,7 @@ namespace ExtraLandscapingTools.Patches
 	{	
 		static void Prefix(LocaleAsset asset)
 		{	
-			try {
-				Localization.AddCustomLocal(asset);
-			} catch (Exception e) {UnityEngine.Debug.Log(e);}
+			Localization.AddCustomLocal(asset);
 		}
 	}
 
@@ -136,6 +123,7 @@ namespace ExtraLandscapingTools.Patches
 	[HarmonyPatch( typeof( ToolUISystem ), "OnToolChanged", typeof(ToolBaseSystem) )]
 	class ToolUISystem_OnToolChanged
 	{
+		private static bool showMarker = false;
 		private static void Postfix( ToolBaseSystem tool ) {
 
 			if(tool is TerrainToolSystem) {
@@ -144,11 +132,13 @@ namespace ExtraLandscapingTools.Patches
 				ELT_UI.eLT_UI_Mono.ChangeUiNextFrame(ELT_UI.GetStringFromEmbbededJSFile("REMOVE_UI.js"));
 			}
 
-			if(tool is AreaToolSystem) {
-				ELT_UI.eLT_UI_Mono.ChangeUiNextFrame(ELT_UI.GetStringFromEmbbededJSFile("ShowMarker.js"));
-			} else {
+			if(tool is AreaToolSystem || tool is ObjectToolSystem) {
+				if(!showMarker) ELT_UI.eLT_UI_Mono.ChangeUiNextFrame(ELT_UI.GetStringFromEmbbededJSFile("ShowMarker.js"));
+				showMarker = true;
+			} else if(showMarker){
 				ELT_UI.ShowMarker(false);
 				ELT_UI.eLT_UI_Mono.ChangeUiNextFrame(ELT_UI.GetStringFromEmbbededJSFile("REMOVE_ShowMarker.js"));
+				showMarker = false;
 			}
 		}
 	}
@@ -185,21 +175,6 @@ namespace ExtraLandscapingTools.Patches
 			// subObjectDefaultProbability.active =  true;
 
 			// __instance.AddPrefab(staticObjectPrefab);
-		}
-
-		// private static void LoadCustomSurfaces(Material material) {
-		// 	CustomSurfaces.LoadCustomSurfaces(material, GameSystemBase_OnCreate.PathToCustomSurface, GameManager_InitializeThumbnails.COUIBaseLocation);
-		// }
-
-		internal static void CreateCustomSurfaces(Material material) {
-			foreach(string folder in CustomSurfaces.FolderToLoadSurface) {
-				foreach(string surfacesCat in Directory.GetDirectories( folder )) {
-					foreach(string filePath in Directory.GetDirectories( surfacesCat )) 
-					{	
-						CustomSurfaces.CreateCustomSurface(ELT.m_PrefabSystem, filePath, material, new DirectoryInfo(surfacesCat).Name);
-					}
-				}
-			}
 		}
 	}
 
@@ -265,7 +240,15 @@ namespace ExtraLandscapingTools.Patches
 					}
 				}
 
-				if (removeTools.Contains(prefab.name) || (prefab is not TerraformingPrefab && prefab is not SpacePrefab && prefab is not SurfacePrefab && prefab is not ObjectPrefab /* && prefab is not TaxiwayPrefab && prefab is not NetLanePrefab*/))
+				if (removeTools.Contains(prefab.name) || 
+					(	
+						prefab is not TerraformingPrefab && 
+						prefab is not SpacePrefab && 
+						prefab is not SurfacePrefab && 
+						prefab is not StaticObjectPrefab /* && prefab is not TaxiwayPrefab && prefab is not NetLanePrefab*/
+					) || 
+					prefab is BuildingPrefab || 
+					prefab is BuildingExtensionPrefab)
 				{	
 
 					// if(prefab is UIAssetCategoryPrefab uIAssetCategoryPrefab2) Plugin.Logger.LogMessage(uIAssetCategoryPrefab2.name);
@@ -279,13 +262,10 @@ namespace ExtraLandscapingTools.Patches
 					return true;
 				}
 
-				try {
-					// WaterSource waterSource = prefab.GetComponent<WaterSource>(); && waterSource == null
-					if (prefab is ObjectPrefab && !prefab.name.ToLower().Contains("decal") && !prefab.name.ToLower().Contains("roadarrow")) 
-					{
-						return true;
-					}
-				} catch { return true;}
+				if (prefab is StaticObjectPrefab && !prefab.name.ToLower().Contains("decal") && !prefab.name.ToLower().Contains("roadarrow")) 
+				{
+					return true;
+				}
 
 				if(prefab is StaticObjectPrefab staticObjectPrefab && (prefab.name.ToLower().Contains("decal") || prefab.name.ToLower().Contains("roadarrow"))) {
 					if(prefab.name.ToLower().Contains("invisible")) {
@@ -350,7 +330,10 @@ namespace ExtraLandscapingTools.Patches
 				} else if(prefab is SurfacePrefab && spawnableArea != null && setupCustomSurfaces) {
 					setupCustomSurfaces = false;
 					try {
-						PrefabSystem_OnCreate.CreateCustomSurfaces(prefab.GetComponent<RenderedArea>().m_Material);
+						// foreach(string s in prefab.GetComponent<RenderedArea>().m_Material.GetPropertyNames(MaterialPropertyType.Vector)) {Plugin.Logger.LogMessage($"Vector : {s} | {prefab.GetComponent<RenderedArea>().m_Material.GetVector(s)}");}
+						// foreach(string s in prefab.GetComponent<RenderedArea>().m_Material.GetPropertyNames(MaterialPropertyType.Float)) {Plugin.Logger.LogMessage($"Float : {s} | {prefab.GetComponent<RenderedArea>().m_Material.GetFloat(s)}");}
+						CustomSurfaces.CreateCustomSurfaces(prefab.GetComponent<RenderedArea>().m_Material);
+
 					} catch (Exception e) {Plugin.Logger.LogWarning(e);}
 				}
 
@@ -364,7 +347,7 @@ namespace ExtraLandscapingTools.Patches
 					TerraformingUI.m_Priority = 1;
 				}
 
-				// if(prefab is TerraformingPrefab) TerraformingUI.m_Group = GetExistingToolCategory(__instance, prefab, "Terraforming") ?? TerraformingUI.m_Group;
+				if(prefab is TerraformingPrefab) TerraformingUI.m_Group = Prefab.GetExistingToolCategory(__instance, prefab, "Terraforming") ?? TerraformingUI.m_Group;
 				if(prefab is SurfacePrefab) TerraformingUI.m_Group ??= CustomSurfaces.SetupUIGroupe(__instance, prefab);
 				else if(prefab is SpacePrefab) TerraformingUI.m_Group ??= Prefab.GetOrCreateNewToolCategory(__instance, prefab, "Landscaping", "Spaces", "Decals");
 				// else if(prefab.name.ToLower().Contains("decal") && prefab.GetComponent<ObjectSubLanes>() != null) TerraformingUI.m_Group = Prefab.GetOrCreateNewToolCategory(__instance, prefab, "Landscaping", "Parkings Decals", "Pathways") ?? TerraformingUI.m_Group;
