@@ -25,12 +25,12 @@ You can now add resources to your map using this tool.
 ### Surface Tools
 Add different materials to your map using the area tool. (This is a new tab in the landscape tool user interface)
 ### Custom brush
-See the [wiki](https://github.com/AlphaGaming7780/ExtraLandscapingTools/wiki).
+See the [wiki](https://github.com/AlphaGaming7780/ExtraLandscapingTools/wiki#custom-brush).
 ### Custom surface
-See the [wiki](https://github.com/AlphaGaming7780/ExtraLandscapingTools/wiki).
+See the [wiki](https://github.com/AlphaGaming7780/ExtraLandscapingTools/wiki#custom-surfaces).
 
 ## Feature roadmap
-- ✔️ More Pathway ([ELT-Assets](https://github.com/AlphaGaming7780/ELT-Assets))
+<!-- - ✔️ More Pathway ([ELT-Assets](https://github.com/AlphaGaming7780/ELT-Assets)) -->
 - ✔️ More Surfaces (Custom) ([ELT-Surfaces](https://github.com/AlphaGaming7780/ELT-Surfaces))
 - ✔️ Custom Surfaces Support
 - ✔️ Decals
