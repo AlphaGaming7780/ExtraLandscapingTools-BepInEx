@@ -1,4 +1,3 @@
-using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Reflection;
@@ -125,8 +124,8 @@ namespace ExtraLandscapingTools
 
 				// 	_ => $"{GameManager_InitializeThumbnails.COUIBaseLocation}/resources/Icons/Misc/placeholder.svg"
 				// };
-				try {
-					if(prefab is StaticObjectPrefab staticObjectPrefab) {
+				// try {
+				// 	if(prefab is StaticObjectPrefab staticObjectPrefab) {
 
 						// SpawnableObject spawnableObject = staticObjectPrefab.GetComponent<SpawnableObject>();
 						// if(spawnableObject is not null) {
@@ -135,10 +134,19 @@ namespace ExtraLandscapingTools
 						// 			foreach(ObjectMeshInfo objectMeshInfo in staticObjectPrefab1.m_Meshes) {
 						// 				if(objectMeshInfo.m_Mesh is RenderPrefab renderPrefab) {
 						// 					foreach(Material material in renderPrefab.ObtainMaterials()) {
-						// 						foreach(string s in material.GetPropertyNames(MaterialPropertyType.Texture)) {ResizeTexture(material.GetTexture(s), 64, $"{GameManager_Awake.resourcesIcons}\\Decals\\{prefab.name}\\{s}.png");} //\\{staticObjectPrefab1.name}\\{objectMeshInfo}
+						// 						foreach(string s in material.GetPropertyNames(MaterialPropertyType.Texture)) {
+
+						// 							if(!material.HasTexture(s)) continue;
+
+						// 							Texture texture = material.GetTexture(s);
+						// 							if(texture is null) continue;
+						// 							Plugin.Logger.LogMessage("Spawnalble object | " + texture.GetType());
+
+						// 							// ResizeTexture(material.GetTexture(s), 64, $"{GameManager_Awake.resourcesIcons}\\Decals\\{prefab.name}\\{s}.png");
+						// 						} //\\{staticObjectPrefab1.name}\\{objectMeshInfo}
 						// 					}
 						// 				}
-						// 			}
+						// 			} 
 						// 		}
 						// 	}
 						// }
@@ -146,11 +154,20 @@ namespace ExtraLandscapingTools
 						// foreach(ObjectMeshInfo objectMeshInfo in staticObjectPrefab.m_Meshes) {
 						// 	if(objectMeshInfo.m_Mesh is RenderPrefab renderPrefab) {
 						// 		foreach(Material material in renderPrefab.ObtainMaterials()) {
-						// 			foreach(string s in material.GetPropertyNames(MaterialPropertyType.Texture)) {ResizeTexture(material.GetTexture(s), 64, $"{GameManager_Awake.resourcesIcons}\\Decals\\{prefab.name}\\{s}.png");}
+						// 			foreach(string s in material.GetPropertyNames(MaterialPropertyType.Texture)) {
+
+						// 				if(!material.HasTexture(s)) continue;
+
+						// 				Texture texture = material.GetTexture(s);
+						// 				if(texture is null) continue;
+						// 				Plugin.Logger.LogMessage("mesh object | " + texture.GetType());
+
+						// 				// ResizeTexture(material.GetTexture(s), 64, $"{GameManager_Awake.resourcesIcons}\\Decals\\{prefab.name}\\{s}.png");
+
+						// 			}
 						// 		}
 						// 	}
 						// }
-
 						// if(staticObjectPrefab.m_Meshes[0].m_Mesh is RenderPrefab) {
 
 
@@ -159,12 +176,11 @@ namespace ExtraLandscapingTools
 							// ResizeTexture(renderPrefab.ObtainMaterial(0).GetTexture("_BaseColorMap"), 64, $"{GameManager_Awake.resourcesIcons}\\Decals\\{prefab.name}.png");
 							// return $"{GameManager_InitializeThumbnails.COUIBaseLocation}/resources/Icons/Decals/{prefab.name}.png";
 						// }
-					}
-				} catch(Exception e) {Plugin.Logger.LogError(e);}
+				// 	}
+				// } catch(Exception e) {Plugin.Logger.LogError(e);}
 
 				return $"{GameManager_InitializeThumbnails.COUIBaseLocation}/resources/Icons/Misc/placeholder.svg";
 			}
-			Plugin.Logger.LogMessage(prefab.name);
 			return $"{GameManager_InitializeThumbnails.COUIBaseLocation}/resources/Icons/Misc/placeholder.svg";
 		}
 
