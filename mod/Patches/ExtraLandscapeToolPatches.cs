@@ -320,21 +320,21 @@ namespace ExtraLandscapingTools.Patches
         }
 	}
 
-	[HarmonyPatch( typeof( ToolbarUISystem ), "SelectAssetMenu" )]
-	class ToolbarUISystem_SelectAssetMenu //: UISystemBase 
-	{
-        static void Postfix( Entity assetMenu ) {
+	// [HarmonyPatch( typeof( ToolbarUISystem ), "SelectAssetMenu" )]
+	// class ToolbarUISystem_SelectAssetMenu //: UISystemBase 
+	// {
+    //     static void Postfix( Entity assetMenu ) {
 
-			if (assetMenu != Entity.Null && ELT.m_EntityManager.HasComponent<UIAssetMenuData>(assetMenu)) {
-				ELT.m_PrefabSystem.TryGetPrefab(assetMenu, out PrefabBase prefabBase);
-				if(prefabBase is UIAssetMenuPrefab && (prefabBase.name == "Landscaping" || prefabBase.name == "Custom Surfaces")) {
-					ELT_UI.ShowELTSettingsButton(true);
-				} else {
-					ELT_UI.ShowELTSettingsButton(false);
-				}
-			}
-		}
-	}
+	// 		if (assetMenu != Entity.Null && ELT.m_EntityManager.HasComponent<UIAssetMenuData>(assetMenu)) {
+	// 			ELT.m_PrefabSystem.TryGetPrefab(assetMenu, out PrefabBase prefabBase);
+	// 			if(prefabBase is UIAssetMenuPrefab && (prefabBase.name == "Landscaping" || prefabBase.name == "Custom Surfaces")) {
+	// 				ELT_UI.ShowELTSettingsButton(true);
+	// 			} else {
+	// 				ELT_UI.ShowELTSettingsButton(false);
+	// 			}
+	// 		}
+	// 	}
+	// }
 }
 
 

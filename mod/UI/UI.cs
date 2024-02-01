@@ -23,11 +23,11 @@ namespace ExtraLandscapingTools
 		internal static ELT_UI_Mono eLT_UI_Mono;
 
 		private static GetterValueBinding<bool> showMarker;
-		private static GetterValueBinding<bool> enableCustomSurfaces;
+		// private static GetterValueBinding<bool> enableCustomSurfaces;
 		internal static bool isMarkerVisible = false;
 
-		private static bool isEnableCustomSurfaces = true;
-		private static EntityQuery surfaceQuery;
+		// private static bool isEnableCustomSurfaces = true;
+		// private static EntityQuery surfaceQuery;
 
 		protected override void OnCreate() {
 
@@ -60,108 +60,23 @@ namespace ExtraLandscapingTools
 			showMarker.Update();
 		}
 
-		private void EnableCustomSurfaces(bool b) {
-			NativeArray<Entity> entities =  surfaceQuery.ToEntityArray(AllocatorManager.Temp);
+		// private void EnableCustomSurfaces(bool b) {
+		// 	NativeArray<Entity> entities =  surfaceQuery.ToEntityArray(AllocatorManager.Temp);
 
-			foreach(Entity entity in entities) {
-				if(b) AddEntityObjectToCategoryUI(entity);
-				else RemoveEntityObjectFromCategoryUI(entity);
-			}
+		// 	foreach(Entity entity in entities) {
+		// 		if(b) AddEntityObjectToCategoryUI(entity);
+		// 		else RemoveEntityObjectFromCategoryUI(entity);
+		// 	}
 
-			isEnableCustomSurfaces = b;
-			enableCustomSurfaces.Update();
-		}
+		// 	isEnableCustomSurfaces = b;
+		// 	enableCustomSurfaces.Update();
+		// }
 
 
-		public static void RemoveEntityObjectFromCategoryUI(Entity entity) {
-			UIObjectData uIObjectData = ELT.m_EntityManager.GetComponentData<UIObjectData>(entity);
-			if(!ELT.m_EntityManager.TryGetBuffer(uIObjectData.m_Group, false, out DynamicBuffer<UIGroupElement> uiGroupBuffer)) {
-				Plugin.Logger.LogError($"Could not get the buffer for RemoveEntityObjectFromCategoryUI");
-				return;
-			};
-
-			for(int i = 0; i < uiGroupBuffer.Length; i++) {
-				if(uiGroupBuffer.ElementAt(i).m_Prefab == entity) {
-					uiGroupBuffer.RemoveAt(i);
-					break;
-				}
-			}
-
-			if(uiGroupBuffer.Length <= 0) {
-				RemoveEntityCategoryUiFromMenuUI(uIObjectData.m_Group);
-			}
-		}
-
-		public static void AddEntityObjectToCategoryUI(Entity entity) {
-
-			UIObjectData uIObjectData = ELT.m_EntityManager.GetComponentData<UIObjectData>(entity);
-			if(!ELT.m_EntityManager.TryGetBuffer(uIObjectData.m_Group, false, out DynamicBuffer<UIGroupElement> uiGroupBuffer)) {
-				Plugin.Logger.LogError($"Could not get the buffer for AddEntityObjectToCategoryUI");
-				return;
-			};
-
-			bool isNotInTheBuffer = true;
-			for (int i = 0; i < uiGroupBuffer.Length; i++)
-			{
-				if(uiGroupBuffer.ElementAt(i).m_Prefab == entity) {
-					isNotInTheBuffer = false;
-					break;
-				}
-			}
-
-			if(isNotInTheBuffer) uiGroupBuffer.Add(new UIGroupElement(entity));
-
-			AddEntityCategoryUiToMenuUI(uIObjectData.m_Group);
-
-		}
-
-		public static void RemoveEntityCategoryUiFromMenuUI(Entity entity) {
-			UIAssetCategoryData uIAssetCategoryData = ELT.m_EntityManager.GetComponentData<UIAssetCategoryData>(entity);
-			if(!ELT.m_EntityManager.TryGetBuffer(uIAssetCategoryData.m_Menu, false, out DynamicBuffer<UIGroupElement> uiGroupBuffer)) {
-				Plugin.Logger.LogError($"Could not get the buffer for RemoveEntityCategoryUiFromMenuUI");
-				return;
-			};
-
-			for(int i = 0; i < uiGroupBuffer.Length; i++) {
-				if(uiGroupBuffer.ElementAt(i).m_Prefab == entity) {
-					uiGroupBuffer.RemoveAt(i);
-					break;
-				}
-			}
-
-			// if(uiGroupBuffer.Length <= 0) {
-			// 	RemoveEntityMenuUiFromBottomBarUI(uIAssetCategoryData.m_Menu);
-			// }
-
-		}
-
-		public static void AddEntityCategoryUiToMenuUI(Entity entity) {
-
-			UIAssetCategoryData uIAssetCategoryData = ELT.m_EntityManager.GetComponentData<UIAssetCategoryData>(entity);
-			if(!ELT.m_EntityManager.TryGetBuffer(uIAssetCategoryData.m_Menu, false, out DynamicBuffer<UIGroupElement> uiGroupBuffer)) {
-				Plugin.Logger.LogError($"Could not get the buffer for AddEntityCategoryUiToMenuUI");
-				return;
-			};
-
-			bool isNotInTheBuffer = true;
-			for (int i = 0; i < uiGroupBuffer.Length; i++)
-			{
-				if(uiGroupBuffer.ElementAt(i).m_Prefab == entity) {
-					isNotInTheBuffer = false;
-					break;
-				}
-			}
-
-			if(isNotInTheBuffer) uiGroupBuffer.Add(new UIGroupElement(entity));
-
-			// AddEntityMenuUiToBottomBarUI(uIAssetCategoryData.m_Menu);
-
-		}
-
-		// public static void RemoveEntityMenuUiFromBottomBarUI(Entity entity) {
-		// 	UIAssetMenuData uIAssetMenuData = ELT.m_EntityManager.GetComponentData<UIAssetMenuData>(entity);
-		// 	if(!ELT.m_EntityManager.TryGetBuffer(entity, false, out DynamicBuffer<UIGroupElement> uiGroupBuffer)) {
-		// 		Plugin.Logger.LogError($"Could not get the buffer for RemoveEntityMenuUiFromBottomBarUI");
+		// public static void RemoveEntityObjectFromCategoryUI(Entity entity) {
+		// 	UIObjectData uIObjectData = ELT.m_EntityManager.GetComponentData<UIObjectData>(entity);
+		// 	if(!ELT.m_EntityManager.TryGetBuffer(uIObjectData.m_Group, false, out DynamicBuffer<UIGroupElement> uiGroupBuffer)) {
+		// 		Plugin.Logger.LogError($"Could not get the buffer for RemoveEntityObjectFromCategoryUI");
 		// 		return;
 		// 	};
 
@@ -171,13 +86,56 @@ namespace ExtraLandscapingTools
 		// 			break;
 		// 		}
 		// 	}
+
+		// 	if(uiGroupBuffer.Length <= 0) {
+		// 		RemoveEntityCategoryUiFromMenuUI(uIObjectData.m_Group);
+		// 	}
 		// }
 
-		// public static void AddEntityMenuUiToBottomBarUI(Entity entity) {
+		// public static void AddEntityObjectToCategoryUI(Entity entity) {
 
-		// 	UIAssetMenuData uIAssetMenuData = ELT.m_EntityManager.GetComponentData<UIAssetMenuData>(entity);
-		// 	if(!ELT.m_EntityManager.TryGetBuffer(entity, false, out DynamicBuffer<UIGroupElement> uiGroupBuffer)) {
-		// 		Plugin.Logger.LogError($"Could not get the buffer for AddEntityMenuUiToBottomBarUI");
+		// 	UIObjectData uIObjectData = ELT.m_EntityManager.GetComponentData<UIObjectData>(entity);
+		// 	if(!ELT.m_EntityManager.TryGetBuffer(uIObjectData.m_Group, false, out DynamicBuffer<UIGroupElement> uiGroupBuffer)) {
+		// 		Plugin.Logger.LogError($"Could not get the buffer for AddEntityObjectToCategoryUI");
+		// 		return;
+		// 	};
+
+		// 	bool isNotInTheBuffer = true;
+		// 	for (int i = 0; i < uiGroupBuffer.Length; i++)
+		// 	{
+		// 		if(uiGroupBuffer.ElementAt(i).m_Prefab == entity) {
+		// 			isNotInTheBuffer = false;
+		// 			break;
+		// 		}
+		// 	}
+
+		// 	if(isNotInTheBuffer) uiGroupBuffer.Add(new UIGroupElement(entity));
+
+		// 	AddEntityCategoryUiToMenuUI(uIObjectData.m_Group);
+
+		// }
+
+		// public static void RemoveEntityCategoryUiFromMenuUI(Entity entity) {
+		// 	UIAssetCategoryData uIAssetCategoryData = ELT.m_EntityManager.GetComponentData<UIAssetCategoryData>(entity);
+		// 	if(!ELT.m_EntityManager.TryGetBuffer(uIAssetCategoryData.m_Menu, false, out DynamicBuffer<UIGroupElement> uiGroupBuffer)) {
+		// 		Plugin.Logger.LogError($"Could not get the buffer for RemoveEntityCategoryUiFromMenuUI");
+		// 		return;
+		// 	};
+
+		// 	for(int i = 0; i < uiGroupBuffer.Length; i++) {
+		// 		if(uiGroupBuffer.ElementAt(i).m_Prefab == entity) {
+		// 			uiGroupBuffer.RemoveAt(i);
+		// 			break;
+		// 		}
+		// 	}
+
+		// }
+
+		// public static void AddEntityCategoryUiToMenuUI(Entity entity) {
+
+		// 	UIAssetCategoryData uIAssetCategoryData = ELT.m_EntityManager.GetComponentData<UIAssetCategoryData>(entity);
+		// 	if(!ELT.m_EntityManager.TryGetBuffer(uIAssetCategoryData.m_Menu, false, out DynamicBuffer<UIGroupElement> uiGroupBuffer)) {
+		// 		Plugin.Logger.LogError($"Could not get the buffer for AddEntityCategoryUiToMenuUI");
 		// 		return;
 		// 	};
 
@@ -217,14 +175,13 @@ namespace ExtraLandscapingTools
 			}
 		}
 
-		public static void ShowELTSettingsButton(bool show) {
-			return;
-			if(show) {
-				eLT_UI_Mono.ChangeUiNextFrame(GetStringFromEmbbededJSFile("SetupSettings.js"));
-			} else {
-				eLT_UI_Mono.ChangeUiNextFrame(GetStringFromEmbbededJSFile("REMOVE_Settings.js"));
-			}
-		}
+		// public static void ShowELTSettingsButton(bool show) {
+		// 	if(show) {
+		// 		eLT_UI_Mono.ChangeUiNextFrame(GetStringFromEmbbededJSFile("SetupSettings.js"));
+		// 	} else {
+		// 		eLT_UI_Mono.ChangeUiNextFrame(GetStringFromEmbbededJSFile("REMOVE_Settings.js"));
+		// 	}
+		// }
 	}
 
 	internal class ELT_UI_Mono : MonoBehaviour
