@@ -58,9 +58,9 @@ public class CustomSurfaces
 		}
 	}
 
-	private static void CreateCustomSurface(PrefabSystem prefabSystem, string folderPath, Material material, string uIAssetCategoryPrefab) {
+	private static void CreateCustomSurface(PrefabSystem prefabSystem, string folderPath, Material material, string CatName) {
 
-		if(!File.Exists(folderPath+"\\_BaseColorMap.png")) return;
+		if(!File.Exists(folderPath+"\\"+"_BaseColorMap.png")) {Plugin.Logger.LogError($"No _BaseColorMap.png file for the {new DirectoryInfo(folderPath).Name} surface in {CatName} category.");return;}
 
 		SurfacePrefab surfacePrefab = (SurfacePrefab)ScriptableObject.CreateInstance("SurfacePrefab");
 		surfacePrefab.name = new DirectoryInfo(folderPath).Name;
@@ -76,7 +76,6 @@ public class CustomSurfaces
 
 		if(File.Exists(folderPath+"\\surface.json")) {
 			JSONMaterail jSONMaterail = Decoder.Decode(File.ReadAllText(folderPath+"\\surface.json")).Make<JSONMaterail>();
-			// foreach(string key in jSONMaterail.Int.Keys) {newMaterial.SetInt(key, jSONMaterail.Int[key]);}
 			foreach(string key in jSONMaterail.Float.Keys) {newMaterial.SetFloat(key, jSONMaterail.Float[key]);}
 			foreach(string key in jSONMaterail.Vector.Keys) {newMaterial.SetVector(key, jSONMaterail.Vector[key]);}
 		} 
@@ -86,7 +85,7 @@ public class CustomSurfaces
 		try {
 			fileData = File.ReadAllBytes(folderPath+"\\_BaseColorMap.png");
 			Texture2D texture2D_BaseColorMap = new(1, 1);
-			if(!texture2D_BaseColorMap.LoadImage(fileData)) {UnityEngine.Debug.LogError("Failed to Load Image"); return;}
+			if(!texture2D_BaseColorMap.LoadImage(fileData)) {UnityEngine.Debug.LogError($"[ELT] Failed to Load the BaseColorMap image for the {surfacePrefab.name} surface."); return;}
 
 			if(!File.Exists(folderPath+"\\icon.png")) ELT.ResizeTexture(texture2D_BaseColorMap, 64, folderPath+"\\icon.png");
 			// if(texture2D_BaseColorMap.width > 512 || texture2D_BaseColorMap.height > 512) texture2D_BaseColorMap = ELT.ResizeTexture(texture2D_BaseColorMap, 512, folderPath+"\\_BaseColorMap.png");
@@ -109,13 +108,11 @@ public class CustomSurfaces
 			if(texture2D_MaskMap.LoadImage(fileData)) {
 				// if(texture2D_MaskMap.width > 512 || texture2D_MaskMap.height > 512) texture2D_MaskMap = ELT.ResizeTexture(texture2D_MaskMap, 512, folderPath+"\\_MaskMap.png");
 				newMaterial.SetTexture("_MaskMap", texture2D_MaskMap);
-				newMaterial.SetFloat("_Metallic", 0.75f);
-				newMaterial.SetFloat("_Smoothness", 0.75f);
 			}
 		} catch {}
 
 		RenderedArea renderedArea = surfacePrefabPlaceHolder.AddComponent<RenderedArea>();
-		renderedArea.m_RendererPriority = GetRendererPriorityByCat(uIAssetCategoryPrefab);
+		renderedArea.m_RendererPriority = GetRendererPriorityByCat(CatName);
 		renderedArea.m_LodBias = 0;
 		renderedArea.m_Roundness = 1;
 		renderedArea.m_Material = newMaterial;
@@ -127,7 +124,7 @@ public class CustomSurfaces
 		spawnableArea.m_Placeholders[0] = surfacePrefabPlaceHolder;
 
 		RenderedArea renderedArea1 = surfacePrefab.AddComponent<RenderedArea>();
-		renderedArea1.m_RendererPriority = GetRendererPriorityByCat(uIAssetCategoryPrefab);
+		renderedArea1.m_RendererPriority = GetRendererPriorityByCat(CatName);
 		renderedArea1.m_LodBias = 0;
 		renderedArea1.m_Roundness = 1;
 		renderedArea1.m_Material = newMaterial;
@@ -146,16 +143,18 @@ public class CustomSurfaces
 		UIObject surfacePrefabUI = surfacePrefab.AddComponent<UIObject>();
 		surfacePrefabUI.active = true;
 		surfacePrefabUI.m_IsDebugObject = false;
-		surfacePrefabUI.m_Icon = File.Exists(folderPath+"\\icon.png") ? $"{GameManager_InitializeThumbnails.COUIBaseLocation}/CustomSurfaces/{uIAssetCategoryPrefab}/{new DirectoryInfo(folderPath).Name}/icon.png" : ELT.GetIcon(surfacePrefab);
+		surfacePrefabUI.m_Icon = File.Exists(folderPath+"\\icon.png") ? $"{GameManager_InitializeThumbnails.COUIBaseLocation}/CustomSurfaces/{CatName}/{new DirectoryInfo(folderPath).Name}/icon.png" : ELT.GetIcon(surfacePrefab);
 		surfacePrefabUI.m_Priority = -1;
-		surfacePrefabUI.m_Group = SetupUIGroupe(prefabSystem, surfacePrefab, uIAssetCategoryPrefab);
+		surfacePrefabUI.m_Group = SetupUIGroupe(prefabSystem, surfacePrefab, CatName);
 
 		prefabSystem.AddPrefab(surfacePrefab);
 		prefabSystem.AddPrefab(surfacePrefabPlaceHolder);
 
 	}
 
-	internal static UIAssetCategoryPrefab SetupUIGroupe(PrefabSystem prefabSystem, PrefabBase prefab, string cat = "Misc") {
+	internal static UIAssetCategoryPrefab SetupUIGroupe(PrefabSystem prefabSystem, PrefabBase prefab, string cat = null) {
+
+		cat ??= GetCatByRendererPriority(prefab.GetComponent<RenderedArea>().m_RendererPriority);
 
 		if(!SurfacesDataBase.ContainsKey(prefab)) SurfacesDataBase.Add(prefab, cat);
 
@@ -179,4 +178,18 @@ public class CustomSurfaces
 			_ => -100
 		};
 	}
+
+	internal static string GetCatByRendererPriority( int i) {
+		return i switch
+		{   
+			-100 => "Ground",
+			-99 => "Ground", //"Grass",
+			-98 => "Ground", //"Sand",
+			-97 => "Concrete",
+			-96 => "Concrete", //"Pavement",
+			-95 => "Tiles",
+			_ => "Misc"
+		};
+	}
+
 }

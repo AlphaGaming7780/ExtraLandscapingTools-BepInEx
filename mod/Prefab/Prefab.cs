@@ -7,7 +7,7 @@ namespace ExtraLandscapingTools;
 public class Prefab
 {
 
-    internal static readonly Dictionary<string, List<PrefabBase>> failedSurfacePrefabs = [];
+    internal static readonly Dictionary<string, List<PrefabBase>> failedPrefabs = [];
 
     internal static UIAssetCategoryPrefab GetExistingToolCategory(PrefabSystem prefabSystem, PrefabBase prefabBase ,string cat)
     {
@@ -64,21 +64,15 @@ public class Prefab
 
         prefabSystem.AddPrefab(surfaceCategory);
 
-        // UnityEngine.Debug.Log($"Registered Surfaces category");
-
-
         return surfaceCategory;
     }
 
     private static void AddPrefabToFailedPrefabList(PrefabBase prefabBase, string cat) {
-        if(failedSurfacePrefabs.ContainsKey(cat)) {
-            failedSurfacePrefabs[cat].Add(prefabBase);
+        if(failedPrefabs.ContainsKey(cat)) {
+            failedPrefabs[cat].Add(prefabBase);
         } else {
-            failedSurfacePrefabs.Add(cat, []);
-            failedSurfacePrefabs[cat].Add(prefabBase);
+            failedPrefabs.Add(cat, []);
+            failedPrefabs[cat].Add(prefabBase);
         }
-
-        // Plugin.Logger.LogMessage("Prefab " + prefabBase.name + " has been added to the failedPrefab " + cat + " " + failedSurfacePrefabs[cat].Contains(prefabBase));
-
     }
 }

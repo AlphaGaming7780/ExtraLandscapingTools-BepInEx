@@ -25,13 +25,14 @@ You can now add resources to your map using this tool.
 ### Surface Tools
 Add different materials to your map using the area tool. (This is a new tab in the landscape tool user interface)
 ### Custom brush
-You can add custom brush into the game. To add a custom brush to your game. Create a folder in the BepInEx/Plugins folder and name it `ExtraLandscapingTools_mods`. Inside this folder create another folder and name it `CustomBrushes`. You can now add your custom brushes into the CustomBrushes folder. All custom brushes must be png format, with a transparent background, and 512x512 in size.
+See the [wiki](https://github.com/AlphaGaming7780/ExtraLandscapingTools/wiki).
 ### Custom surface
-You can add custom surface into the game. To add a custom surface to your game. Create a folder in the BepInEx/Plugins folder and name it `ExtraLandscapingTools_mods`. Inside this folder create another folder and name it `CustomSurfaces`. You can now create a new folder named the name of you surface and in the folder you need to have at least one of this file whit the same name `_BaseColorMap.png`, `_MaskMap.png`, `_NormalMap.png`. If you wan a custom icon for you surface just put your icon.svg in the same folder.
+See the [wiki](https://github.com/AlphaGaming7780/ExtraLandscapingTools/wiki).
 
 ## Feature roadmap
-- ✔️ More Pathway
-- ✔️ Custom Surfaces
+- ✔️ More Pathway ([ELT-Assets](https://github.com/AlphaGaming7780/ELT-Assets))
+- ✔️ More Surfaces (Custom) ([ELT-Surfaces](https://github.com/AlphaGaming7780/ELT-Surfaces))
+- ✔️ Custom Surfaces Support
 - ✔️ Decals
 - ✔️ Translation support
 - ✔️ Custom brush
@@ -42,7 +43,8 @@ You can add custom surface into the game. To add a custom surface to your game. 
 
 # Acknowledgment
 - [CynicalBusiness](https://lab.vevox.io/games/cities-skylines-2/surface-tools/-/tree/develop?ref_type=heads) For its surface tools which help me a lot to make this mod.
-- [CityRat](https://thunderstore.io/c/cities-skylines-ii/p/CityRat/) For all the custom icons.
+- [CityRat](https://thunderstore.io/c/cities-skylines-ii/p/CityRat/) For the custom icons.
+- Chamëleon TBN For the custom icons.
 - [optimus-code](https://thunderstore.io/c/cities-skylines-ii/p/Cities2Modding/)
 
 # Community

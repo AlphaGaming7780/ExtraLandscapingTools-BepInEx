@@ -21,7 +21,7 @@ namespace ExtraLandscapingTools.Patches
 {
 
 	[HarmonyPatch(typeof(GameManager), "Awake")]
-	internal class GameSystemBase_OnCreate
+	internal class GameManager_Awake
 	{	
 		static private readonly string PathToParent = Directory.GetParent(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location)).FullName;
 		public static readonly string PathToMods = Path.Combine(PathToParent,"ExtraLandscapingTools_mods");
@@ -36,7 +36,6 @@ namespace ExtraLandscapingTools.Patches
 
 		static void Postfix(GameSystemBase __instance)
 		{
-			Plugin.Logger.LogMessage("YEET");
 			if(File.Exists(pathToZip)) {
 				if(Directory.Exists(resources)) Directory.Delete(resources, true);
 				ZipFile.ExtractToDirectory(pathToZip, Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location));
@@ -72,7 +71,7 @@ namespace ExtraLandscapingTools.Patches
 		static void Prefix(GameManager __instance)
 		{
 
-			if(Directory.Exists(GameSystemBase_OnCreate.PathToMods)) pathToIconToLoad.Add(GameSystemBase_OnCreate.PathToMods);
+			if(Directory.Exists(GameManager_Awake.PathToMods)) pathToIconToLoad.Add(GameManager_Awake.PathToMods);
 
 			var gameUIResourceHandler = (GameUIResourceHandler)GameManager.instance.userInterface.view.uiSystem.resourceHandler;
 			
@@ -123,7 +122,7 @@ namespace ExtraLandscapingTools.Patches
 	[HarmonyPatch( typeof( ToolUISystem ), "OnToolChanged", typeof(ToolBaseSystem) )]
 	class ToolUISystem_OnToolChanged
 	{
-		private static bool showMarker = false;
+		internal static bool showMarker = false;
 		private static void Postfix( ToolBaseSystem tool ) {
 
 			if(tool is TerrainToolSystem) {
@@ -133,13 +132,25 @@ namespace ExtraLandscapingTools.Patches
 			}
 
 			if(tool is AreaToolSystem || tool is ObjectToolSystem) {
-				if(!showMarker) ELT_UI.eLT_UI_Mono.ChangeUiNextFrame(ELT_UI.GetStringFromEmbbededJSFile("ShowMarker.js"));
+				// if(!showMarker) 
+				ELT_UI.eLT_UI_Mono.ChangeUiNextFrame(ELT_UI.GetStringFromEmbbededJSFile("ShowMarker.js"));
 				showMarker = true;
 			} else if(showMarker){
 				ELT_UI.ShowMarker(false);
 				ELT_UI.eLT_UI_Mono.ChangeUiNextFrame(ELT_UI.GetStringFromEmbbededJSFile("REMOVE_ShowMarker.js"));
 				showMarker = false;
 			}
+
+			ELT_UI.SetUpMarker(tool.GetPrefab());
+
+		}
+	}
+
+	[HarmonyPatch( typeof( ToolUISystem ), "OnPrefabChanged", typeof(PrefabBase) )]
+	class ToolUISystem_OnPrefabChanged
+	{
+		private static void Postfix(PrefabBase prefab) {
+			ELT_UI.SetUpMarker(prefab);
 		}
 	}
 
@@ -153,13 +164,11 @@ namespace ExtraLandscapingTools.Patches
 
 			ELT.m_PrefabSystem = __instance;
 
-			// CustomSurfaces.CallOnCustomSurfaces += LoadCustomSurfaces;
-
 			foreach(string folder in FolderToLoadBrush) {;
 				foreach(string filePath in Directory.GetFiles(folder)) 
 				{
 					byte[] fileData = File.ReadAllBytes(filePath);
-					Texture2D texture2D = new(512, 512);
+					Texture2D texture2D = new(1, 1);
 					if(!texture2D.LoadImage(fileData)) UnityEngine.Debug.LogError("Failed to Load Image");
 								
 					BrushPrefab brushPrefab = (BrushPrefab)ScriptableObject.CreateInstance("BrushPrefab");
@@ -168,13 +177,6 @@ namespace ExtraLandscapingTools.Patches
 					__instance.AddPrefab(brushPrefab);
 				}
 			}
-
-			// StaticObjectPrefab staticObjectPrefab = (StaticObjectPrefab)ScriptableObject.CreateInstance("StaticObjectPrefab");
-			// staticObjectPrefab.name = "TestDecals";
-			// SubObjectDefaultProbability subObjectDefaultProbability = staticObjectPrefab.AddComponent<SubObjectDefaultProbability>();
-			// subObjectDefaultProbability.active =  true;
-
-			// __instance.AddPrefab(staticObjectPrefab);
 		}
 	}
 
@@ -195,13 +197,12 @@ namespace ExtraLandscapingTools.Patches
 		private static string UIAssetCategoryPrefabName = "";
 
 		private static bool setupCustomSurfaces = true;
+		private static bool setupCustomDecals = true;
 
 		public static bool Prefix( PrefabSystem __instance, PrefabBase prefab)
 		{
 
 			if (Traverse.Create(__instance).Field("m_Entities").GetValue<Dictionary<PrefabBase, Entity>>().ContainsKey(prefab)) {
-				
-				// if(prefab is SurfacePrefab) Plugin.Logger.LogWarning(prefab.name + " is already added");
 				return false;
 			}
 
@@ -227,15 +228,13 @@ namespace ExtraLandscapingTools.Patches
 
 			try {
 
-				if(Prefab.failedSurfacePrefabs.ContainsKey(UIAssetCategoryPrefabName)) {
-					// Plugin.Logger.LogMessage(UIAssetCategoryPrefabName);
+				if(Prefab.failedPrefabs.ContainsKey(UIAssetCategoryPrefabName)) {
 					string cat = UIAssetCategoryPrefabName;
 					UIAssetCategoryPrefabName = "";
-					PrefabBase[] temp = new PrefabBase[Prefab.failedSurfacePrefabs[cat].Count];
-					Prefab.failedSurfacePrefabs[cat].CopyTo(temp);
+					PrefabBase[] temp = new PrefabBase[Prefab.failedPrefabs[cat].Count];
+					Prefab.failedPrefabs[cat].CopyTo(temp);
 					foreach(PrefabBase prefabBase in temp) {
-						// Plugin.Logger.LogMessage("Trying to add prefab " + prefabBase.name + " to the game.");
-						Prefab.failedSurfacePrefabs[cat].Remove(prefabBase);
+						Prefab.failedPrefabs[cat].Remove(prefabBase);
 						__instance.AddPrefab(prefabBase);
 					}
 				}
@@ -243,20 +242,15 @@ namespace ExtraLandscapingTools.Patches
 				if (removeTools.Contains(prefab.name) || 
 					(	
 						prefab is not TerraformingPrefab && 
-						prefab is not SpacePrefab && 
 						prefab is not SurfacePrefab && 
-						prefab is not StaticObjectPrefab /* && prefab is not TaxiwayPrefab && prefab is not NetLanePrefab*/
+						prefab is not StaticObjectPrefab
 					) || 
 					prefab is BuildingPrefab || 
 					prefab is BuildingExtensionPrefab)
 				{	
-
-					// if(prefab is UIAssetCategoryPrefab uIAssetCategoryPrefab2) Plugin.Logger.LogMessage(uIAssetCategoryPrefab2.name);
-
-					if(prefab is UIAssetMenuPrefab uIAssetMenuPrefab && Prefab.failedSurfacePrefabs.ContainsKey(uIAssetMenuPrefab.name)) {
+					if(prefab is UIAssetMenuPrefab uIAssetMenuPrefab && Prefab.failedPrefabs.ContainsKey(uIAssetMenuPrefab.name)) {
 						UIAssetCategoryPrefabName = uIAssetMenuPrefab.name;
-					} else if(prefab is UIAssetCategoryPrefab uIAssetCategoryPrefab && Prefab.failedSurfacePrefabs.ContainsKey(uIAssetCategoryPrefab.name)) {
-						// Plugin.Logger.LogMessage("Now adding asset for " + uIAssetCategoryPrefab.name + " cat");
+					} else if(prefab is UIAssetCategoryPrefab uIAssetCategoryPrefab && Prefab.failedPrefabs.ContainsKey(uIAssetCategoryPrefab.name)) {
 						UIAssetCategoryPrefabName = uIAssetCategoryPrefab.name;
 					}
 					return true;
@@ -270,58 +264,13 @@ namespace ExtraLandscapingTools.Patches
 				if(prefab is StaticObjectPrefab staticObjectPrefab && (prefab.name.ToLower().Contains("decal") || prefab.name.ToLower().Contains("roadarrow"))) {
 					if(prefab.name.ToLower().Contains("invisible")) {
 						return true;
+					}else if(setupCustomDecals) {
+						if(staticObjectPrefab.m_Meshes[0].m_Mesh is RenderPrefab renderPrefab) {
+							setupCustomDecals = false;
+							// CustomDecals.CreateCustomDecals(renderPrefab);
+						}
 					}
-
-					// Plugin.Logger.LogMessage(prefab.name);
-
-					// foreach (ObjectMeshInfo objectMeshInfo in staticObjectPrefab.m_Meshes) {
-					// 	foreach(ComponentBase componentBase in objectMeshInfo.m_Mesh.components) {
-					// 		if(componentBase is DecalProperties decalProperties) {
-					// 			Plugin.Logger.LogMessage(decalProperties.prefab == staticObjectPrefab);
-					// 			Plugin.Logger.LogMessage(decalProperties.m_TextureArea);
-					// 		}
-					// 		Plugin.Logger.LogMessage(componentBase);
-					// 	}
-					// }
-
-					// foreach(ComponentBase componentBase in prefab.components) {
-					// 	Plugin.Logger.LogMessage(componentBase);
-					// 	if (componentBase is ObjectSubObjects objectSubObjects) {
-					// 		foreach(ObjectSubObjectInfo objectSubObjectInfo in objectSubObjects.m_SubObjects) {
-					// 			foreach(ComponentBase componentBase1 in objectSubObjectInfo.m_Object.components) {
-					// 				Plugin.Logger.LogMessage(componentBase1);
-
-					// 				Plugin.Logger.LogWarning(componentBase1 + "is not on the prefab PlaceHolder");
-					// 			}
-					// 		}
-					// 	} else if(componentBase is SubObjectDefaultProbability subObjectDefaultProbability) {
-					// 		Plugin.Logger.LogMessage(subObjectDefaultProbability.name);
-					// 		Plugin.Logger.LogMessage(subObjectDefaultProbability);
-					// 	} else {
-					// 		Plugin.Logger.LogWarning(componentBase + "is not on the prefab");
-					// 	}
-					// }
-				
-					// Plugin.Logger.LogMessage(prefab.GetComponent<ObjectSubObjects>().m_SubObjects);
-					// Plugin.Logger.LogMessage(prefab);
-
-					// foreach(ObjectSubObjectInfo objectSubObjectInfo in prefab.GetComponent<ObjectSubObjects>().m_SubObjects) {
-					// 	// Plugin.Logger.LogMessage(objectSubObjectInfo.m_Object);
-					// 	foreach(ComponentBase componentBase in objectSubObjectInfo.m_Object.components) {
-					// 		Plugin.Logger.LogMessage(componentBase);
-					// 	}
-					// 	// Plugin.Logger.LogMessage(objectSubObjectInfo.m_ParentMesh);
-					// 	// Plugin.Logger.LogMessage(objectSubObjectInfo.m_GroupIndex);
-					// }
-
-					
-					// foreach(ComponentBase componentBase in prefab.components) {
-					// 	Plugin.Logger.LogMessage(componentBase);
-					// }
-
 				}
-
-				// if(prefab is SurfacePrefab) Plugin.Logger.LogMessage(prefab.name);
 
 				var spawnableArea = prefab.GetComponent<SpawnableArea>();
 				if (prefab is SurfacePrefab && spawnableArea == null)
@@ -330,8 +279,6 @@ namespace ExtraLandscapingTools.Patches
 				} else if(prefab is SurfacePrefab && spawnableArea != null && setupCustomSurfaces) {
 					setupCustomSurfaces = false;
 					try {
-						// foreach(string s in prefab.GetComponent<RenderedArea>().m_Material.GetPropertyNames(MaterialPropertyType.Vector)) {Plugin.Logger.LogMessage($"Vector : {s} | {prefab.GetComponent<RenderedArea>().m_Material.GetVector(s)}");}
-						// foreach(string s in prefab.GetComponent<RenderedArea>().m_Material.GetPropertyNames(MaterialPropertyType.Float)) {Plugin.Logger.LogMessage($"Float : {s} | {prefab.GetComponent<RenderedArea>().m_Material.GetFloat(s)}");}
 						CustomSurfaces.CreateCustomSurfaces(prefab.GetComponent<RenderedArea>().m_Material);
 
 					} catch (Exception e) {Plugin.Logger.LogWarning(e);}
@@ -348,24 +295,46 @@ namespace ExtraLandscapingTools.Patches
 				}
 
 				if(prefab is TerraformingPrefab) TerraformingUI.m_Group = Prefab.GetExistingToolCategory(__instance, prefab, "Terraforming") ?? TerraformingUI.m_Group;
-				if(prefab is SurfacePrefab) TerraformingUI.m_Group ??= CustomSurfaces.SetupUIGroupe(__instance, prefab);
-				else if(prefab is SpacePrefab) TerraformingUI.m_Group ??= Prefab.GetOrCreateNewToolCategory(__instance, prefab, "Landscaping", "Spaces", "Decals");
-				// else if(prefab.name.ToLower().Contains("decal") && prefab.GetComponent<ObjectSubLanes>() != null) TerraformingUI.m_Group = Prefab.GetOrCreateNewToolCategory(__instance, prefab, "Landscaping", "Parkings Decals", "Pathways") ?? TerraformingUI.m_Group;
+				else if(prefab is SurfacePrefab) TerraformingUI.m_Group ??= CustomSurfaces.SetupUIGroupe(__instance, prefab);
 				else if(prefab.name.ToLower().Contains("decal")) TerraformingUI.m_Group = Prefab.GetOrCreateNewToolCategory(__instance, prefab, "Landscaping", "Decals", "Pathways") ?? TerraformingUI.m_Group;
 				else if(prefab.name.ToLower().Contains("roadarrow")) TerraformingUI.m_Group = Prefab.GetOrCreateNewToolCategory(__instance, prefab, "Landscaping", "Decals", "Pathways") ?? TerraformingUI.m_Group;
+				else TerraformingUI.m_Group ??= Prefab.GetOrCreateNewToolCategory(__instance, prefab, "Landscaping", "[ELT] Failed Prefab, IF you see this tab, repport it, it's a bug.");
 
 				if(TerraformingUI.m_Group == null) {
-					// Plugin.Logger.LogWarning($"Failed to add {prefab.GetType()} | {prefab.name} to the game.");
 					return false;
 				} else {
-					// Plugin.Logger.LogMessage($"Success to add {prefab.GetType()} | {prefab.name} to the game.");
 				}
 
 			} catch (Exception e) {Plugin.Logger.LogError(e);}
 
-			// if(prefab is SurfacePrefab) Plugin.Logger.LogMessage(prefab.name + " Have been added in the game.");
-
 			return true;
 		}
 	}
+
+	[HarmonyPatch(typeof(SelectedInfoUISystem), "AddSections")]
+	public class SelectedInfoUISystem_AddSections
+	{
+		public static void Postfix(List<ISectionSource> topSections, List<ISectionSource> sections, List<ISectionSource> bottomSections)
+		{
+			// sections.Add(base.World.GetOrCreateSystemManaged<VehiclesSection>());
+        }
+	}
+
+	[HarmonyPatch( typeof( ToolbarUISystem ), "SelectAssetMenu" )]
+	class ToolbarUISystem_SelectAssetMenu //: UISystemBase 
+	{
+        static void Postfix( Entity assetMenu ) {
+
+			if (assetMenu != Entity.Null && ELT.m_EntityManager.HasComponent<UIAssetMenuData>(assetMenu)) {
+				ELT.m_PrefabSystem.TryGetPrefab(assetMenu, out PrefabBase prefabBase);
+				if(prefabBase is UIAssetMenuPrefab && (prefabBase.name == "Landscaping" || prefabBase.name == "Custom Surfaces")) {
+					ELT_UI.ShowELTSettingsButton(true);
+				} else {
+					ELT_UI.ShowELTSettingsButton(false);
+				}
+			}
+		}
+	}
 }
+
+
