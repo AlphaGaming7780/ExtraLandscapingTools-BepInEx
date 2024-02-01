@@ -86,7 +86,7 @@ public class Prefab
 
     }
 
-    internal static void CreateNewUiToolMenu(string menu, int) {
+    internal static void CreateNewUiToolMenu(PrefabBase prefab, string menu) {
         if (!ELT.m_PrefabSystem.TryGetPrefab(new PrefabID(nameof(UIAssetMenuPrefab), menu), out var p2) //Landscaping
             || p2 is not UIAssetMenuPrefab SurfaceMenu)
             {
@@ -94,7 +94,7 @@ public class Prefab
                 SurfaceMenu.name = menu;
                 var SurfaceMenuUI = SurfaceMenu.AddComponent<UIObject>();
                 SurfaceMenuUI.m_Icon = ELT.GetIcon(SurfaceMenu);
-                SurfaceMenuUI.m_Priority = prefab.GetComponent<UIObject>().m_Priority+1;
+                SurfaceMenuUI.m_Priority = prefab.GetComponent<UIObject>().m_Priority;
                 SurfaceMenuUI.active = true;
                 SurfaceMenuUI.m_IsDebugObject = false;
                 SurfaceMenuUI.m_Group = prefab.GetComponent<UIObject>().m_Group;
