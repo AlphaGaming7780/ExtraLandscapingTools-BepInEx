@@ -208,6 +208,26 @@ namespace ExtraLandscapingTools.Patches
 
 
 			if(prefab is UIAssetMenuPrefab) {
+
+				if(Prefab.newUiMenu.ContainsKey(prefab.name)) {
+					foreach(string menu in Prefab.newUiMenu[prefab.name]) {
+					if (!__instance.TryGetPrefab(new PrefabID(nameof(UIAssetMenuPrefab), menu), out var p2) //Landscaping
+						|| p2 is not UIAssetMenuPrefab SurfaceMenu)
+						{
+							SurfaceMenu = ScriptableObject.CreateInstance<UIAssetMenuPrefab>();
+							SurfaceMenu.name = menu;
+							var SurfaceMenuUI = SurfaceMenu.AddComponent<UIObject>();
+							SurfaceMenuUI.m_Icon = ELT.GetIcon(SurfaceMenu);
+							SurfaceMenuUI.m_Priority = prefab.GetComponent<UIObject>().m_Priority+1;
+							SurfaceMenuUI.active = true;
+							SurfaceMenuUI.m_IsDebugObject = false;
+							SurfaceMenuUI.m_Group = prefab.GetComponent<UIObject>().m_Group;
+
+							__instance.AddPrefab(SurfaceMenu);
+						}
+					}
+				}
+
 				if(prefab.name == "Landscaping" && CustomSurfaces.FolderToLoadSurface.Count > 0) {
 					if (!__instance.TryGetPrefab(new PrefabID(nameof(UIAssetMenuPrefab), "Custom Surfaces"), out var p2) //Landscaping
 					|| p2 is not UIAssetMenuPrefab SurfaceMenu)
@@ -329,7 +349,7 @@ namespace ExtraLandscapingTools.Patches
 
 			if (assetMenu != Entity.Null && ELT.m_EntityManager.HasComponent<UIAssetMenuData>(assetMenu)) {
 				ELT.m_PrefabSystem.TryGetPrefab(assetMenu, out PrefabBase prefabBase);
-				if(prefabBase is UIAssetMenuPrefab && (prefabBase.name == "Landscaping" || prefabBase.name == "Custom Surfaces")) {
+				if(prefabBase is UIAssetMenuPrefab && ELT_UI.validMenuForELTSettings.Contains(prefabBase.name)) {
 					ELT_UI.ShowELTSettingsButton(true);
 				} else {
 					ELT_UI.ShowELTSettingsButton(false);

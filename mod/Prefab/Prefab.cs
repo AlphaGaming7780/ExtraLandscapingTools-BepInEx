@@ -10,6 +10,8 @@ public class Prefab
     internal delegate void OnAddPrefab(PrefabBase prefabBase);
     internal static OnAddPrefab onAddPrefab;
 
+    internal static Dictionary<string, List<string>> newUiMenu = [];
+
     internal static readonly Dictionary<string, List<PrefabBase>> failedPrefabs = [];
 
     internal static UIAssetCategoryPrefab GetExistingToolCategory(PrefabSystem prefabSystem, PrefabBase prefabBase ,string cat)
@@ -70,8 +72,36 @@ public class Prefab
         return surfaceCategory;
     }
 
-    public static void RegisterNewToolMenu(string name, string insertAfter) {
-        
+    public static void RegisterNewToolMenu(string name, string insertAfter = null, bool elt = true) {
+
+        insertAfter ??= "none";
+
+        if(newUiMenu.ContainsKey(insertAfter)) {
+            newUiMenu[insertAfter].Add(name);
+        } else {
+            newUiMenu.Add(insertAfter, new([name]));
+        }
+
+        if(elt) ELT_UI.validMenuForELTSettings.Add(name);
+
+    }
+
+    internal static void CreateNewUiToolMenu(string menu, int) {
+        if (!ELT.m_PrefabSystem.TryGetPrefab(new PrefabID(nameof(UIAssetMenuPrefab), menu), out var p2) //Landscaping
+            || p2 is not UIAssetMenuPrefab SurfaceMenu)
+            {
+                SurfaceMenu = ScriptableObject.CreateInstance<UIAssetMenuPrefab>();
+                SurfaceMenu.name = menu;
+                var SurfaceMenuUI = SurfaceMenu.AddComponent<UIObject>();
+                SurfaceMenuUI.m_Icon = ELT.GetIcon(SurfaceMenu);
+                SurfaceMenuUI.m_Priority = prefab.GetComponent<UIObject>().m_Priority+1;
+                SurfaceMenuUI.active = true;
+                SurfaceMenuUI.m_IsDebugObject = false;
+                SurfaceMenuUI.m_Group = prefab.GetComponent<UIObject>().m_Group;
+
+                __instance.AddPrefab(SurfaceMenu);
+            }
+        }
     }
 
     private static void AddPrefabToFailedPrefabList(PrefabBase prefabBase, string cat) {

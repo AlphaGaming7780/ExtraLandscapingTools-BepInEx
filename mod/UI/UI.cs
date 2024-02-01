@@ -1,5 +1,6 @@
 using System;
 using System.Collections;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Runtime.Serialization;
@@ -25,9 +26,10 @@ namespace ExtraLandscapingTools
 		private static GetterValueBinding<bool> showMarker;
 		private static GetterValueBinding<bool> enableCustomSurfaces;
 		internal static bool isMarkerVisible = false;
-
 		private static bool isEnableCustomSurfaces = true;
+
 		private static EntityQuery surfaceQuery;
+		internal static List<string> validMenuForELTSettings = ["Landscaping"];
 
 		protected override void OnCreate() {
 
@@ -42,17 +44,17 @@ namespace ExtraLandscapingTools
 			AddBinding(showMarker = new GetterValueBinding<bool>("elt", "showmarker", () => ELT.m_RenderingSystem.markersVisible));
 			AddBinding(new TriggerBinding<bool, bool>("elt", "showmarker", new Action<bool, bool>(ShowMarker)));
 
-			// AddBinding(enableCustomSurfaces = new GetterValueBinding<bool>("elt", "enablecustomsurfaces", () => isEnableCustomSurfaces));
-			// AddBinding(new TriggerBinding<bool>("elt", "enablecustomsurfaces", new Action<bool>(EnableCustomSurfaces)));
+			AddBinding(enableCustomSurfaces = new GetterValueBinding<bool>("elt", "enablecustomsurfaces", () => isEnableCustomSurfaces));
+			AddBinding(new TriggerBinding<bool>("elt", "enablecustomsurfaces", new Action<bool>(EnableCustomSurfaces)));
 
-			// surfaceQuery = GetEntityQuery(new EntityQueryDesc
-			// {
-			//     All =
-            //    [
-            //         ComponentType.ReadOnly<SurfaceData>(),
-			//         ComponentType.ReadOnly<UIObjectData>(),
-			//    ],
-			// });
+			surfaceQuery = GetEntityQuery(new EntityQueryDesc
+			{
+			    All =
+               [
+                    ComponentType.ReadOnly<SurfaceData>(),
+			        ComponentType.ReadOnly<UIObjectData>(),
+			   ],
+			});
 		}
 
 		public static void ShowMarker(bool b, bool forceUpdate = false) {
@@ -128,11 +130,6 @@ namespace ExtraLandscapingTools
 					break;
 				}
 			}
-
-			// if(uiGroupBuffer.Length <= 0) {
-			// 	RemoveEntityMenuUiFromBottomBarUI(uIAssetCategoryData.m_Menu);
-			// }
-
 		}
 
 		public static void AddEntityCategoryUiToMenuUI(Entity entity) {
@@ -154,46 +151,7 @@ namespace ExtraLandscapingTools
 
 			if(isNotInTheBuffer) uiGroupBuffer.Add(new UIGroupElement(entity));
 
-			// AddEntityMenuUiToBottomBarUI(uIAssetCategoryData.m_Menu);
-
 		}
-
-		// public static void RemoveEntityMenuUiFromBottomBarUI(Entity entity) {
-		// 	UIAssetMenuData uIAssetMenuData = ELT.m_EntityManager.GetComponentData<UIAssetMenuData>(entity);
-		// 	if(!ELT.m_EntityManager.TryGetBuffer(entity, false, out DynamicBuffer<UIGroupElement> uiGroupBuffer)) {
-		// 		Plugin.Logger.LogError($"Could not get the buffer for RemoveEntityMenuUiFromBottomBarUI");
-		// 		return;
-		// 	};
-
-		// 	for(int i = 0; i < uiGroupBuffer.Length; i++) {
-		// 		if(uiGroupBuffer.ElementAt(i).m_Prefab == entity) {
-		// 			uiGroupBuffer.RemoveAt(i);
-		// 			break;
-		// 		}
-		// 	}
-		// }
-
-		// public static void AddEntityMenuUiToBottomBarUI(Entity entity) {
-
-		// 	UIAssetMenuData uIAssetMenuData = ELT.m_EntityManager.GetComponentData<UIAssetMenuData>(entity);
-		// 	if(!ELT.m_EntityManager.TryGetBuffer(entity, false, out DynamicBuffer<UIGroupElement> uiGroupBuffer)) {
-		// 		Plugin.Logger.LogError($"Could not get the buffer for AddEntityMenuUiToBottomBarUI");
-		// 		return;
-		// 	};
-
-		// 	bool isNotInTheBuffer = true;
-		// 	for (int i = 0; i < uiGroupBuffer.Length; i++)
-		// 	{
-		// 		if(uiGroupBuffer.ElementAt(i).m_Prefab == entity) {
-		// 			isNotInTheBuffer = false;
-		// 			break;
-		// 		}
-		// 	}
-
-		// 	if(isNotInTheBuffer) uiGroupBuffer.Add(new UIGroupElement(entity));
-
-		// }
-
 
 		internal static string GetStringFromEmbbededJSFile(string path) {
 			return new StreamReader(ELT.GetEmbedded("UI."+path)).ReadToEnd();
