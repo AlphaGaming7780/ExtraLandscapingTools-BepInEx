@@ -131,7 +131,7 @@ namespace ExtraLandscapingTools.Patches
 				ELT_UI.eLT_UI_Mono.ChangeUiNextFrame(ELT_UI.GetStringFromEmbbededJSFile("REMOVE_UI.js"));
 			}
 
-			if(tool is AreaToolSystem || tool is ObjectToolSystem) {
+			if(tool is AreaToolSystem) { //|| tool is ObjectToolSystem
 				// if(!showMarker) 
 				ELT_UI.eLT_UI_Mono.ChangeUiNextFrame(ELT_UI.GetStringFromEmbbededJSFile("ShowMarker.js"));
 				showMarker = true;
