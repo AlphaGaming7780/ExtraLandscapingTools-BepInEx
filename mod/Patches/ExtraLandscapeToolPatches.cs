@@ -239,7 +239,7 @@ namespace ExtraLandscapingTools.Patches
 					}
 				}
 
-				Prefab.onAddPrefab(prefab);
+				if(Prefab.onAddPrefab is not null) Prefab.onAddPrefab(prefab);
 
 				if (removeTools.Contains(prefab.name) || 
 					(	
