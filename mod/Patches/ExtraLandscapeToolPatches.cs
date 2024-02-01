@@ -239,6 +239,8 @@ namespace ExtraLandscapingTools.Patches
 					}
 				}
 
+				Prefab.onAddPrefab(prefab);
+
 				if (removeTools.Contains(prefab.name) || 
 					(	
 						prefab is not TerraformingPrefab && 

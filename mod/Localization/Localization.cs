@@ -32,7 +32,7 @@ namespace ExtraLandscapingTools
 
 		}
 
-		internal static void LoadLocalization() {
+		private static void LoadLocalization() {
 			localization = Decoder.Decode(new StreamReader(ELT.GetEmbedded("Localization.Localization.jsonc")).ReadToEnd()).Make<LocalizationJS>().Localization;
 			if(CustomSurfaces.FolderToLoadSurface.Count > 0) CustomSurfaces.LoadLocalization();
 		}

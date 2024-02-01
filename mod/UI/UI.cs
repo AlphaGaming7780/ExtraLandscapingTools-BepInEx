@@ -218,7 +218,6 @@ namespace ExtraLandscapingTools
 		}
 
 		public static void ShowELTSettingsButton(bool show) {
-			return;
 			if(show) {
 				eLT_UI_Mono.ChangeUiNextFrame(GetStringFromEmbbededJSFile("SetupSettings.js"));
 			} else {

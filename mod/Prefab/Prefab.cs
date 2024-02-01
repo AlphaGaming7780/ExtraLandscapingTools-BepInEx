@@ -7,6 +7,9 @@ namespace ExtraLandscapingTools;
 public class Prefab
 {
 
+    internal delegate void OnAddPrefab(PrefabBase prefabBase);
+    internal static OnAddPrefab onAddPrefab;
+
     internal static readonly Dictionary<string, List<PrefabBase>> failedPrefabs = [];
 
     internal static UIAssetCategoryPrefab GetExistingToolCategory(PrefabSystem prefabSystem, PrefabBase prefabBase ,string cat)
@@ -65,6 +68,10 @@ public class Prefab
         prefabSystem.AddPrefab(surfaceCategory);
 
         return surfaceCategory;
+    }
+
+    public static void RegisterNewToolMenu(string name, string insertAfter) {
+        
     }
 
     private static void AddPrefabToFailedPrefabList(PrefabBase prefabBase, string cat) {

@@ -17,15 +17,8 @@ namespace ExtraLandscapingTools
 		public static RenderingSystem m_RenderingSystem;
 		public static EntityManager m_EntityManager;
 
-		public enum ELT_ExtensionType : int
-		{
-			Other = 0,
-			Surfaces = 1,
-			Decals = 2,
-			Assets = 3
-		}
-
-		public static Dictionary<string, ELT_ExtensionType> ELT_Extensions {private set; get;} = [];
+		internal delegate string OnGetIcon(PrefabBase prefabBase);
+		internal static OnGetIcon onGetIcon;
 
 		internal static Stream GetEmbedded(string embeddedPath) {
 			return Assembly.GetExecutingAssembly().GetManifestResourceStream("ExtraLandscapingTools.embedded."+embeddedPath);
@@ -68,6 +61,11 @@ namespace ExtraLandscapingTools
 		}
 
 		internal static string GetIcon(PrefabBase prefab) {
+
+			if(onGetIcon is not null) {
+				string s = onGetIcon(prefab);
+				if(s is not null) return s;
+			}
 
 			if(File.Exists($"{GameManager_Awake.resourcesIcons}/{prefab.GetType().Name}/{prefab.name}.svg")) return $"{GameManager_InitializeThumbnails.COUIBaseLocation}/resources/Icons/{prefab.GetType().Name}/{prefab.name}.svg";
 
@@ -164,13 +162,10 @@ namespace ExtraLandscapingTools
 
 				return $"{GameManager_InitializeThumbnails.COUIBaseLocation}/resources/Icons/Misc/placeholder.svg";
 			}
-			Plugin.Logger.LogMessage(prefab.name);
+
 			return $"{GameManager_InitializeThumbnails.COUIBaseLocation}/resources/Icons/Misc/placeholder.svg";
 		}
 
-		public static void RegisterELTExtension( string extensionID , ELT_ExtensionType eLT_ExtensionType ) {
-			if(ELT_Extensions.ContainsKey(extensionID)) return;
-			ELT_Extensions.Add(extensionID, eLT_ExtensionType);
-		}
+
 	}
 }
