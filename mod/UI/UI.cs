@@ -11,8 +11,10 @@ using Game.Prefabs;
 using Game.Rendering;
 using Game.SceneFlow;
 using Game.UI;
+using Game.UI.InGame;
 using Unity.Collections;
 using Unity.Entities;
+using Unity.Mathematics;
 using UnityEngine;
 
 namespace ExtraLandscapingTools
@@ -34,11 +36,8 @@ namespace ExtraLandscapingTools
 		protected override void OnCreate() {
 
 			base.OnCreate();
-			// SelectedInfoUISystem selectedInfoUISystem = base.World.GetOrCreateSystemManaged<SelectedInfoUISystem>();
 			ELT.m_RenderingSystem = base.World.GetOrCreateSystemManaged<RenderingSystem>();
 			ELT.m_EntityManager = EntityManager;
-
-			// selectedInfoUISystem.AddMiddleSection(base.World.GetOrCreateSystemManaged<TransformSection>());
 
 			eLT_UI_Mono = eLT_UI_Object.AddComponent<ELT_UI_Mono>();
 			AddBinding(showMarker = new GetterValueBinding<bool>("elt", "showmarker", () => ELT.m_RenderingSystem.markersVisible));
@@ -58,6 +57,9 @@ namespace ExtraLandscapingTools
 			//         ComponentType.ReadOnly<UIObjectData>(),
 			//    ],
 			// });
+
+			GameManager.instance.userInterface.view.View.ExecuteScript(GetStringFromEmbbededJSFile("Setup.js"));
+
 		}
 
 		public static void ShowMarker(bool b, bool forceUpdate = false) {

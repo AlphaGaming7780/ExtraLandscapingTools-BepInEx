@@ -92,6 +92,7 @@ namespace ExtraLandscapingTools.Patches
 	public static class SystemOrderPatch {
 		public static void Postfix(UpdateSystem updateSystem) {
 			updateSystem.UpdateAt<ELT_UI>(SystemUpdatePhase.UIUpdate);
+			updateSystem.UpdateAt<TransformSection>(SystemUpdatePhase.UIUpdate);
 		}
 	}
 
@@ -308,15 +309,6 @@ namespace ExtraLandscapingTools.Patches
 
 			return true;
 		}
-	}
-
-	[HarmonyPatch(typeof(SelectedInfoUISystem), "AddSections")]
-	public class SelectedInfoUISystem_AddSections
-	{
-		public static void Postfix(List<ISectionSource> topSections, List<ISectionSource> sections, List<ISectionSource> bottomSections)
-		{
-			// sections.Add(base.World.GetOrCreateSystemManaged<VehiclesSection>());
-        }
 	}
 
 	[HarmonyPatch( typeof( ToolbarUISystem ), "SelectAssetMenu" )]
