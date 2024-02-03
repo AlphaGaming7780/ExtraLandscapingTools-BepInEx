@@ -1,0 +1,35 @@
+using System;
+using System.Collections.Generic;
+using System.IO;
+using Colossal.Json;
+using ExtraLandscapingTools.Patches;
+using Game.Settings;
+
+namespace ExtraLandscapingTools
+{	
+	public class Settings
+	{
+		internal static SettingsJSON settings;
+
+		internal static T LoadSettings<T>(string id, T ExtensionSettings) {
+			if(Directory.Exists($"{GameManager_Awake.PathToMods}\\Settings")) {
+				if(File.Exists($"{GameManager_Awake.PathToMods}\\Settings\\{id}.json")) {
+					ExtensionSettings = Decoder.Decode(File.ReadAllText($"{GameManager_Awake.PathToMods}\\Settings\\{id}.json")).Make<T>();
+				}
+			}
+			return ExtensionSettings;
+		}
+
+		internal static void SaveSettings<T>( string id, T ExtensionSettings) {
+			if(!Directory.Exists($"{GameManager_Awake.PathToMods}\\Settings")) Directory.CreateDirectory($"{GameManager_Awake.PathToMods}\\Settings");
+			File.WriteAllText($"{GameManager_Awake.PathToMods}\\Settings\\{id}.json", Encoder.Encode(ExtensionSettings, EncodeOptions.None));
+		}
+	}
+
+	[Serializable]
+	internal class SettingsJSON
+	{
+		public bool LoadCustomSurfaces = true;
+	}
+
+}

@@ -98,7 +98,7 @@ function ExtraLandscapingTools_CreateSettingsPanel() {
 
 
 	ExtraLandscapingTools_CreateSettingsCat("ELT Base")
-	ExtraLandscapingTools_CreateSettingsCatToggle("ELT Base", "Enable Custom Surfaces", "elt.enablecustomsurfaces")
+	ExtraLandscapingTools_CreateSettingsCatToggle("ELT Base", "Load Custom Surfaces", "elt.loadcustomsurfaces")
 	// ExtraLandscapingTools_CreateSettingsCatToggle("Global", "Load last radio on startup", "extended_radio_settings.SaveLastRadio")
 	// ExtraLandscapingTools_CreateSettingsCatButton("ELT Base", "Reload Radio", "extended_radio.reloadradio")
 

@@ -24,11 +24,11 @@ namespace ExtraLandscapingTools
 		internal static ELT_UI_Mono eLT_UI_Mono;
 
 		private static GetterValueBinding<bool> showMarker;
-		private static GetterValueBinding<bool> enableCustomSurfaces;
+		private static GetterValueBinding<bool> loadcustomsurfaces;
 		internal static bool isMarkerVisible = false;
-		private static bool isEnableCustomSurfaces = true;
+		// private static bool isEnableCustomSurfaces = true;
 
-		private static EntityQuery surfaceQuery;
+		// private static EntityQuery surfaceQuery;
 		internal static List<string> validMenuForELTSettings = ["Landscaping"];
 
 		protected override void OnCreate() {
@@ -44,17 +44,20 @@ namespace ExtraLandscapingTools
 			AddBinding(showMarker = new GetterValueBinding<bool>("elt", "showmarker", () => ELT.m_RenderingSystem.markersVisible));
 			AddBinding(new TriggerBinding<bool, bool>("elt", "showmarker", new Action<bool, bool>(ShowMarker)));
 
-			AddBinding(enableCustomSurfaces = new GetterValueBinding<bool>("elt", "enablecustomsurfaces", () => isEnableCustomSurfaces));
-			AddBinding(new TriggerBinding<bool>("elt", "enablecustomsurfaces", new Action<bool>(EnableCustomSurfaces)));
+			AddBinding(loadcustomsurfaces = new GetterValueBinding<bool>("elt", "loadcustomsurfaces", () => Settings.settings.LoadCustomSurfaces));
+			AddBinding(new TriggerBinding<bool>("elt", "loadcustomsurfaces", new Action<bool>(LoadCustomSurfaces)));
 
-			surfaceQuery = GetEntityQuery(new EntityQueryDesc
-			{
-			    All =
-               [
-                    ComponentType.ReadOnly<SurfaceData>(),
-			        ComponentType.ReadOnly<UIObjectData>(),
-			   ],
-			});
+			// AddBinding(new GetterValueBinding<bool>("elt", "getsettings", () => isEnableCustomSurfaces));
+			// AddBinding(new TriggerBinding<bool>("elt", "enablecustomsurfaces", new Action<bool>(EnableCustomSurfaces)));
+
+			// surfaceQuery = GetEntityQuery(new EntityQueryDesc
+			// {
+			//     All =
+            //    [
+            //         ComponentType.ReadOnly<SurfaceData>(),
+			//         ComponentType.ReadOnly<UIObjectData>(),
+			//    ],
+			// });
 		}
 
 		public static void ShowMarker(bool b, bool forceUpdate = false) {
@@ -62,16 +65,17 @@ namespace ExtraLandscapingTools
 			showMarker.Update();
 		}
 
-		private void EnableCustomSurfaces(bool b) {
-			NativeArray<Entity> entities =  surfaceQuery.ToEntityArray(AllocatorManager.Temp);
+		private void LoadCustomSurfaces(bool b) {
+			// NativeArray<Entity> entities =  surfaceQuery.ToEntityArray(AllocatorManager.Temp);
 
-			foreach(Entity entity in entities) {
-				if(b) AddEntityObjectToCategoryUI(entity);
-				else RemoveEntityObjectFromCategoryUI(entity);
-			}
+			// foreach(Entity entity in entities) {
+			// 	if(b) AddEntityObjectToCategoryUI(entity);
+			// 	else RemoveEntityObjectFromCategoryUI(entity);
+			// }
 
-			isEnableCustomSurfaces = b;
-			enableCustomSurfaces.Update();
+			Settings.settings.LoadCustomSurfaces = b;
+			Settings.SaveSettings("ELT", Settings.settings);
+			loadcustomsurfaces.Update();
 		}
 
 
@@ -186,7 +190,7 @@ namespace ExtraLandscapingTools
 
 	internal class ELT_UI_Mono : MonoBehaviour
 	{
-		internal void ChangeUiNextFrame(string js) {
+		public void ChangeUiNextFrame(string js) {
 			StartCoroutine(ChangeUI(js));
 		}
 

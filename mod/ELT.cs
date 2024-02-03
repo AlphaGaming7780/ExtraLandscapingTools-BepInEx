@@ -41,7 +41,7 @@ namespace ExtraLandscapingTools
 			RenderTexture scaledRT = RenderTexture.GetTemporary( newSize, newSize );
 			Graphics.Blit(texture, scaledRT);
 
-			Texture2D outputTexture = new( newSize, newSize, texture2D.format, true);
+			Texture2D outputTexture = new( newSize, newSize, TextureFormat.RGBA32, true);
 
 			RenderTexture.active = scaledRT;
 			outputTexture.ReadPixels( new Rect( 0, 0, newSize, newSize ), 0, 0 );
@@ -53,6 +53,7 @@ namespace ExtraLandscapingTools
 			RenderTexture.ReleaseTemporary( scaledRT );
 
 			if(savePath != null) {
+				Directory.CreateDirectory(new FileInfo(savePath).DirectoryName);
 				File.WriteAllBytes( savePath, outputTexture.EncodeToPNG( ) );
 			}
 
@@ -60,11 +61,14 @@ namespace ExtraLandscapingTools
 
 		}
 
-		internal static string GetIcon(PrefabBase prefab) {
+		public static string GetIcon(PrefabBase prefab) {
 
-			if(onGetIcon is not null) {
-				string s = onGetIcon(prefab);
-				if(s is not null) return s;
+
+			if(onGetIcon is not null) foreach(Delegate @delegate in onGetIcon.GetInvocationList()) {
+
+				object result = @delegate.DynamicInvoke(prefab);
+
+				if(result is string s && s is not null) return s;
 			}
 
 			if(File.Exists($"{GameManager_Awake.resourcesIcons}/{prefab.GetType().Name}/{prefab.name}.svg")) return $"{GameManager_InitializeThumbnails.COUIBaseLocation}/resources/Icons/{prefab.GetType().Name}/{prefab.name}.svg";

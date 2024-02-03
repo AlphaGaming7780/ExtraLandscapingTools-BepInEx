@@ -28,22 +28,35 @@ public class CustomSurfaces
 
 		Dictionary<string, string> csLocalisation = [];
 		
-		csLocalisation.Add($"SubServices.NAME[Misc Surfaces]", "Misc");
-		csLocalisation.Add($"Assets.SUB_SERVICE_DESCRIPTION[Misc Surfaces]", "Misc");
+		// csLocalisation.Add($"SubServices.NAME[Misc Surfaces]", "Misc");
+		// csLocalisation.Add($"Assets.SUB_SERVICE_DESCRIPTION[Misc Surfaces]", "Misc");
 
 		foreach(string folder in FolderToLoadSurface) {
 			foreach(string surfacesCat in Directory.GetDirectories( folder )) {
-				csLocalisation.Add($"SubServices.NAME[{new DirectoryInfo(surfacesCat).Name} Surfaces]", new DirectoryInfo(surfacesCat).Name);
-				csLocalisation.Add($"Assets.SUB_SERVICE_DESCRIPTION[{new DirectoryInfo(surfacesCat).Name} Surfaces]", new DirectoryInfo(surfacesCat).Name);
+
+				if(!csLocalisation.ContainsKey($"SubServices.NAME[{new DirectoryInfo(surfacesCat).Name} Surfaces]")) {
+					csLocalisation.Add($"SubServices.NAME[{new DirectoryInfo(surfacesCat).Name} Surfaces]", new DirectoryInfo(surfacesCat).Name);
+				}
+
+				if(!csLocalisation.ContainsKey($"Assets.SUB_SERVICE_DESCRIPTION[{new DirectoryInfo(surfacesCat).Name} Surfaces]")) {
+					csLocalisation.Add($"Assets.SUB_SERVICE_DESCRIPTION[{new DirectoryInfo(surfacesCat).Name} Surfaces]", new DirectoryInfo(surfacesCat).Name);
+				}
+
 				foreach(string filePath in Directory.GetDirectories( surfacesCat )) 
 				{	
 					csLocalisation.Add($"Assets.NAME[{new DirectoryInfo(filePath).Name}]", new DirectoryInfo(filePath).Name);
+					csLocalisation.Add($"Assets.DESCRIPTION[{new DirectoryInfo(filePath).Name}]", new DirectoryInfo(filePath).Name);
 				}
 			}
 		}
 
 		foreach(string key in Localization.localization.Keys) {
-			csLocalisation.ToList().ForEach(x => Localization.localization[key].Add(x.Key, x.Value));
+
+			foreach(string s in csLocalisation.Keys) {
+				if(!Localization.localization[key].ContainsKey(s)) Localization.localization[key].Add(s, csLocalisation[s]);
+			}
+
+			// csLocalisation.ToList().ForEach(x => Localization.localization[key].Add(x.Key, x.Value));
 		}
 	}
 
@@ -64,6 +77,7 @@ public class CustomSurfaces
 
 		SurfacePrefab surfacePrefab = (SurfacePrefab)ScriptableObject.CreateInstance("SurfacePrefab");
 		surfacePrefab.name = new DirectoryInfo(folderPath).Name;
+		surfacePrefab.m_Color = new(255f,255f,255f,0.05f);
 
 		SurfacePrefab surfacePrefabPlaceHolder = (SurfacePrefab)ScriptableObject.CreateInstance("SurfacePrefab");
 		surfacePrefabPlaceHolder.name = surfacePrefab.name  + "_Placeholder";
@@ -158,10 +172,10 @@ public class CustomSurfaces
 
 		if(!SurfacesDataBase.ContainsKey(prefab)) SurfacesDataBase.Add(prefab, cat);
 
-		if(FolderToLoadSurface.Count > 0) {
-			return Prefab.GetOrCreateNewToolCategory(prefabSystem, prefab, "Custom Surfaces", SurfacesDataBase[prefab]+" Surfaces");
+		if(FolderToLoadSurface.Count > 0 && Settings.settings.LoadCustomSurfaces) {
+			return Prefab.GetOrCreateNewToolCategory(prefab, "Custom Surfaces", SurfacesDataBase[prefab]+" Surfaces");
 		} else {
-			return Prefab.GetOrCreateNewToolCategory(prefabSystem, prefab, "Landscaping", "Surfaces", "Terraforming");
+			return Prefab.GetOrCreateNewToolCategory(prefab, "Landscaping", "Surfaces", "Terraforming");
 		}
 	}
 

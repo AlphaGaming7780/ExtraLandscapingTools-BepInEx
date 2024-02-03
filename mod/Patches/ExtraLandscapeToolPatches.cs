@@ -46,6 +46,7 @@ namespace ExtraLandscapingTools.Patches
 			if(!PrefabSystem_OnCreate.FolderToLoadBrush.Contains(PathToCustomBrushes) && Directory.Exists(PathToCustomBrushes)) PrefabSystem_OnCreate.FolderToLoadBrush.Add(PathToCustomBrushes);
 			if(!CustomSurfaces.FolderToLoadSurface.Contains(PathToCustomSurface) && Directory.Exists(PathToCustomSurface)) CustomSurfaces.FolderToLoadSurface.Add(PathToCustomSurface);
 
+			Settings.settings = Settings.LoadSettings("ELT", Settings.settings);
 		}
 	}
 
@@ -209,40 +210,9 @@ namespace ExtraLandscapingTools.Patches
 
 			if(prefab is UIAssetMenuPrefab) {
 
-				if(Prefab.newUiMenu.ContainsKey(prefab.name)) {
-					foreach(string menu in Prefab.newUiMenu[prefab.name]) {
-					if (!__instance.TryGetPrefab(new PrefabID(nameof(UIAssetMenuPrefab), menu), out var p2) //Landscaping
-						|| p2 is not UIAssetMenuPrefab SurfaceMenu)
-						{
-							SurfaceMenu = ScriptableObject.CreateInstance<UIAssetMenuPrefab>();
-							SurfaceMenu.name = menu;
-							var SurfaceMenuUI = SurfaceMenu.AddComponent<UIObject>();
-							SurfaceMenuUI.m_Icon = ELT.GetIcon(SurfaceMenu);
-							SurfaceMenuUI.m_Priority = prefab.GetComponent<UIObject>().m_Priority+1;
-							SurfaceMenuUI.active = true;
-							SurfaceMenuUI.m_IsDebugObject = false;
-							SurfaceMenuUI.m_Group = prefab.GetComponent<UIObject>().m_Group;
+				if(prefab.name == "Landscaping" && CustomSurfaces.FolderToLoadSurface.Count > 0 && Settings.settings.LoadCustomSurfaces) {
 
-							__instance.AddPrefab(SurfaceMenu);
-						}
-					}
-				}
-
-				if(prefab.name == "Landscaping" && CustomSurfaces.FolderToLoadSurface.Count > 0) {
-					if (!__instance.TryGetPrefab(new PrefabID(nameof(UIAssetMenuPrefab), "Custom Surfaces"), out var p2) //Landscaping
-					|| p2 is not UIAssetMenuPrefab SurfaceMenu)
-					{
-						SurfaceMenu = ScriptableObject.CreateInstance<UIAssetMenuPrefab>();
-						SurfaceMenu.name = "Custom Surfaces";
-						var SurfaceMenuUI = SurfaceMenu.AddComponent<UIObject>();
-						SurfaceMenuUI.m_Icon = ELT.GetIcon(SurfaceMenu);
-						SurfaceMenuUI.m_Priority = prefab.GetComponent<UIObject>().m_Priority+1;
-						SurfaceMenuUI.active = true;
-						SurfaceMenuUI.m_IsDebugObject = false;
-						SurfaceMenuUI.m_Group = prefab.GetComponent<UIObject>().m_Group;
-
-						__instance.AddPrefab(SurfaceMenu);
-					}
+					Prefab.CreateNewUiToolMenu(prefab, "Custom Surfaces");
 				}
 			}
 
@@ -259,7 +229,14 @@ namespace ExtraLandscapingTools.Patches
 					}
 				}
 
-				if(Prefab.onAddPrefab is not null) Prefab.onAddPrefab(prefab);
+				if(Prefab.onAddPrefab is not null) foreach(Delegate @delegate in Prefab.onAddPrefab.GetInvocationList()) {
+
+					object result = @delegate.DynamicInvoke(prefab);
+
+					if(result is bool b && !b) return false;
+				}
+
+				// if(Prefab.onAddPrefab is not null) if(!Prefab.onAddPrefab(prefab)) return false;
 
 				if (removeTools.Contains(prefab.name) || 
 					(	
@@ -298,7 +275,7 @@ namespace ExtraLandscapingTools.Patches
 				if (prefab is SurfacePrefab && spawnableArea == null)
 				{
 					return true;
-				} else if(prefab is SurfacePrefab && spawnableArea != null && setupCustomSurfaces) {
+				} else if(prefab is SurfacePrefab && spawnableArea != null && setupCustomSurfaces && Settings.settings.LoadCustomSurfaces) {
 					setupCustomSurfaces = false;
 					try {
 						CustomSurfaces.CreateCustomSurfaces(prefab.GetComponent<RenderedArea>().m_Material);
@@ -316,11 +293,11 @@ namespace ExtraLandscapingTools.Patches
 					TerraformingUI.m_Priority = 1;
 				}
 
-				if(prefab is TerraformingPrefab) TerraformingUI.m_Group = Prefab.GetExistingToolCategory(__instance, prefab, "Terraforming") ?? TerraformingUI.m_Group;
+				if(prefab is TerraformingPrefab) TerraformingUI.m_Group = Prefab.GetExistingToolCategory(prefab, "Terraforming") ?? TerraformingUI.m_Group;
 				else if(prefab is SurfacePrefab) TerraformingUI.m_Group ??= CustomSurfaces.SetupUIGroupe(__instance, prefab);
-				else if(prefab.name.ToLower().Contains("decal")) TerraformingUI.m_Group = Prefab.GetOrCreateNewToolCategory(__instance, prefab, "Landscaping", "Decals", "Pathways") ?? TerraformingUI.m_Group;
-				else if(prefab.name.ToLower().Contains("roadarrow")) TerraformingUI.m_Group = Prefab.GetOrCreateNewToolCategory(__instance, prefab, "Landscaping", "Decals", "Pathways") ?? TerraformingUI.m_Group;
-				else TerraformingUI.m_Group ??= Prefab.GetOrCreateNewToolCategory(__instance, prefab, "Landscaping", "[ELT] Failed Prefab, IF you see this tab, repport it, it's a bug.");
+				else if(prefab.name.ToLower().Contains("decal")) TerraformingUI.m_Group = Prefab.GetOrCreateNewToolCategory(prefab, "Landscaping", "Decals", "Pathways") ?? TerraformingUI.m_Group;
+				else if(prefab.name.ToLower().Contains("roadarrow")) TerraformingUI.m_Group = Prefab.GetOrCreateNewToolCategory(prefab, "Landscaping", "Decals", "Pathways") ?? TerraformingUI.m_Group;
+				else TerraformingUI.m_Group ??= Prefab.GetOrCreateNewToolCategory(prefab, "Landscaping", "[ELT] Failed Prefab, IF you see this tab, repport it, it's a bug.");
 
 				if(TerraformingUI.m_Group == null) {
 					return false;
