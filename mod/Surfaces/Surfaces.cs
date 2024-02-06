@@ -27,9 +27,6 @@ public class CustomSurfaces
 	internal static void LoadLocalization() {
 
 		Dictionary<string, string> csLocalisation = [];
-		
-		// csLocalisation.Add($"SubServices.NAME[Misc Surfaces]", "Misc");
-		// csLocalisation.Add($"Assets.SUB_SERVICE_DESCRIPTION[Misc Surfaces]", "Misc");
 
 		foreach(string folder in FolderToLoadSurface) {
 			foreach(string surfacesCat in Directory.GetDirectories( folder )) {
@@ -55,8 +52,6 @@ public class CustomSurfaces
 			foreach(string s in csLocalisation.Keys) {
 				if(!Localization.localization[key].ContainsKey(s)) Localization.localization[key].Add(s, csLocalisation[s]);
 			}
-
-			// csLocalisation.ToList().ForEach(x => Localization.localization[key].Add(x.Key, x.Value));
 		}
 	}
 
