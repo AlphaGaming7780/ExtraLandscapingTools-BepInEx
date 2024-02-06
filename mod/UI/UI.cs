@@ -2,19 +2,13 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Runtime.Serialization;
 using Colossal.Entities;
 using Colossal.UI.Binding;
-using Game.Common;
 using Game.Prefabs;
 using Game.Rendering;
 using Game.SceneFlow;
 using Game.UI;
-using Game.UI.InGame;
-using Unity.Collections;
 using Unity.Entities;
-using Unity.Mathematics;
 using UnityEngine;
 
 namespace ExtraLandscapingTools

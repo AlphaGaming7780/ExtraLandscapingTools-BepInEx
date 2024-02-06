@@ -16,6 +16,7 @@ using System;
 using Colossal.Localization;
 using Colossal.IO.AssetDatabase;
 using System.IO.Compression;
+using System.ComponentModel;
 
 namespace ExtraLandscapingTools.Patches
 {
@@ -46,7 +47,7 @@ namespace ExtraLandscapingTools.Patches
 			if(!PrefabSystem_OnCreate.FolderToLoadBrush.Contains(PathToCustomBrushes) && Directory.Exists(PathToCustomBrushes)) PrefabSystem_OnCreate.FolderToLoadBrush.Add(PathToCustomBrushes);
 			if(!CustomSurfaces.FolderToLoadSurface.Contains(PathToCustomSurface) && Directory.Exists(PathToCustomSurface)) CustomSurfaces.FolderToLoadSurface.Add(PathToCustomSurface);
 
-			Settings.settings = Settings.LoadSettings("ELT", Settings.settings);
+			Settings.settings = Settings.LoadSettings("ELT", new SettingsJSON());
 		}
 	}
 
@@ -230,7 +231,7 @@ namespace ExtraLandscapingTools.Patches
 					}
 				}
 
-				if(Prefab.onAddPrefab is not null) foreach(Delegate @delegate in Prefab.onAddPrefab.GetInvocationList()) {
+				if(Prefab.onAddPrefab != null) foreach(Delegate @delegate in Prefab.onAddPrefab.GetInvocationList()) {
 
 					object result = @delegate.DynamicInvoke(prefab);
 
