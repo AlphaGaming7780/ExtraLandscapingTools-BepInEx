@@ -146,14 +146,6 @@ namespace ExtraLandscapingTools.Patches
 		}
 	}
 
-	// [HarmonyPatch( typeof( ToolUISystem ), "OnPrefabChanged", typeof(PrefabBase) )]
-	// class ToolUISystem_OnPrefabChanged
-	// {
-	// 	private static void Postfix(PrefabBase prefab) {
-	// 		ELT_UI.SetUpMarker(prefab);
-	// 	}
-	// }
-
 	[HarmonyPatch(typeof(PrefabSystem), "OnCreate")]
 	public class PrefabSystem_OnCreate
 	{
@@ -310,31 +302,6 @@ namespace ExtraLandscapingTools.Patches
 			return true;
 		}
 	}
-
-	[HarmonyPatch(typeof(SelectedInfoUISystem), "AddSections")]
-	public class SelectedInfoUISystem_AddSections
-	{
-		public static void Postfix(List<ISectionSource> topSections, List<ISectionSource> sections, List<ISectionSource> bottomSections)
-		{
-			// sections.Add(base.World.GetOrCreateSystemManaged<VehiclesSection>());
-        }
-	}
-
-	// [HarmonyPatch( typeof( ToolbarUISystem ), "SelectAssetMenu" )]
-	// class ToolbarUISystem_SelectAssetMenu //: UISystemBase 
-	// {
-    //     static void Postfix( Entity assetMenu ) {
-
-	// 		if (assetMenu != Entity.Null && ELT.m_EntityManager.HasComponent<UIAssetMenuData>(assetMenu)) {
-	// 			ELT.m_PrefabSystem.TryGetPrefab(assetMenu, out PrefabBase prefabBase);
-	// 			if(prefabBase is UIAssetMenuPrefab && (prefabBase.name == "Landscaping" || prefabBase.name == "Custom Surfaces")) {
-	// 				ELT_UI.ShowELTSettingsButton(true);
-	// 			} else {
-	// 				ELT_UI.ShowELTSettingsButton(false);
-	// 			}
-	// 		}
-	// 	}
-	// }
 }
 
 

@@ -11,7 +11,7 @@ namespace ExtraLandscapingTools
 
 		internal static Dictionary<string, Dictionary<string, string>> localization;
 
-		internal static void AddCustomLocal(LocaleAsset localeAsset) { //Dictionary<string, string>
+		internal static void AddCustomLocal(LocaleAsset localeAsset) {
 
 			if(localization == null) {
 				LoadLocalization();
