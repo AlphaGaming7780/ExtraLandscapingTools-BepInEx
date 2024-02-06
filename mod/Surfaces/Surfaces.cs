@@ -72,6 +72,7 @@ public class CustomSurfaces
 
 		SurfacePrefab surfacePrefab = (SurfacePrefab)ScriptableObject.CreateInstance("SurfacePrefab");
 		surfacePrefab.name = new DirectoryInfo(folderPath).Name;
+		surfacePrefab.m_Color = new(255f,255f,255f,0.05f);
 
 		SurfacePrefab surfacePrefabPlaceHolder = (SurfacePrefab)ScriptableObject.CreateInstance("SurfacePrefab");
 		surfacePrefabPlaceHolder.name = surfacePrefab.name  + "_Placeholder";
