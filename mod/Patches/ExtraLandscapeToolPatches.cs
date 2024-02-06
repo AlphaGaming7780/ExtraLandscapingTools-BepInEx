@@ -141,18 +141,18 @@ namespace ExtraLandscapingTools.Patches
 				showMarker = false;
 			}
 
-			ELT_UI.SetUpMarker(tool.GetPrefab());
+			// ELT_UI.SetUpMarker(tool.GetPrefab());
 
 		}
 	}
 
-	[HarmonyPatch( typeof( ToolUISystem ), "OnPrefabChanged", typeof(PrefabBase) )]
-	class ToolUISystem_OnPrefabChanged
-	{
-		private static void Postfix(PrefabBase prefab) {
-			ELT_UI.SetUpMarker(prefab);
-		}
-	}
+	// [HarmonyPatch( typeof( ToolUISystem ), "OnPrefabChanged", typeof(PrefabBase) )]
+	// class ToolUISystem_OnPrefabChanged
+	// {
+	// 	private static void Postfix(PrefabBase prefab) {
+	// 		ELT_UI.SetUpMarker(prefab);
+	// 	}
+	// }
 
 	[HarmonyPatch(typeof(PrefabSystem), "OnCreate")]
 	public class PrefabSystem_OnCreate

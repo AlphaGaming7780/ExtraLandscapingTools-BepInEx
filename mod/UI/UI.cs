@@ -157,23 +157,22 @@ namespace ExtraLandscapingTools
 			return new StreamReader(ELT.GetEmbedded("UI."+path)).ReadToEnd();
 		}
 
-		internal static void SetUpMarker(PrefabBase prefabBase) {
+		// internal static void SetUpMarker(PrefabBase prefabBase) {
 
-			if (prefabBase != null && !ELT.m_RenderingSystem.markersVisible)
-			{
-				Entity entity = ELT.m_PrefabSystem.GetEntity(prefabBase);
-				
-				if (ELT.m_EntityManager.HasComponent<MarkerNetData>(entity) ||  prefabBase is MarkerObjectPrefab) {
-					ShowMarker(true);
-					isMarkerVisible = true;
-				}
-				else if (isMarkerVisible)
-				{	
-					ShowMarker(false);
-					isMarkerVisible = false;
-				}
-			}
-		}
+		// 	if(prefabBase is null) return;
+
+		// 	Entity entity = ELT.m_PrefabSystem.GetEntity(prefabBase);
+			
+		// 	if (ELT.m_EntityManager.HasComponent<MarkerNetData>(entity) ||  prefabBase is MarkerObjectPrefab) {
+		// 		ShowMarker(true);
+		// 		isMarkerVisible = true;
+		// 	}
+		// 	else if (isMarkerVisible)
+		// 	{	
+		// 		ShowMarker(false);
+		// 		isMarkerVisible = false;
+		// 	}
+		// }
 
 		// public static void ShowELTSettingsButton(bool show) {
 		// 	if(show) {
