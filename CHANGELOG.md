@@ -1,3 +1,9 @@
+# v0.2.1
+- Fixed: Localization error when a category already exist.
+- Fixed: The surface overlay is now more transparent.
+- Fixed(Maybe): Marker bugs.
+- Clean the code.
+
 # v0.2.0
 - Add: Custom Surface [Support](https://github.com/AlphaGaming7780/ExtraLandscapingTools/wiki#custom-surfaces).
 - Add: Support for Extension ([Surfaces](https://github.com/AlphaGaming7780/ELT-Surfaces)) 

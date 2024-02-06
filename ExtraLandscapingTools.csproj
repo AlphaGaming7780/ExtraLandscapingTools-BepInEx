@@ -12,7 +12,7 @@
 		<AssemblyName>ExtraLandscapingTools</AssemblyName>
 		<RootNamespace>ExtraLandscapingTools</RootNamespace>
 		<Description>This mod aims to add features and improve existing ones for the game's landscaping tool.</Description>
-		<Version>0.2.0</Version>
+		<Version>0.2.1</Version>
 		<AllowUnsafeBlocks>true</AllowUnsafeBlocks>
 		<LangVersion>preview</LangVersion>
 		<RestoreAdditionalProjectSources>
@@ -27,8 +27,6 @@
 	</PropertyGroup>
 
 	<ItemGroup>
-		<EmbeddedResource Include="embedded\UI\SetupSettings.js"></EmbeddedResource>
-		<EmbeddedResource Include="embedded\UI\REMOVE_Settings.js"></EmbeddedResource>
 		<EmbeddedResource Include="embedded\UI\UI.js"></EmbeddedResource>
 		<EmbeddedResource Include="embedded\UI\ShowMarker.js"></EmbeddedResource>
 		<EmbeddedResource Include="embedded\UI\REMOVE_UI.js"></EmbeddedResource>

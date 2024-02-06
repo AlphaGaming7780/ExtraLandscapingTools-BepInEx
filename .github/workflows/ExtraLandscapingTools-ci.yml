@@ -25,7 +25,7 @@ jobs:
           token: ${{ secrets.GH_PAT }}
           path: libcs2/
       - name: Install .NET Core
-        uses: actions/setup-dotnet@v3
+        uses: actions/setup-dotnet@v4
         with:
           dotnet-version: 6.0.x
       - name: Install TagLibSharp
@@ -33,7 +33,7 @@ jobs:
       - name: Build (BepInEx ${{ matrix.bepinex-version }})
         run: make package-unix BEPINEX_VERSION=${{ matrix.bepinex-version }}
       - name: Zip Resources folder
-        uses: thedoctor0/zip-release@0.7.5
+        uses: thedoctor0/zip-release@0.7.6
         with:
           type: 'zip'
           filename: "resources.zip"
@@ -44,13 +44,13 @@ jobs:
           mv ${{ github.workspace }}/dist ${{ github.workspace }}/${{ github.event.repository.name }}
           mv resources.zip ${{ github.workspace }}/${{ github.event.repository.name }}/resources.zip
       - name: Zip Release
-        uses: thedoctor0/zip-release@0.7.5
+        uses: thedoctor0/zip-release@0.7.6
         with:
           type: 'zip'
           filename: "${{ github.event.repository.name }}-${{ env.RELEASE_TAG }}_BepInEx-${{ matrix.bepinex-version }}.zip"
           path: "${{ github.event.repository.name }}"
       - name: Upload Artifact (Zip Release BepInEx ${{ matrix.bepinex-version }})
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4.3.1
         with:
           name: ${{ github.event.repository.name }}-${{env.RELEASE_TAG}}_BepInEx-${{ matrix.bepinex-version }}
           path: ${{ github.event.repository.name }}-${{env.RELEASE_TAG}}_BepInEx-${{ matrix.bepinex-version }}.zip
@@ -62,14 +62,14 @@ jobs:
       contents: write
     steps:
       - name: Checkout source
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
       - name: Download Zip artifact
-        uses: actions/download-artifact@v3
+        uses: actions/download-artifact@v4
         id: download
         with:
           path: .
       - name: Create Release
-        uses: ncipollo/release-action@v1.13.0
+        uses: ncipollo/release-action@v1.14.0
         with:
           tag: "${{env.RELEASE_TAG}}"
           allowUpdates: true
@@ -87,9 +87,9 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout source
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
       - name: Download Zip artifact BepInEx-5
-        uses: actions/download-artifact@v3
+        uses: actions/download-artifact@v4
         with:
           name: ${{ github.event.repository.name }}-${{env.RELEASE_TAG}}_BepInEx-5
           path: .
