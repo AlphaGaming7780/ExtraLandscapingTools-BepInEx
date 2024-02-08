@@ -22,7 +22,7 @@ namespace ExtraLandscapingTools
 			if(!localization.ContainsKey(loc)) loc = "en-US";
 
 			foreach(string key in localization[loc].Keys) {
-				if(localeAsset.data.entries.ContainsKey(key)) localeAsset.data.entries[key] = localization[loc][key];
+				if(localeAsset.data.entries.ContainsKey(key)) {localeAsset.data.entries[key] = localization[loc][key]; Plugin.Logger.LogWarning($"The key {key} already existe in {localeAsset.localeId} localization.");}
 				else localeAsset.data.entries.Add(key, localization[loc][key]);
 
 				if(localeAsset.data.indexCounts.ContainsKey(key)) localeAsset.data.indexCounts[key] = localeAsset.data.indexCounts.Count;
