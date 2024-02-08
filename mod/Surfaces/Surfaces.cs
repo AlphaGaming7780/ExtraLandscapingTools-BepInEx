@@ -82,6 +82,7 @@ public class CustomSurfaces
 		newMaterial.SetFloat("_Metallic", 0.5f);
 		newMaterial.SetFloat("_Smoothness", 0.5f);
 		newMaterial.SetFloat("colossal_UVScale", 0.5f);
+		newMaterial.SetFloat("_DrawOrder", GetRendererPriorityByCat(CatName));
 
 		if(File.Exists(folderPath+"\\surface.json")) {
 			JSONMaterail jSONMaterail = Decoder.Decode(File.ReadAllText(folderPath+"\\surface.json")).Make<JSONMaterail>();
@@ -121,7 +122,7 @@ public class CustomSurfaces
 		} catch {}
 
 		RenderedArea renderedArea = surfacePrefabPlaceHolder.AddComponent<RenderedArea>();
-		renderedArea.m_RendererPriority = GetRendererPriorityByCat(CatName);
+		renderedArea.m_RendererPriority = (int)newMaterial.GetFloat("_DrawOrder");
 		renderedArea.m_LodBias = 0;
 		renderedArea.m_Roundness = 1;
 		renderedArea.m_Material = newMaterial;
@@ -133,7 +134,7 @@ public class CustomSurfaces
 		spawnableArea.m_Placeholders[0] = surfacePrefabPlaceHolder;
 
 		RenderedArea renderedArea1 = surfacePrefab.AddComponent<RenderedArea>();
-		renderedArea1.m_RendererPriority = GetRendererPriorityByCat(CatName);
+		renderedArea1.m_RendererPriority = (int)newMaterial.GetFloat("_DrawOrder");
 		renderedArea1.m_LodBias = 0;
 		renderedArea1.m_Roundness = 1;
 		renderedArea1.m_Material = newMaterial;

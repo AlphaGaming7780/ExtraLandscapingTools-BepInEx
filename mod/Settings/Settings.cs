@@ -9,7 +9,7 @@ namespace ExtraLandscapingTools
 {	
 	public class Settings
 	{
-		internal static SettingsJSON settings;
+		internal static ELTSettings settings;
 
 		internal static T LoadSettings<T>(string id, T ExtensionSettings) {
 			if(Directory.Exists($"{GameManager_Awake.PathToMods}\\Settings")) {
@@ -27,9 +27,10 @@ namespace ExtraLandscapingTools
 	}
 
 	[Serializable]
-	internal class SettingsJSON
+	internal class ELTSettings
 	{
 		public bool LoadCustomSurfaces = true;
+		public bool EnableTransformSection = true;
 	}
 
 }

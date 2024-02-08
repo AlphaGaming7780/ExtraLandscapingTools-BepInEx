@@ -47,7 +47,7 @@ namespace ExtraLandscapingTools.Patches
 			if(!PrefabSystem_OnCreate.FolderToLoadBrush.Contains(PathToCustomBrushes) && Directory.Exists(PathToCustomBrushes)) PrefabSystem_OnCreate.FolderToLoadBrush.Add(PathToCustomBrushes);
 			if(!CustomSurfaces.FolderToLoadSurface.Contains(PathToCustomSurface) && Directory.Exists(PathToCustomSurface)) CustomSurfaces.FolderToLoadSurface.Add(PathToCustomSurface);
 
-			Settings.settings = Settings.LoadSettings("ELT", new SettingsJSON());
+			Settings.settings = Settings.LoadSettings("ELT", new ELTSettings());
 		}
 	}
 

@@ -21,6 +21,7 @@ namespace ExtraLandscapingTools
 
 		private static GetterValueBinding<bool> showMarker;
 		private static GetterValueBinding<bool> loadcustomsurfaces;
+		private static GetterValueBinding<bool> enableTransformSection;
 		internal static bool isMarkerVisible = false;
 		// private static bool isEnableCustomSurfaces = true;
 
@@ -39,6 +40,9 @@ namespace ExtraLandscapingTools
 
 			AddBinding(loadcustomsurfaces = new GetterValueBinding<bool>("elt", "loadcustomsurfaces", () => Settings.settings.LoadCustomSurfaces));
 			AddBinding(new TriggerBinding<bool>("elt", "loadcustomsurfaces", new Action<bool>(LoadCustomSurfaces)));
+
+			AddBinding(enableTransformSection = new GetterValueBinding<bool>("elt", "enabletransformsection", () => Settings.settings.EnableTransformSection));
+			AddBinding(new TriggerBinding<bool>("elt", "enabletransformsection", new Action<bool>(EnableTransformSection)));
 
 			// AddBinding(new GetterValueBinding<bool>("elt", "getsettings", () => isEnableCustomSurfaces));
 			// AddBinding(new TriggerBinding<bool>("elt", "enablecustomsurfaces", new Action<bool>(EnableCustomSurfaces)));
@@ -72,6 +76,12 @@ namespace ExtraLandscapingTools
 			Settings.settings.LoadCustomSurfaces = b;
 			Settings.SaveSettings("ELT", Settings.settings);
 			loadcustomsurfaces.Update();
+		}
+
+		private void EnableTransformSection( bool b ) {
+			Settings.settings.EnableTransformSection = b;
+			Settings.SaveSettings("ELT", Settings.settings);
+			enableTransformSection.Update();
 		}
 
 

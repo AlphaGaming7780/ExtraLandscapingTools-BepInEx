@@ -4,28 +4,15 @@ if(!ExtraLandscapingTools_InfoSectionContainer.contains(document.getElementById(
 
 	var ExtraLandscapingTools_TransformSection = document.createElement("div")
 	var ExtraLandscapingTools_TransformSection_content = document.createElement("div")
-	// var ExtraLandscapingTools_TransformSection_content_position_InfoRow = document.createElement("div")
-	// var ExtraLandscapingTools_TransformSection_content_position_InfoRow_left = document.createElement("div")
-	// var ExtraLandscapingTools_TransformSection_content_position_InfoRow_right = document.createElement("div")
 	
 	ExtraLandscapingTools_TransformSection.className = "info-section_I7V"
 	ExtraLandscapingTools_TransformSection.id = "ExtraLandscapingTools_TransformSection"
 	ExtraLandscapingTools_TransformSection_content.className = "content_Cdk item-focused_FuT disable-focus-highlight_ik3"
-	// ExtraLandscapingTools_TransformSection_content_main_InfoRow.className = "info-row_QQ9 item-focused_FuT"
-	// ExtraLandscapingTools_TransformSection_content_position_InfoRow.className = "info-row_QQ9 item-focused_FuT"
-	// ExtraLandscapingTools_TransformSection_content_position_InfoRow_left.className = "left_RyE uppercase_f0y"
-	// ExtraLandscapingTools_TransformSection_content_position_InfoRow_right.className = "right_ZUb"
-
-	// ExtraLandscapingTools_TransformSection_content_position_InfoRow_left.innerHTML = "position"
-
 	
 	ExtraLandscapingTools_TransformSection_MainInfoview("Transform Section")
 	ExtraLandscapingTools_TransformSection_SubInfoview("Position", "elt.transformsection_getpos")
 	ExtraLandscapingTools_TransformSection_SubInfoview("Rotation", "elt.transformsection_getrot")
 
-	// ExtraLandscapingTools_TransformSection_content_position_InfoRow.appendChild(ExtraLandscapingTools_TransformSection_content_position_InfoRow_left)
-	// ExtraLandscapingTools_TransformSection_content_position_InfoRow.appendChild(ExtraLandscapingTools_TransformSection_content_position_InfoRow_right)
-	// ExtraLandscapingTools_TransformSection_content.appendChild(ExtraLandscapingTools_TransformSection_content_position_InfoRow)
 	ExtraLandscapingTools_TransformSection.appendChild(ExtraLandscapingTools_TransformSection_content)
 	ExtraLandscapingTools_InfoSectionContainer.appendChild(ExtraLandscapingTools_TransformSection)
 }
@@ -84,6 +71,16 @@ function ExtraLandscapingTools_TransformSection_SubInfoview_CreateInput(event, e
 		ExtraLandscapingTools_TransformSection_OnInput(event, element)
 	})
 
+	ExtraLandscapingTools_TransformSection_content_InfoRow_right_input.addEventListener("wheel", function(event2) {
+		if(event2.deltaY > 0) {
+			this.value = parseFloat(this.value) + 1
+		} else if(event2.deltaY < 0) {
+			this.value = parseFloat(this.value) - 1
+		}
+		
+		ExtraLandscapingTools_TransformSection_OnInput(event, element)
+	})
+
 	element.appendChild(ExtraLandscapingTools_TransformSection_content_InfoRow_right_input)
 
 }
@@ -94,13 +91,14 @@ function ExtraLandscapingTools_TransformSection_OnInput(event, element) {
 		y: 0.0,
 		z: 0.0
 	}
+
 	data.x = parseFloat(element.children[0].value)
 	data.y = parseFloat(element.children[1].value)
 	data.z = parseFloat(element.children[2].value)
 
-	if(data.x == null || data.x == NaN) {data.x = 0.0}
-	if(data.y == null || data.y == NaN) {data.y = 0.0}
-	if(data.z == null || data.z == NaN) {data.z = 0.0}
+	if(data.x == null || data.x == NaN) {data.x = 0.0; element.children[0].value = 0.0}
+	if(data.y == null || data.y == NaN) {data.y = 0.0; element.children[1].value = 0.0}
+	if(data.z == null || data.z == NaN) {data.z = 0.0; element.children[2].value = 0.0}
 
 	engine.trigger(event, data)
 }
