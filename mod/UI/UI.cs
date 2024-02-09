@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 using Colossal.Entities;
+using Colossal.Json;
 using Colossal.UI.Binding;
 using Game.Prefabs;
 using Game.Rendering;
@@ -16,8 +17,11 @@ namespace ExtraLandscapingTools
 	
 	public class ELT_UI : UISystemBase
 	{	
+
 		private static readonly GameObject eLT_UI_Object = new();
 		internal static ELT_UI_Mono eLT_UI_Mono;
+
+		internal static List<SettingsUI> settings = [new("ELT Base", [new(SettingUI.SettingUIType.CheckBox, "Load Custom Surfaces", "elt.loadcustomsurfaces"), new(SettingUI.SettingUIType.CheckBox, "Enable Transfrom Section", "elt.enabletransformsection")])];
 
 		private static GetterValueBinding<bool> showMarker;
 		private static GetterValueBinding<bool> loadcustomsurfaces;
@@ -35,6 +39,9 @@ namespace ExtraLandscapingTools
 			ELT.m_EntityManager = EntityManager;
 
 			eLT_UI_Mono = eLT_UI_Object.AddComponent<ELT_UI_Mono>();
+
+			AddBinding(new GetterValueBinding<string>("elt", "settings", () => Encoder.Encode(settings, EncodeOptions.None)));
+
 			AddBinding(showMarker = new GetterValueBinding<bool>("elt", "showmarker", () => ELT.m_RenderingSystem.markersVisible));
 			AddBinding(new TriggerBinding<bool, bool>("elt", "showmarker", new Action<bool, bool>(ShowMarker)));
 
@@ -206,4 +213,45 @@ namespace ExtraLandscapingTools
 			yield return null;
 		}
 	}
+
+	[Serializable]
+	public class  SettingsUI {
+		public string TabName;
+		public List<SettingUI> settings;
+
+		public SettingsUI(string TabName, List<SettingUI> settings) {
+			this.TabName = TabName;
+			this.settings = settings;
+        }
+
+        public SettingsUI()
+        {
+        }
+
+	}
+
+	[Serializable]
+	public class SettingUI
+    {
+
+		public enum SettingUIType {
+			CheckBox,
+			Button,
+		}
+
+		public SettingUIType settingUIType;
+		public string displayName;
+		public string name;
+
+		public SettingUI(SettingUIType settingUIType, string displayName, string name) {
+			this.settingUIType = settingUIType;
+			this.displayName = displayName;
+			this.name = name;
+        }
+
+        public SettingUI()
+        {
+        }
+    }
+
 }

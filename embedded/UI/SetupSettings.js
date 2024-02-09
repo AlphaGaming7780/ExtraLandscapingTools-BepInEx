@@ -68,8 +68,17 @@ function ExtraLandscapingTools_CreateSettingsButton() {
 }
 
 function ExtraLandscapingTools_CreateSettingsPanel() {
+	if(document.getElementById("ExtraLandscapingTools_settingsPanel") != null) {
+		if(ExtraLandscapingTools_LandscapingMenu.contains(document.getElementById("ExtraLandscapingTools_settingsPanel"))) {
+			return
+		}
+		ExtraLandscapingTools_LandscapingMenu.appendChild(document.getElementById("ExtraLandscapingTools_settingsPanel"))
+		return;
+	}
+
     ExtraLandscapingTools_settingsPanel = document.createElement("div");
 	ExtraLandscapingTools_settingsPanel.className = "content_XD5 content_AD7 child-opacity-transition_nkS"
+	ExtraLandscapingTools_settingsPanel.id = "ExtraLandscapingTools_settingsPanel"
 	// ExtraLandscapingTools_settingsPanel.style.height = "100%"
 	// ExtraLandscapingTools_settingsPanel.style.width = "100%"
 	ExtraLandscapingTools_settingsPanel.style.display = "none"
@@ -96,14 +105,15 @@ function ExtraLandscapingTools_CreateSettingsPanel() {
 	ExtraLandscapingTools_settingsPanel_TabsButton.style.flexDirection = "column"
 	// ExtraLandscapingTools_settingsPanel_TabsButton.style.backgroundColor = "rgba(0,0,255, 0.2)"
 
+	ExtraLandscapingTools_getterValue("elt.settings", ExtraLandscapingTools_settingsPanel, ExtraLandscapingTools_CreateSettings)
 
-	ExtraLandscapingTools_CreateSettingsCat("ELT Base")
-	ExtraLandscapingTools_CreateSettingsCatToggle("ELT Base", "Load Custom Surfaces", "elt.loadcustomsurfaces")
-	ExtraLandscapingTools_CreateSettingsCatToggle("ELT Base", "Enable Transfrom Section", "elt.enabletransformsection")
+	// ExtraLandscapingTools_CreateSettingsCat("ELT Base")
+	// ExtraLandscapingTools_CreateSettingsCatToggle("ELT Base", "Load Custom Surfaces", "elt.loadcustomsurfaces")
+	// ExtraLandscapingTools_CreateSettingsCatToggle("ELT Base", "Enable Transfrom Section", "elt.enabletransformsection")
 	// ExtraLandscapingTools_CreateSettingsCatToggle("Global", "Load last radio on startup", "extended_radio_settings.SaveLastRadio")
 	// ExtraLandscapingTools_CreateSettingsCatButton("ELT Base", "Reload Radio", "extended_radio.reloadradio")
 
-	ExtraLandscapingTools_SetDefaultOpenSettingsPanel("ELT Base")
+	// ExtraLandscapingTools_SetDefaultOpenSettingsPanel("ELT Base")
 
 	ExtraLandscapingTools_settingsPanel.appendChild(ExtraLandscapingTools_settingsPanel_TabsButton)
 	ExtraLandscapingTools_settingsPanel.appendChild(ExtraLandscapingTools_settingsPanel_Tabs)
@@ -111,7 +121,29 @@ function ExtraLandscapingTools_CreateSettingsPanel() {
     ExtraLandscapingTools_LandscapingMenu.appendChild(ExtraLandscapingTools_settingsPanel)
 }
 
+function ExtraLandscapingTools_CreateSettings(element, data) {
+	var first = true
+	JSON.parse(data).forEach(ExtraLandscapingTools_settingsUI => {
+		if(ExtraLandscapingTools_settingsPanel_TabPanelDict[ExtraLandscapingTools_settingsUI.TabName] == null) {
 
+			ExtraLandscapingTools_CreateSettingsCat(ExtraLandscapingTools_settingsUI.TabName)
+
+			ExtraLandscapingTools_settingsUI.settings.forEach(ExtraLandscapingTools_setting => {
+				if(ExtraLandscapingTools_setting.settingUIType == "CheckBox") {
+					ExtraLandscapingTools_CreateSettingsCatToggle(ExtraLandscapingTools_settingsUI.TabName, ExtraLandscapingTools_setting.displayName, ExtraLandscapingTools_setting.name)
+				} else if (ExtraLandscapingTools_setting.settingUIType == "Button") {
+					ExtraLandscapingTools_CreateSettingsCatButton(ExtraLandscapingTools_settingsUI.TabName, ExtraLandscapingTools_setting.displayName, ExtraLandscapingTools_setting.name)
+				}
+			});
+	
+			if(first) {
+				first = false
+				ExtraLandscapingTools_SetDefaultOpenSettingsPanel(ExtraLandscapingTools_settingsUI.TabName)
+			}
+		}
+
+	});
+}
 
 function ExtraLandscapingTools_CreateSettingsCat(name) {
 	var ExtraLandscapingTools_settingsPanel_Tabs_catButton = document.createElement("button")

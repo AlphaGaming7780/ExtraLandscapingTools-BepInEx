@@ -20,9 +20,11 @@ public abstract class Extension {
 	public static List<Extension> Extensions {private set; get;} = [];
 	public abstract string ExtensionID { get; }
 	public abstract ExtensionType Type { get; }
-	public virtual ExtensionSettings ExtensionSettings { get; internal set;}
+	public virtual SettingsUI UISettings { get; internal set;}
+	public static ExtensionSettings ExtensionSettings; //{ get; internal set;}
 
 	protected virtual void OnCreate() {
+		if(UISettings != null) ELT_UI.settings.Add(UISettings);
 		Prefab.onAddPrefab += OnAddPrefab;
 		ELT.onGetIcon += OnGetIcon;
 		if (ExtensionSettings != null) ExtensionSettings = Settings.LoadSettings(ExtensionID, ExtensionSettings);
@@ -34,12 +36,8 @@ public abstract class Extension {
 
 	public virtual void OnELTSettings() {}
 
-	public void SaveSettings() {
+	public static void SaveSettings() {
 		Settings.SaveSettings(ExtensionID, ExtensionSettings);
-	}
-
-	public void Test() {
-		Plugin.Logger.LogMessage(Assembly.GetExecutingAssembly().FullName);
 	}
 
 	public static void RegisterELTExtension( Extension extension ) {
