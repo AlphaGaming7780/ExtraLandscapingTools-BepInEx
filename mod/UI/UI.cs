@@ -5,6 +5,7 @@ using System.IO;
 using Colossal.Entities;
 using Colossal.Json;
 using Colossal.UI.Binding;
+using ExtraLandscapingTools.Patches;
 using Game.Prefabs;
 using Game.Rendering;
 using Game.SceneFlow;
@@ -21,11 +22,21 @@ namespace ExtraLandscapingTools
 		private static readonly GameObject eLT_UI_Object = new();
 		internal static ELT_UI_Mono eLT_UI_Mono;
 
-		internal static List<SettingsUI> settings = [new("ELT Base", [new(SettingUI.SettingUIType.CheckBox, "Load Custom Surfaces", "elt.loadcustomsurfaces"), new(SettingUI.SettingUIType.CheckBox, "Enable Transfrom Section", "elt.enabletransformsection")])];
+		internal static List<SettingsUI> settings = [
+			new("ELT Base", [
+				new(SettingUI.SettingUIType.CheckBox, "[RESTART] Load Custom Surfaces", "elt.loadcustomsurfaces"), 
+				new(SettingUI.SettingUIType.CheckBox, "Enable Transfrom Section", "elt.enabletransformsection"),
+			]),
+			new("Surfaces", [
+				new(SettingUI.SettingUIType.CheckBox, "[EXPERIMENTAL] [RESTART] Enable Snow", "elt.enableSnowSurfaces"),
+				new(SettingUI.SettingUIType.Button, "Clear Cache", "elt.clearsurfacescache"),
+			])
+		];
 
 		private static GetterValueBinding<bool> showMarker;
 		private static GetterValueBinding<bool> loadcustomsurfaces;
 		private static GetterValueBinding<bool> enableTransformSection;
+		private static GetterValueBinding<bool> enableSnowSurfaces;
 		internal static bool isMarkerVisible = false;
 		// private static bool isEnableCustomSurfaces = true;
 
@@ -41,6 +52,7 @@ namespace ExtraLandscapingTools
 			eLT_UI_Mono = eLT_UI_Object.AddComponent<ELT_UI_Mono>();
 
 			AddBinding(new GetterValueBinding<string>("elt", "settings", () => Encoder.Encode(settings, EncodeOptions.None)));
+			AddBinding(new TriggerBinding("elt", "clearsurfacescache", new Action(ClearSurfacesCache)));
 
 			AddBinding(showMarker = new GetterValueBinding<bool>("elt", "showmarker", () => ELT.m_RenderingSystem.markersVisible));
 			AddBinding(new TriggerBinding<bool, bool>("elt", "showmarker", new Action<bool, bool>(ShowMarker)));
@@ -50,6 +62,9 @@ namespace ExtraLandscapingTools
 
 			AddBinding(enableTransformSection = new GetterValueBinding<bool>("elt", "enabletransformsection", () => Settings.settings.EnableTransformSection));
 			AddBinding(new TriggerBinding<bool>("elt", "enabletransformsection", new Action<bool>(EnableTransformSection)));
+
+			AddBinding(enableSnowSurfaces = new GetterValueBinding<bool>("elt", "enableSnowSurfaces", () => Settings.settings.EnableSnowSurfaces));
+			AddBinding(new TriggerBinding<bool>("elt", "enableSnowSurfaces", new Action<bool>(EnableSurfacesSnow)));
 
 			// AddBinding(new GetterValueBinding<bool>("elt", "getsettings", () => isEnableCustomSurfaces));
 			// AddBinding(new TriggerBinding<bool>("elt", "enablecustomsurfaces", new Action<bool>(EnableCustomSurfaces)));
@@ -72,6 +87,12 @@ namespace ExtraLandscapingTools
 			showMarker.Update();
 		}
 
+		private void ClearSurfacesCache() {
+			if(Directory.Exists($"{GameManager_Awake.resourcesCache}/Surfaces")) {
+				Directory.Delete($"{GameManager_Awake.resourcesCache}/Surfaces", true);
+			}
+		}
+
 		private void LoadCustomSurfaces(bool b) {
 			// NativeArray<Entity> entities =  surfaceQuery.ToEntityArray(AllocatorManager.Temp);
 
@@ -91,6 +112,11 @@ namespace ExtraLandscapingTools
 			enableTransformSection.Update();
 		}
 
+		private void EnableSurfacesSnow( bool b ) {
+			Settings.settings.EnableSnowSurfaces = b;
+			Settings.SaveSettings("ELT", Settings.settings);
+			enableSnowSurfaces.Update();
+		}
 
 		public static void RemoveEntityObjectFromCategoryUI(Entity entity) {
 			UIObjectData uIObjectData = ELT.m_EntityManager.GetComponentData<UIObjectData>(entity);

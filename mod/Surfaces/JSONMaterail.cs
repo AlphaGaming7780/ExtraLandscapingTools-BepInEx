@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace CustomSurfaces;
+namespace ExtraLandscapingTools;
 
 public class JSONMaterail {
     public Dictionary<string, float> Float = [];

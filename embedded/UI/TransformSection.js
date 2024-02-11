@@ -1,4 +1,9 @@
 var ExtraLandscapingTools_InfoSectionContainer = document.getElementsByClassName("content_gqa")[0]
+if(typeof ExtraLandscapingTools_ScrollOffset === 'undefined') {
+	var ExtraLandscapingTools_ScrollOffset = {}
+	ExtraLandscapingTools_ScrollOffset["Position"] = 1
+	ExtraLandscapingTools_ScrollOffset["Rotation"] = 1
+}
 
 if(!ExtraLandscapingTools_InfoSectionContainer.contains(document.getElementById("ExtraLandscapingTools_TransformSection"))) {
 
@@ -46,9 +51,41 @@ function ExtraLandscapingTools_TransformSection_SubInfoview(name, event) {
 
 	ExtraLandscapingTools_TransformSection_content_InfoRow_left.innerHTML = name
 
-	ExtraLandscapingTools_TransformSection_SubInfoview_CreateInput(event, ExtraLandscapingTools_TransformSection_content_InfoRow_right)
-	ExtraLandscapingTools_TransformSection_SubInfoview_CreateInput(event, ExtraLandscapingTools_TransformSection_content_InfoRow_right)
-	ExtraLandscapingTools_TransformSection_SubInfoview_CreateInput(event, ExtraLandscapingTools_TransformSection_content_InfoRow_right)
+	var ExtraLandscapingTools_TransformSection_content_InfoRow_left_input = document.createElement("input")
+	ExtraLandscapingTools_TransformSection_content_InfoRow_left_input.className = "slider-input_DXM input_Wfi"
+	ExtraLandscapingTools_TransformSection_content_InfoRow_left_input.type = "text"
+	ExtraLandscapingTools_TransformSection_content_InfoRow_left_input.style.width = "10%"
+	ExtraLandscapingTools_TransformSection_content_InfoRow_left_input.setAttributeNS(null, "vk-title", "")
+	ExtraLandscapingTools_TransformSection_content_InfoRow_left_input.setAttributeNS(null, "vk-description", "")
+	ExtraLandscapingTools_TransformSection_content_InfoRow_left_input.setAttributeNS(null, "vk-type", "text")
+	ExtraLandscapingTools_TransformSection_content_InfoRow_left_input.setAttributeNS(null, "rows", "5")
+	ExtraLandscapingTools_TransformSection_content_InfoRow_left_input.value = ExtraLandscapingTools_ScrollOffset[name]
+	ExtraLandscapingTools_TransformSection_content_InfoRow_left_input.addEventListener("input", function() {
+		ExtraLandscapingTools_ScrollOffset[name] = this.value
+	})
+
+	ExtraLandscapingTools_TransformSection_content_InfoRow_left_input.addEventListener("mouseenter", function() {
+		engine.trigger("audio.playSound", "hover-item", 1);
+	})
+
+	ExtraLandscapingTools_TransformSection_content_InfoRow_left_input.addEventListener("wheel", function(event2) {
+		if(event2.deltaY < 0) {
+			this.value = parseFloat(this.value) + 1
+			engine.trigger("audio.playSound", "increase-elevation", 1);
+		} else if(event2.deltaY > 0) {
+			if(parseFloat(this.value) > 1) { this.value = parseFloat(this.value) - 1 }
+			engine.trigger("audio.playSound", "decrease-elevation", 1);
+		}
+
+		ExtraLandscapingTools_ScrollOffset[name] = this.value
+	})
+
+	ExtraLandscapingTools_TransformSection_content_InfoRow_left.appendChild(ExtraLandscapingTools_TransformSection_content_InfoRow_left_input)
+
+
+	ExtraLandscapingTools_TransformSection_SubInfoview_CreateInput(event, name, ExtraLandscapingTools_TransformSection_content_InfoRow_right)
+	ExtraLandscapingTools_TransformSection_SubInfoview_CreateInput(event, name, ExtraLandscapingTools_TransformSection_content_InfoRow_right)
+	ExtraLandscapingTools_TransformSection_SubInfoview_CreateInput(event, name, ExtraLandscapingTools_TransformSection_content_InfoRow_right)
 
 	ExtraLandscapingTools_getterValue( event, ExtraLandscapingTools_TransformSection_content_InfoRow_right, ExtraLandscapingTools_TransformSection_UpdatePosition)
 
@@ -57,7 +94,7 @@ function ExtraLandscapingTools_TransformSection_SubInfoview(name, event) {
 	ExtraLandscapingTools_TransformSection_content.appendChild(ExtraLandscapingTools_TransformSection_content_InfoRow)
 }
 
-function ExtraLandscapingTools_TransformSection_SubInfoview_CreateInput(event, element) {
+function ExtraLandscapingTools_TransformSection_SubInfoview_CreateInput(event, name, element) {
 	var ExtraLandscapingTools_TransformSection_content_InfoRow_right_input = document.createElement("input")
 	ExtraLandscapingTools_TransformSection_content_InfoRow_right_input.className = "slider-input_DXM input_Wfi"
 	ExtraLandscapingTools_TransformSection_content_InfoRow_right_input.type = "text"
@@ -71,11 +108,17 @@ function ExtraLandscapingTools_TransformSection_SubInfoview_CreateInput(event, e
 		ExtraLandscapingTools_TransformSection_OnInput(event, element)
 	})
 
+	ExtraLandscapingTools_TransformSection_content_InfoRow_right_input.addEventListener("mouseenter", function() {
+		engine.trigger("audio.playSound", "hover-item", 1);
+	})
+
 	ExtraLandscapingTools_TransformSection_content_InfoRow_right_input.addEventListener("wheel", function(event2) {
-		if(event2.deltaY > 0) {
-			this.value = parseFloat(this.value) + 1
-		} else if(event2.deltaY < 0) {
-			this.value = parseFloat(this.value) - 1
+		if(event2.deltaY < 0) {
+			this.value = parseFloat(this.value) + parseFloat(ExtraLandscapingTools_ScrollOffset[name])
+			engine.trigger("audio.playSound", "increase-elevation", 1);
+		} else if(event2.deltaY > 0) {
+			this.value = parseFloat(this.value) - parseFloat(ExtraLandscapingTools_ScrollOffset[name])
+			engine.trigger("audio.playSound", "decrease-elevation", 1);
 		}
 		
 		ExtraLandscapingTools_TransformSection_OnInput(event, element)

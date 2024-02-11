@@ -17,6 +17,7 @@ using Colossal.Localization;
 using Colossal.IO.AssetDatabase;
 using System.IO.Compression;
 using System.ComponentModel;
+using Unity.Collections;
 
 namespace ExtraLandscapingTools.Patches
 {
@@ -28,12 +29,14 @@ namespace ExtraLandscapingTools.Patches
 		public static readonly string PathToMods = Path.Combine(PathToParent,"ExtraLandscapingTools_mods");
 		public static readonly string PathToCustomBrushes = Path.Combine(PathToMods,"CustomBrushes");
 		public static readonly string PathToCustomSurface = Path.Combine(PathToMods,"CustomSurfaces");
+		public static readonly string PathToCustomDecal = Path.Combine(PathToMods,"CustomDecals");
 
 		static readonly string pathToZip = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location)+"\\resources.zip";
 
 		static internal readonly string resources = Path.Combine(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location), "resources");
 		static internal readonly string resourcesIcons = Path.Combine(resources, "Icons");
 		static internal readonly string resourcesBrushes = Path.Combine(resources, "Brushes");
+		static internal readonly string resourcesCache = Path.Combine(resources, "Cache");
 
 		static void Postfix(GameSystemBase __instance)
 		{
@@ -46,6 +49,7 @@ namespace ExtraLandscapingTools.Patches
 			if(!PrefabSystem_OnCreate.FolderToLoadBrush.Contains(resourcesBrushes) && Directory.Exists(resourcesBrushes)) PrefabSystem_OnCreate.FolderToLoadBrush.Add(resourcesBrushes);
 			if(!PrefabSystem_OnCreate.FolderToLoadBrush.Contains(PathToCustomBrushes) && Directory.Exists(PathToCustomBrushes)) PrefabSystem_OnCreate.FolderToLoadBrush.Add(PathToCustomBrushes);
 			if(!CustomSurfaces.FolderToLoadSurface.Contains(PathToCustomSurface) && Directory.Exists(PathToCustomSurface)) CustomSurfaces.FolderToLoadSurface.Add(PathToCustomSurface);
+			if(!CustomDecals.FolderToLoadDecals.Contains(PathToCustomDecal) && Directory.Exists(PathToCustomDecal)) CustomDecals.FolderToLoadDecals.Add(PathToCustomDecal);
 
 			Settings.settings = Settings.LoadSettings("ELT", new ELTSettings());
 		}
@@ -266,10 +270,8 @@ namespace ExtraLandscapingTools.Patches
 					if(prefab.name.ToLower().Contains("invisible")) {
 						return true;
 					}else if(setupCustomDecals) {
-						if(staticObjectPrefab.m_Meshes[0].m_Mesh is RenderPrefab renderPrefab) {
-							setupCustomDecals = false;
-							// CustomDecals.CreateCustomDecals(renderPrefab);
-						}
+						setupCustomDecals = false;
+						// CustomDecals.CreateCustomDecals(staticObjectPrefab);
 					}
 				}
 
@@ -277,13 +279,21 @@ namespace ExtraLandscapingTools.Patches
 				if (prefab is SurfacePrefab && spawnableArea == null)
 				{
 					return true;
-				} else if(prefab is SurfacePrefab && spawnableArea != null && setupCustomSurfaces && Settings.settings.LoadCustomSurfaces) {
-					setupCustomSurfaces = false;
-					try {
-						CustomSurfaces.CreateCustomSurfaces(prefab.GetComponent<RenderedArea>().m_Material);
+				} else if(prefab is SurfacePrefab surfacePrefab && spawnableArea != null) {
 
-					} catch (Exception e) {Plugin.Logger.LogWarning(e);}
-				}
+					Material material = surfacePrefab.GetComponent<RenderedArea>().m_Material;
+
+					if(setupCustomSurfaces && Settings.settings.LoadCustomSurfaces) {
+						setupCustomSurfaces = false;
+						try {
+							CustomSurfaces.CreateCustomSurfaces(material);
+
+						} catch (Exception e) {Plugin.Logger.LogWarning(e);}
+					}
+
+					if(Settings.settings.EnableSnowSurfaces && !surfacePrefab.Has<CustomSurface>()) CustomSurfaces.GetOrCreateSnowTexture((Texture2D)material.GetTexture("_BaseColorMap"), surfacePrefab.name);
+
+				}	
 
 				var TerraformingUI = prefab.GetComponent<UIObject>();
 				if (TerraformingUI == null)

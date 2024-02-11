@@ -24,7 +24,7 @@ namespace ExtraLandscapingTools
 			return Assembly.GetExecutingAssembly().GetManifestResourceStream("ExtraLandscapingTools.embedded."+embeddedPath);
 		}
 
-		public static Texture2D ResizeTexture( Texture texture, int newSize, string savePath = null) {
+		public static Texture2D ResizeTexture( Texture2D texture, int newSize, string savePath = null) {
 
 			if(texture is null) {
 				// Plugin.Logger.LogWarning("The input texture2D is null @ ResizeTexture");
@@ -33,15 +33,15 @@ namespace ExtraLandscapingTools
 
 			// Plugin.Logger.LogMessage(savePath);
 
-			if(texture is not Texture2D texture2D) {
-				texture2D = new Texture2D(texture.width, texture.height, TextureFormat.RGBA32, true);
-				Graphics.CopyTexture(texture, texture2D);
-			}
+			// if(texture is not Texture2D texture2D) {
+			// 	texture2D = new Texture2D(texture.width, texture.height, TextureFormat.RGBA32, true);
+			// 	Graphics.CopyTexture(texture, texture2D);
+			// }
 
 			RenderTexture scaledRT = RenderTexture.GetTemporary( newSize, newSize );
 			Graphics.Blit(texture, scaledRT);
 
-			Texture2D outputTexture = new( newSize, newSize, TextureFormat.RGBA32, true);
+			Texture2D outputTexture = new( newSize, newSize, texture.format, true);
 
 			RenderTexture.active = scaledRT;
 			outputTexture.ReadPixels( new Rect( 0, 0, newSize, newSize ), 0, 0 );
@@ -53,12 +53,34 @@ namespace ExtraLandscapingTools
 			RenderTexture.ReleaseTemporary( scaledRT );
 
 			if(savePath != null) {
-				Directory.CreateDirectory(new FileInfo(savePath).DirectoryName);
-				File.WriteAllBytes( savePath, outputTexture.EncodeToPNG( ) );
+				SaveTexture(outputTexture, savePath);
 			}
 
 			return outputTexture;
 
+		}
+
+		public static Texture2D GetTextureFromNonReadable(Texture2D texture2D) {
+			RenderTexture scaledRT = RenderTexture.GetTemporary( texture2D.width, texture2D.height );
+			Graphics.Blit(texture2D, scaledRT);
+
+			Texture2D outputTexture = new( texture2D.width, texture2D.height, TextureFormat.RGBA32, true);
+
+			RenderTexture.active = scaledRT;
+			outputTexture.ReadPixels( new Rect( 0, 0, texture2D.width, texture2D.height ), 0, 0 );
+
+			outputTexture.Apply( );
+
+			// Clean up
+			RenderTexture.active = null;
+			RenderTexture.ReleaseTemporary( scaledRT );
+
+			return outputTexture;
+		}
+
+		public static void SaveTexture(Texture2D texture2D, string path) {
+			Directory.CreateDirectory(new FileInfo(path).DirectoryName);
+			File.WriteAllBytes( path, texture2D.EncodeToPNG( ) );
 		}
 
 		public static string GetIcon(PrefabBase prefab) {
@@ -122,6 +144,9 @@ namespace ExtraLandscapingTools
 				// };
 				return $"{GameManager_InitializeThumbnails.COUIBaseLocation}/resources/Icons/Misc/placeholder.svg";
 			} else if(prefab.name.ToLower().Contains("decal") || prefab.name.ToLower().Contains("roadarrow")) {
+
+
+
 				// return prefab.name switch
 				// {   
 

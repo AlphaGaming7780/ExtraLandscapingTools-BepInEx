@@ -36,7 +36,7 @@ public abstract class Extension {
 
 	public virtual void OnELTSettings() {}
 
-	public static void SaveSettings() {
+	public void SaveSettings() {
 		Settings.SaveSettings(ExtensionID, ExtensionSettings);
 	}
 

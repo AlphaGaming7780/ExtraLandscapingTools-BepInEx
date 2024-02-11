@@ -256,9 +256,9 @@ function ExtraLandscapingTools_CreateSettingsCatButton(panelname, name, event) {
 	ExtraLandscapingTools_settingsContainer.className = "buttons_hd7"
 	ExtraLandscapingTools_settingsButton.className = "button_WWa button_SH8"
 
-	ExtraLandscapingTools_settingsButton.style.backgroundColor = "rgba(255, 255, 255, 1)"
-	ExtraLandscapingTools_settingsButton.style.borderColor = "rgba(212, 23, 23, 1)"
-	ExtraLandscapingTools_settingsButton.style.color = "rgba(212, 23, 23, 1)"
+	ExtraLandscapingTools_settingsButton.style.backgroundColor = "rgba(255, 255, 255, 255)"
+	ExtraLandscapingTools_settingsButton.style.borderColor = "rgba(212, 23, 23, 255)"
+	ExtraLandscapingTools_settingsButton.style.color = "rgba(212, 23, 23, 255)"
 	ExtraLandscapingTools_settingsButton.innerHTML = name
 
 	ExtraLandscapingTools_settingsButton.addEventListener("click", function () {
@@ -268,15 +268,15 @@ function ExtraLandscapingTools_CreateSettingsCatButton(panelname, name, event) {
 
 	ExtraLandscapingTools_settingsButton.addEventListener("mouseover", function () {
 
-		this.style.backgroundColor = "rgba(212, 23, 23, 1)"
-		this.style.color = "rgba(255, 255, 255, 1)"
+		this.style.backgroundColor = "rgba(212, 23, 23, 255)"
+		this.style.color = "rgba(255, 255, 255, 255)"
 
 	})
 
 	ExtraLandscapingTools_settingsButton.addEventListener("mouseout", function () {
 
-		this.style.backgroundColor = "rgba(255, 255, 255, 1)"
-		this.style.color = "rgba(212, 23, 23, 1)"
+		this.style.backgroundColor = "rgba(255, 255, 255, 255)"
+		this.style.color = "rgba(212, 23, 23, 255)"
 
 	})
 

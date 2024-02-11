@@ -31,6 +31,7 @@ namespace ExtraLandscapingTools
 	{
 		public bool LoadCustomSurfaces = true;
 		public bool EnableTransformSection = true;
+		public bool EnableSnowSurfaces = false;
 	}
 
 }

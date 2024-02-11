@@ -1,11 +1,10 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Linq;
 using Colossal.Json;
-using CustomSurfaces;
 using ExtraLandscapingTools.Patches;
 using Game.Prefabs;
+using Unity.Entities;
 using UnityEngine;
 
 namespace ExtraLandscapingTools;
@@ -55,6 +54,27 @@ public class CustomSurfaces
 		}
 	}
 
+	internal static Texture2D GetOrCreateSnowTexture(Texture2D texture2D, string surfaceName, float snowAmount = 0.15f) { // string folderPath,
+		if(File.Exists($"{GameManager_Awake.resourcesCache}/Surfaces/{surfaceName}/_BaseColorMap_Snow.png")) {
+			byte[] data = File.ReadAllBytes($"{GameManager_Awake.resourcesCache}/Surfaces/{surfaceName}/_BaseColorMap_Snow.png");
+			texture2D.LoadImage(data);
+		} else {
+			Plugin.Logger.LogMessage($"Creating snow texture for {surfaceName} surface.");
+			if(!texture2D.isReadable) texture2D = ELT.GetTextureFromNonReadable(texture2D);
+			for(int x = 0; x < texture2D.width; x++) {
+				for(int y = 0; y < texture2D.height; y++) {
+					Color color = texture2D.GetPixel(x, y);
+					color.a -= snowAmount;
+					texture2D.SetPixel(x, y, color);
+				}
+			}
+			texture2D.Apply();
+			ELT.SaveTexture(texture2D, $"{GameManager_Awake.resourcesCache}/Surfaces/{surfaceName}/_BaseColorMap_Snow.png");
+			Plugin.Logger.LogMessage($"Done.");
+		}
+		return texture2D;
+	}
+
 	internal static void CreateCustomSurfaces(Material material) {
 		foreach(string folder in FolderToLoadSurface) {
 			foreach(string surfacesCat in Directory.GetDirectories( folder )) {
@@ -69,6 +89,8 @@ public class CustomSurfaces
 	private static void CreateCustomSurface(PrefabSystem prefabSystem, string folderPath, Material material, string CatName) {
 
 		if(!File.Exists(folderPath+"\\"+"_BaseColorMap.png")) {Plugin.Logger.LogError($"No _BaseColorMap.png file for the {new DirectoryInfo(folderPath).Name} surface in {CatName} category.");return;}
+
+		Dictionary<string, object> SurfaceInformation = [];
 
 		SurfacePrefab surfacePrefab = (SurfacePrefab)ScriptableObject.CreateInstance("SurfacePrefab");
 		surfacePrefab.name = new DirectoryInfo(folderPath).Name;
@@ -86,7 +108,12 @@ public class CustomSurfaces
 
 		if(File.Exists(folderPath+"\\surface.json")) {
 			JSONMaterail jSONMaterail = Decoder.Decode(File.ReadAllText(folderPath+"\\surface.json")).Make<JSONMaterail>();
-			foreach(string key in jSONMaterail.Float.Keys) {newMaterial.SetFloat(key, jSONMaterail.Float[key]);}
+			foreach(string key in jSONMaterail.Float.Keys) {
+				if(material.HasProperty(key)) newMaterial.SetFloat(key, jSONMaterail.Float[key]);
+				else { 
+					SurfaceInformation.Add(key, jSONMaterail.Float[key]); 
+				}
+			}
 			foreach(string key in jSONMaterail.Vector.Keys) {newMaterial.SetVector(key, jSONMaterail.Vector[key]);}
 		} 
 
@@ -99,6 +126,9 @@ public class CustomSurfaces
 
 			if(!File.Exists(folderPath+"\\icon.png")) ELT.ResizeTexture(texture2D_BaseColorMap, 64, folderPath+"\\icon.png");
 			// if(texture2D_BaseColorMap.width > 512 || texture2D_BaseColorMap.height > 512) texture2D_BaseColorMap = ELT.ResizeTexture(texture2D_BaseColorMap, 512, folderPath+"\\_BaseColorMap.png");
+			
+			if(!SurfaceInformation.ContainsKey("ELT_SnowAmount")) SurfaceInformation.Add("ELT_SnowAmount", 0.15f);
+			if(Settings.settings.EnableSnowSurfaces && (float)SurfaceInformation["ELT_SnowAmount"] > 0.0f) texture2D_BaseColorMap = GetOrCreateSnowTexture(texture2D_BaseColorMap, surfacePrefab.name, (float)SurfaceInformation["ELT_SnowAmount"]);
 
 			newMaterial.SetTexture("_BaseColorMap", texture2D_BaseColorMap);
 		} catch (Exception e) {Plugin.Logger.LogWarning(e); return;}
@@ -117,9 +147,19 @@ public class CustomSurfaces
 			Texture2D texture2D_MaskMap = new(1, 1);
 			if(texture2D_MaskMap.LoadImage(fileData)) {
 				// if(texture2D_MaskMap.width > 512 || texture2D_MaskMap.height > 512) texture2D_MaskMap = ELT.ResizeTexture(texture2D_MaskMap, 512, folderPath+"\\_MaskMap.png");
+				
 				newMaterial.SetTexture("_MaskMap", texture2D_MaskMap);
 			}
 		} catch {}
+
+		// try {
+		// 	Texture2D texture2D = (Texture2D)newMaterial.GetTexture("_BaseColorMap");
+		// 	Plugin.Logger.LogMessage(texture2D);
+
+
+		// 	newMaterial.SetTexture("_BaseColorMap", texture2D);
+		// } catch (Exception e) {Plugin.Logger.LogError(e);}
+
 
 		RenderedArea renderedArea = surfacePrefabPlaceHolder.AddComponent<RenderedArea>();
 		renderedArea.m_RendererPriority = (int)newMaterial.GetFloat("_DrawOrder");
@@ -156,6 +196,8 @@ public class CustomSurfaces
 		surfacePrefabUI.m_Icon = File.Exists(folderPath+"\\icon.png") ? $"{GameManager_InitializeThumbnails.COUIBaseLocation}/CustomSurfaces/{CatName}/{new DirectoryInfo(folderPath).Name}/icon.png" : ELT.GetIcon(surfacePrefab);
 		surfacePrefabUI.m_Priority = -1;
 		surfacePrefabUI.m_Group = SetupUIGroupe(prefabSystem, surfacePrefab, CatName);
+
+		surfacePrefab.AddComponent<CustomSurface>();
 
 		prefabSystem.AddPrefab(surfacePrefab);
 		prefabSystem.AddPrefab(surfacePrefabPlaceHolder);
@@ -201,5 +243,11 @@ public class CustomSurfaces
 			_ => "Misc"
 		};
 	}
+}
 
+
+internal class CustomSurface : ComponentBase
+{
+    public override void GetArchetypeComponents(HashSet<ComponentType> components) {}
+    public override void GetPrefabComponents(HashSet<ComponentType> components) {}
 }
