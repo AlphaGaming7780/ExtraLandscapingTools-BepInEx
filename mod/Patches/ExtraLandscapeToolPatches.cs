@@ -16,7 +16,6 @@ using System;
 using Colossal.Localization;
 using Colossal.IO.AssetDatabase;
 using System.IO.Compression;
-using System.ComponentModel;
 using Unity.Collections;
 
 namespace ExtraLandscapingTools.Patches

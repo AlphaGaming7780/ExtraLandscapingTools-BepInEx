@@ -1,9 +1,7 @@
 using System;
-using System.Collections.Generic;
 using System.IO;
 using Colossal.Json;
 using ExtraLandscapingTools.Patches;
-using Game.Settings;
 
 namespace ExtraLandscapingTools
 {	

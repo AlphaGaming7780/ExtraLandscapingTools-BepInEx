@@ -26,55 +26,65 @@ public class CustomDecals
 		RenderPrefab DecalRenderPrefab = (RenderPrefab)DecalPrefab.m_Meshes[0].m_Mesh;
 
 		// Plugin.Logger.LogWarning(DecalPrefab);
-		// foreach(ObjectMeshInfo objectMeshInfo in DecalPrefab.m_Meshes) {
-		// 	Plugin.Logger.LogWarning(objectMeshInfo);
-		// 	if(objectMeshInfo == null) continue;
-		// 	if(objectMeshInfo.m_Mesh is RenderPrefab renderPrefab) {
-		// 		if(renderPrefab.surfaceAssets == null) continue;
-		// 		foreach(SurfaceAsset surfaceAsset in renderPrefab.surfaceAssets.ToArray()) {
-		// 			if(surfaceAsset.textures == null) continue;
-		// 			foreach(string s in surfaceAsset.textures.Keys) {
-		// 				if(surfaceAsset.textures[s].rawData == null) continue;
-		// 				Texture2D texture2D = new(surfaceAsset.textures[s].width, surfaceAsset.textures[s].height);
-		// 				texture2D.LoadRawTextureData(surfaceAsset.textures[s].rawData);
-		// 				Plugin.Logger.LogMessage(s);
-		// 				ELT.SaveTexture(texture2D, $"{GameManager_Awake.resourcesIcons}\\Decals\\{DecalPrefab.name}\\{objectMeshInfo}\\{surfaceAsset}\\{s}.png");
-		// 			}
-		// 		}
-
-				// foreach(Material material in renderPrefab.ObtainMaterials()) {
-				// 	Plugin.Logger.LogWarning(material);
-				// 	foreach(string s in material.GetPropertyNames(MaterialPropertyType.Texture)) {
-				// 		if(material.HasTexture(s)) Plugin.Logger.LogMessage($"Texture : {s} | {material.GetTexture(s)}");
+		// foreach(ObjectMeshInfo objectMeshInfo99 in DecalPrefab.m_Meshes) {
+		// 	Plugin.Logger.LogWarning(objectMeshInfo99);
+		// 	if(objectMeshInfo99 == null) continue;
+		// 	if(objectMeshInfo99.m_Mesh is RenderPrefab renderPrefab99) {
+				// if(renderPrefab99.surfaceAssets == null) continue;
+				// foreach(SurfaceAsset surfaceAsset99 in renderPrefab99.surfaceAssets.ToArray()) {
+				// 	if(surfaceAsset99.textures == null) continue;
+				// 	foreach(string s in surfaceAsset99.textures.Keys) {
+				// 		if(surfaceAsset99.textures[s].rawData == null) continue;
+				// 		Texture2D texture2D = new(surfaceAsset99.textures[s].width, surfaceAsset99.textures[s].height);
+				// 		texture2D.LoadRawTextureData(surfaceAsset99.textures[s].rawData);
+				// 		Plugin.Logger.LogMessage(s);
+				// 		ELT.SaveTexture(texture2D, $"{GameManager_Awake.resources}\\Decals\\{DecalPrefab.name}\\{objectMeshInfo99}\\{surfaceAsset99}\\{s}.png");
 				// 	}
 				// }
+
+		// 		foreach(Material material99 in renderPrefab99.ObtainMaterials(false)) {
+		// 			Plugin.Logger.LogWarning(material99);
+		// 			foreach(string s in material99.GetPropertyNames(MaterialPropertyType.Texture)) {
+		// 				if(material99.HasTexture(s)) { 
+		// 					Plugin.Logger.LogMessage($"Texture : {s} | {material99.GetTexture(s).name}");
+		// 					Texture2D texture2D = (Texture2D)material99.GetTexture(s);
+		// 					if(!texture2D.isReadable) texture2D = ELT.GetTextureFromNonReadable(texture2D);
+		// 					ELT.SaveTexture(texture2D, $"{GameManager_Awake.resources}\\Decals\\{DecalPrefab.name}\\{objectMeshInfo99}\\{material99.name}\\{s}.png");
+		// 				}
+		// 			}
+		// 		}
 		// 	}
 		// }
 
 		// Plugin.Logger.LogWarning("Static Object Prefab in component");
-		// foreach(StaticObjectPrefab staticObjectPrefab in DecalPrefab.GetComponent<SpawnableObject>().m_Placeholders.Cast<StaticObjectPrefab>()) {
+		// foreach(StaticObjectPrefab staticObjectPrefab99 in DecalPrefab.GetComponent<SpawnableObject>().m_Placeholders.Cast<StaticObjectPrefab>()) {
 		// 	Plugin.Logger.LogWarning(DecalPrefab);
-		// 	foreach(ObjectMeshInfo objectMeshInfo in staticObjectPrefab.m_Meshes) {
-		// 		Plugin.Logger.LogWarning(objectMeshInfo);
-		// 		if(objectMeshInfo == null) continue;
-		// 		if(objectMeshInfo.m_Mesh is RenderPrefab renderPrefab) {
-		// 			if(renderPrefab.surfaceAssets == null) continue;
-		// 			foreach(SurfaceAsset surfaceAsset in renderPrefab.surfaceAssets.ToArray()) {
-		// 				if(surfaceAsset.textures == null) continue;
-		// 				foreach(string s in surfaceAsset.textures.Keys) {
-		// 					if(surfaceAsset.textures[s].rawData == null) continue;
-		// 					Texture2D texture2D = new(surfaceAsset.textures[s].width, surfaceAsset.textures[s].height);
-		// 					texture2D.LoadRawTextureData(surfaceAsset.textures[s].rawData.ToArray());
-		// 					Plugin.Logger.LogMessage(s);
-		// 					ELT.SaveTexture(texture2D, $"{GameManager_Awake.resourcesIcons}\\Decals\\{DecalPrefab.name}\\{staticObjectPrefab}\\{objectMeshInfo}\\{surfaceAsset}\\{s}.png");
-		// 				}
-		// 			}
-					// foreach(Material material in renderPrefab.ObtainMaterials()) {
-					// 	Plugin.Logger.LogWarning(material);
-					// 	foreach(string s in material.GetPropertyNames(MaterialPropertyType.Texture)) {
-					// 		if(material.HasTexture(s)) Plugin.Logger.LogMessage($"Texture : {s} | {material.GetTexture(s)}");
+		// 	foreach(ObjectMeshInfo objectMeshInfo99 in staticObjectPrefab99.m_Meshes) {
+		// 		Plugin.Logger.LogWarning(objectMeshInfo99);
+		// 		if(objectMeshInfo99 == null) continue;
+		// 		if(objectMeshInfo99.m_Mesh is RenderPrefab renderPrefab99) {
+					// if(renderPrefab99.surfaceAssets == null) continue;
+					// foreach(SurfaceAsset surfaceAsset in renderPrefab.surfaceAssets.ToArray()) {
+					// 	if(surfaceAsset.textures == null) continue;
+					// 	foreach(string s in surfaceAsset.textures.Keys) {
+					// 		if(surfaceAsset.textures[s].rawData == null) continue;
+					// 		Texture2D texture2D = new(surfaceAsset.textures[s].width, surfaceAsset.textures[s].height);
+					// 		texture2D.LoadRawTextureData(surfaceAsset.textures[s].rawData.ToArray());
+					// 		Plugin.Logger.LogMessage(s);
+					// 		ELT.SaveTexture(texture2D, $"{GameManager_Awake.resources}\\Decals\\{DecalPrefab.name}\\{staticObjectPrefab}\\{objectMeshInfo}\\{surfaceAsset}\\{s}.png");
 					// 	}
 					// }
+		// 			foreach(Material material99 in renderPrefab99.ObtainMaterials(false)) {
+		// 				Plugin.Logger.LogWarning(material99);
+		// 				foreach(string s in material99.GetPropertyNames(MaterialPropertyType.Texture)) {
+		// 					if(material99.HasTexture(s)) {
+		// 						Plugin.Logger.LogMessage($"Texture : {s} | {material99.GetTexture(s).name}");
+		// 						Texture2D texture2D = (Texture2D)material99.GetTexture(s);
+		// 						if(!texture2D.isReadable) texture2D = ELT.GetTextureFromNonReadable(texture2D);
+		// 						ELT.SaveTexture(texture2D, $"{GameManager_Awake.resources}\\Decals\\{DecalPrefab.name}\\{staticObjectPrefab99}\\{objectMeshInfo99}\\{material99.name}\\{s}.png");
+		// 					}
+		// 				}
+		// 			}
 		// 		}
 		// 	}
 		// }
