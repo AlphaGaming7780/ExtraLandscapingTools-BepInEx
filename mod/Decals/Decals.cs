@@ -2,11 +2,9 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using Colossal.AssetPipeline;
 using Colossal.IO.AssetDatabase;
 using ExtraLandscapingTools.Patches;
 using Game.Prefabs;
-using Game.SceneFlow;
 using Unity.Mathematics;
 using UnityEngine;
 
@@ -17,7 +15,6 @@ public class CustomDecals
 	internal static List<string> FolderToLoadDecals = [];
 	public static void CreateCustomDecals(StaticObjectPrefab DecalPrefab) {
 		foreach(string folder in FolderToLoadDecals) {
-			Plugin.Logger.LogMessage("Let's go");
 			foreach(string decalsFolder in Directory.GetDirectories( folder )) {
 				CreateCustomDecal(DecalPrefab, decalsFolder, new DirectoryInfo(decalsFolder).Name);
 			}
