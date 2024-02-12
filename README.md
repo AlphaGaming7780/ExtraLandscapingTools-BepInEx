@@ -46,6 +46,7 @@ See the [wiki](https://github.com/AlphaGaming7780/ExtraLandscapingTools/wiki).
 - [CityRat](https://thunderstore.io/c/cities-skylines-ii/p/CityRat/) For the custom icons.
 - Chamëleon TBN For the custom icons.
 - [optimus-code](https://thunderstore.io/c/cities-skylines-ii/p/Cities2Modding/)
+- [Yenyang](https://thunderstore.io/c/cities-skylines-ii/p/yenyang/)
 
 # Community
 Looking to discuss Cities: Skylines 2 Unofficial modding together with other modders? You're welcome to join [Cities 2 Modding Discord](https://discord.gg/vd7HXnpPJf) or the [Cities: Skylines Modding Discord](https://discord.gg/27CVdGFA47).

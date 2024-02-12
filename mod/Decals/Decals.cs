@@ -7,6 +7,7 @@ using ExtraLandscapingTools.Patches;
 using Game.Prefabs;
 using Unity.Mathematics;
 using UnityEngine;
+using static Colossal.IO.AssetDatabase.MaterialLibrary;
 
 namespace ExtraLandscapingTools;
 
@@ -24,6 +25,8 @@ public class CustomDecals
 	public static void CreateCustomDecal(StaticObjectPrefab DecalPrefab, string folderPath, string name) {
 
 		RenderPrefab DecalRenderPrefab = (RenderPrefab)DecalPrefab.m_Meshes[0].m_Mesh;
+		SpawnableObject DecalSpawnableObjectPrefab = DecalPrefab.GetComponent<SpawnableObject>();
+		DecalProperties DecalPropertiesPrefab = DecalRenderPrefab.GetComponent<DecalProperties>();
 
 		// Plugin.Logger.LogWarning(DecalPrefab);
 		// foreach(ObjectMeshInfo objectMeshInfo99 in DecalPrefab.m_Meshes) {
@@ -110,7 +113,7 @@ public class CustomDecals
 		};
 		mesh.RecalculateNormals();
 
-		Material material = new(Shader.Find( "BH/Decals/DefaultDecalShader" )); //DecalRenderPrefab.ObtainMaterial(0);
+		Material material = DecalRenderPrefab.ObtainMaterial(0); //new(Shader.Find( "BH/Decals/DefaultDecalShader" ));
 		foreach(string s in material.GetPropertyNames(MaterialPropertyType.Float)) {Plugin.Logger.LogMessage($"Float : {s} | {material.GetFloat(s)}");}
 		foreach(string s in material.GetPropertyNames(MaterialPropertyType.Vector)) {Plugin.Logger.LogMessage($"Vector : {s} | {material.GetVector(s)}");}
 		foreach(string s in material.GetPropertyNames(MaterialPropertyType.Texture)) {Plugin.Logger.LogMessage($"Texture : {s}");}
@@ -145,24 +148,47 @@ public class CustomDecals
 		material.SetTexture("_MaskMap", texture2D_MaskMap);
 
 		foreach(string s in material.GetPropertyNames(MaterialPropertyType.Texture)) {
-			if(material.GetTexture(s) != null) continue;
+			if(material.GetTexture(s) && material.GetTexture(s) != null) continue;
 			try {
-				Texture2D texture2D = new(1, 1)
+				Texture2D texture2D = new(texture2D_BaseColorMap.width, texture2D_BaseColorMap.height)
 				{
 					name = $"{name}{s}"
 				};
+
+				// for(int x = 0; x < texture2D.width; x++) {
+				// 	for(int y = 0; y < texture2D.height; y++) {
+				// 		Color color = new(0,0,0,0);
+				// 		texture2D.SetPixel(x, y, color);
+				// 	}
+				// }
+
+				// texture2D.Apply();
+
 				material.SetTexture(s, texture2D);
+				Plugin.Logger.LogMessage("FUCCKKK");
 			} catch(Exception e) {Plugin.Logger.LogError(e);}
 		}
+
+        MaterialDescription materialDescription = new()
+        {
+            m_Material = material,
+            m_Hash = CalculateHash(material),
+			m_SupportsVT = false,
+			m_Stacks = []
+        };
+
+        AssetDatabase.global.resources.materialLibrary.m_Materials.Add(materialDescription);
 
 		Plugin.Logger.LogMessage("SurfaceAsset");
 		SurfaceAsset surfaceAsset = new()
 		{
-			guid = DecalRenderPrefab.surfaceAssets.ToArray()[0].guid, //Guid.NewGuid(), 
+			guid = Guid.NewGuid(), //DecalRenderPrefab.surfaceAssets.ToArray()[0].guid, //
 			database = DecalRenderPrefab.surfaceAssets.ToArray()[0].database,
 		};
 		surfaceAsset.SetData(material);
-		// surfaceAsset.Save();
+		AssetDataPath assetDataPath = AssetDataPath.Create($"ELT/CustomDecals/{name}", "SurfaceAsset");
+		surfaceAsset.database.AddAsset<SurfaceAsset>(assetDataPath, surfaceAsset.guid);
+		surfaceAsset.Save();
 		// Colossal.IO.AssetDatabase.TextureAssetExtensions.AddAsset
 
 		Plugin.Logger.LogMessage("RenderPrefab");
@@ -187,7 +213,18 @@ public class CustomDecals
 		Plugin.Logger.LogMessage("RenderPrefab 2.5");
 		if(renderPrefab.geometryAsset == null) Plugin.Logger.LogWarning("renderPrefab.geometryAsset is null");
 		Plugin.Logger.LogMessage("RenderPrefab 3");
-		renderPrefab.surfaceAssets = [surfaceAsset];
+		renderPrefab.surfaceAssets = [new AssetReference<SurfaceAsset>(surfaceAsset.guid)];//DecalRenderPrefab.surfaceAssets; //
+		renderPrefab.surfaceArea = DecalRenderPrefab.surfaceArea;
+		renderPrefab.bounds = DecalRenderPrefab.bounds;
+		renderPrefab.meshCount = 1;
+		renderPrefab.vertexCount = DecalRenderPrefab.vertexCount;
+		renderPrefab.indexCount = DecalRenderPrefab.indexCount;
+
+		DecalProperties decalProperties = renderPrefab.AddComponent<DecalProperties>();
+		decalProperties.m_TextureArea = DecalPropertiesPrefab.m_TextureArea;
+		decalProperties.m_LayerMask = DecalPropertiesPrefab.m_LayerMask;
+		decalProperties.m_RendererPriority = DecalPropertiesPrefab.m_RendererPriority;
+		decalProperties.m_EnableInfoviewColor = DecalPropertiesPrefab.m_EnableInfoviewColor;
 
 		Plugin.Logger.LogMessage("ObjectMeshInfo");
 		ObjectMeshInfo objectMeshInfo = new()
@@ -208,7 +245,7 @@ public class CustomDecals
 		placeholder.AddComponent<PlaceholderObject>();
 
 		SpawnableObject spawnableObject = staticObjectPrefab.AddComponent<SpawnableObject>();
-		spawnableObject.m_Placeholders = [placeholder];
+		spawnableObject.m_Placeholders = DecalSpawnableObjectPrefab.m_Placeholders; //[placeholder];
 
 		Plugin.Logger.LogMessage("UIObject");
 		UIObject surfacePrefabUI = staticObjectPrefab.AddComponent<UIObject>();
@@ -220,9 +257,7 @@ public class CustomDecals
 
 		// staticObjectPrefab.m_Meshes[0].m_Mesh is RenderPrefab renderPrefab
 
-
-
-
+		// ELT.m_PrefabSystem.AddPrefab(placeholder);
 		ELT.m_PrefabSystem.AddPrefab(staticObjectPrefab);
 
 	}

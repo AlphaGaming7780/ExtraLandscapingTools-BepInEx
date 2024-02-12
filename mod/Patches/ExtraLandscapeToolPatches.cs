@@ -270,7 +270,7 @@ namespace ExtraLandscapingTools.Patches
 						return true;
 					}else if(setupCustomDecals) {
 						setupCustomDecals = false;
-						// CustomDecals.CreateCustomDecals(staticObjectPrefab);
+						CustomDecals.CreateCustomDecals(staticObjectPrefab);
 					}
 				}
 
