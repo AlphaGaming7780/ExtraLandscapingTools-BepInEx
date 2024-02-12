@@ -136,6 +136,15 @@ public class CustomDecals
 		if(File.Exists(folderPath+"\\_NormalMap.png")) {
 			fileData = File.ReadAllBytes(folderPath+"\\_NormalMap.png");
 			texture2D_NormalMap.LoadImage(fileData);
+		} else {
+			for(int x = 0; x < texture2D_NormalMap.width; x++) {
+				for(int y = 0; y < texture2D_NormalMap.height; y++) {
+					Color color = new(0,0,0,0);
+					texture2D_NormalMap.SetPixel(x, y, color);
+				}
+			}
+
+			texture2D_NormalMap.Apply();
 		}
 		material.SetTexture("_NormalMap", texture2D_NormalMap);
 
@@ -144,6 +153,15 @@ public class CustomDecals
 		if(File.Exists(folderPath+"\\_MaskMap.png")) {
 			fileData = File.ReadAllBytes(folderPath+"\\_MaskMap.png");
 			texture2D_MaskMap.LoadImage(fileData);
+		} else {
+			for(int x = 0; x < texture2D_MaskMap.width; x++) {
+				for(int y = 0; y < texture2D_MaskMap.height; y++) {
+					Color color = new(0,0,0,0);
+					texture2D_MaskMap.SetPixel(x, y, color);
+				}
+			}
+
+			texture2D_MaskMap.Apply();
 		}
 		material.SetTexture("_MaskMap", texture2D_MaskMap);
 
@@ -155,14 +173,14 @@ public class CustomDecals
 					name = $"{name}{s}"
 				};
 
-				// for(int x = 0; x < texture2D.width; x++) {
-				// 	for(int y = 0; y < texture2D.height; y++) {
-				// 		Color color = new(0,0,0,0);
-				// 		texture2D.SetPixel(x, y, color);
-				// 	}
-				// }
+				for(int x = 0; x < texture2D.width; x++) {
+					for(int y = 0; y < texture2D.height; y++) {
+						Color color = new(0,0,0,0);
+						texture2D.SetPixel(x, y, color);
+					}
+				}
 
-				// texture2D.Apply();
+				texture2D.Apply();
 
 				material.SetTexture(s, texture2D);
 				Plugin.Logger.LogMessage("FUCCKKK");
@@ -188,7 +206,7 @@ public class CustomDecals
 		surfaceAsset.SetData(material);
 		AssetDataPath assetDataPath = AssetDataPath.Create($"ELT/CustomDecals/{name}", "SurfaceAsset");
 		surfaceAsset.database.AddAsset<SurfaceAsset>(assetDataPath, surfaceAsset.guid);
-		surfaceAsset.Save();
+		surfaceAsset.Save(force: true);
 		// Colossal.IO.AssetDatabase.TextureAssetExtensions.AddAsset
 
 		Plugin.Logger.LogMessage("RenderPrefab");
@@ -245,7 +263,7 @@ public class CustomDecals
 		placeholder.AddComponent<PlaceholderObject>();
 
 		SpawnableObject spawnableObject = staticObjectPrefab.AddComponent<SpawnableObject>();
-		spawnableObject.m_Placeholders = DecalSpawnableObjectPrefab.m_Placeholders; //[placeholder];
+		spawnableObject.m_Placeholders = [placeholder];  //DecalSpawnableObjectPrefab.m_Placeholders;
 
 		Plugin.Logger.LogMessage("UIObject");
 		UIObject surfacePrefabUI = staticObjectPrefab.AddComponent<UIObject>();
