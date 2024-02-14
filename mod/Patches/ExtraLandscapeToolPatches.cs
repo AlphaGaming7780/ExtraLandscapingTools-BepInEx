@@ -17,6 +17,7 @@ using Colossal.Localization;
 using Colossal.IO.AssetDatabase;
 using System.IO.Compression;
 using Unity.Collections;
+using Colossal.PSI.Environment;
 
 namespace ExtraLandscapingTools.Patches
 {
@@ -24,6 +25,7 @@ namespace ExtraLandscapingTools.Patches
 	[HarmonyPatch(typeof(GameManager), "Awake")]
 	internal class GameManager_Awake
 	{	
+		static internal readonly string ELTDataPath = $"{EnvPath.kStreamingDataPath}\\ELT";
 		static private readonly string PathToParent = Directory.GetParent(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location)).FullName;
 		public static readonly string PathToMods = Path.Combine(PathToParent,"ExtraLandscapingTools_mods");
 		public static readonly string PathToCustomBrushes = Path.Combine(PathToMods,"CustomBrushes");
@@ -37,13 +39,15 @@ namespace ExtraLandscapingTools.Patches
 		static internal readonly string resourcesBrushes = Path.Combine(resources, "Brushes");
 		static internal readonly string resourcesCache = Path.Combine(resources, "Cache");
 
-		static void Postfix(GameSystemBase __instance)
+		static void Postfix(GameManager __instance)
 		{
 			if(File.Exists(pathToZip)) {
 				if(Directory.Exists(resources)) Directory.Delete(resources, true);
 				ZipFile.ExtractToDirectory(pathToZip, Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location));
 				File.Delete(pathToZip);
 			}
+
+			ELT.ClearData();
 
 			if(!PrefabSystem_OnCreate.FolderToLoadBrush.Contains(resourcesBrushes) && Directory.Exists(resourcesBrushes)) PrefabSystem_OnCreate.FolderToLoadBrush.Add(resourcesBrushes);
 			if(!PrefabSystem_OnCreate.FolderToLoadBrush.Contains(PathToCustomBrushes) && Directory.Exists(PathToCustomBrushes)) PrefabSystem_OnCreate.FolderToLoadBrush.Add(PathToCustomBrushes);
@@ -290,7 +294,7 @@ namespace ExtraLandscapingTools.Patches
 						} catch (Exception e) {Plugin.Logger.LogWarning(e);}
 					}
 
-					if(Settings.settings.EnableSnowSurfaces && !surfacePrefab.Has<CustomSurface>()) CustomSurfaces.GetOrCreateSnowTexture((Texture2D)material.GetTexture("_BaseColorMap"), surfacePrefab.name);
+					if(Settings.settings.EnableSnowSurfaces && !surfacePrefab.Has<CustomSurfaceComponent>()) CustomSurfaces.GetOrCreateSnowTexture((Texture2D)material.GetTexture("_BaseColorMap"), surfacePrefab.name);
 
 				}	
 

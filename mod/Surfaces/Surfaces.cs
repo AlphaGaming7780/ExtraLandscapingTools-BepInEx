@@ -15,6 +15,13 @@ public class CustomSurfaces
 
 	internal static List<string> FolderToLoadSurface = [];
 
+	internal static void ClearSurfacesCache() {
+		if(Directory.Exists($"{GameManager_Awake.resourcesCache}/Surfaces")) {
+			Directory.Delete($"{GameManager_Awake.resourcesCache}/Surfaces", true);
+		}
+	}
+
+
 	public static void AddCustomSurfacesFolder(string path) {
 		// Plugin.Logger.LogMessage(path);
 		if(!FolderToLoadSurface.Contains(path)) {
@@ -197,7 +204,7 @@ public class CustomSurfaces
 		surfacePrefabUI.m_Priority = -1;
 		surfacePrefabUI.m_Group = SetupUIGroupe(prefabSystem, surfacePrefab, CatName);
 
-		surfacePrefab.AddComponent<CustomSurface>();
+		surfacePrefab.AddComponent<CustomSurfaceComponent>();
 
 		prefabSystem.AddPrefab(surfacePrefab);
 		prefabSystem.AddPrefab(surfacePrefabPlaceHolder);
@@ -246,7 +253,7 @@ public class CustomSurfaces
 }
 
 
-internal class CustomSurface : ComponentBase
+internal class CustomSurfaceComponent : ComponentBase
 {
     public override void GetArchetypeComponents(HashSet<ComponentType> components) {}
     public override void GetPrefabComponents(HashSet<ComponentType> components) {}

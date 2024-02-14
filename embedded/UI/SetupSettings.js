@@ -83,6 +83,7 @@ function ExtraLandscapingTools_CreateSettingsPanel() {
 	// ExtraLandscapingTools_settingsPanel.style.width = "100%"
 	ExtraLandscapingTools_settingsPanel.style.display = "none"
 	ExtraLandscapingTools_settingsPanel.style.flexDirection = "row"
+	// ExtraLandscapingTools_settingsPanel.style.minHeight = "100%"
 
 	ExtraLandscapingTools_settingsPanel_Tabs = document.createElement("div")
 	ExtraLandscapingTools_settingsPanel_Tabs.className = "ExtraLandscapingTools_settingsPanel_Tabs" //detail_eTp
@@ -132,7 +133,7 @@ function ExtraLandscapingTools_CreateSettings(element, data) {
 				if(ExtraLandscapingTools_setting.settingUIType == "CheckBox") {
 					ExtraLandscapingTools_CreateSettingsCatToggle(ExtraLandscapingTools_settingsUI.TabName, ExtraLandscapingTools_setting.displayName, ExtraLandscapingTools_setting.name)
 				} else if (ExtraLandscapingTools_setting.settingUIType == "Button") {
-					ExtraLandscapingTools_CreateSettingsCatButton(ExtraLandscapingTools_settingsUI.TabName, ExtraLandscapingTools_setting.displayName, ExtraLandscapingTools_setting.name)
+					ExtraLandscapingTools_CreateSettingsCatButton(ExtraLandscapingTools_settingsUI.TabName, ExtraLandscapingTools_setting.displayName, ExtraLandscapingTools_setting.name, ExtraLandscapingTools_setting.buttonDescription)
 				}
 			});
 	
@@ -221,9 +222,9 @@ function ExtraLandscapingTools_CreateSettingsCatToggle(panelname, name, event) {
 	ExtraLandscapingTools_settingsToggle.className = "toggle_cca item-mouse-states_Fmi toggle_th_"
 	ExtraLandscapingTools_settingsToggleCheckmark.className = "checkmark_NXV"
 
-	ExtraLandscapingTools_settingsToggle.style.setProperty("--checkmarkColor", "rgba(80, 76, 83, 1.000000)")
+	ExtraLandscapingTools_settingsToggle.style.setProperty("--checkmarkColor", "var(--menuControlBorder)")
 	ExtraLandscapingTools_settingsToggle.style.alignItems = "flex-end"
-	ExtraLandscapingTools_settingsToggle.style.backgroundColor = "rgba(236, 236, 236, 1.000000)"
+	// ExtraLandscapingTools_settingsToggle.style.backgroundColor = "rgba(236, 236, 236, 1.000000)"
 	ExtraLandscapingTools_settingsToggleLabel.innerHTML = name
 	ExtraLandscapingTools_settingsToggleLabel.style.color = "rgba(255,255,255,255)"
 
@@ -248,7 +249,7 @@ function ExtraLandscapingTools_CreateSettingsCatToggle(panelname, name, event) {
 	ExtraLandscapingTools_settingsPanel_TabPanelDict[panelname].appendChild(ExtraLandscapingTools_settingsContainer)
 }
 
-function ExtraLandscapingTools_CreateSettingsCatButton(panelname, name, event) {
+function ExtraLandscapingTools_CreateSettingsCatButton(panelname, name, event, buttonDescription) {
 
 	var ExtraLandscapingTools_settingsContainer = document.createElement("div")
 	var ExtraLandscapingTools_settingsButton = document.createElement("button")
@@ -256,9 +257,13 @@ function ExtraLandscapingTools_CreateSettingsCatButton(panelname, name, event) {
 	ExtraLandscapingTools_settingsContainer.className = "buttons_hd7"
 	ExtraLandscapingTools_settingsButton.className = "button_WWa button_SH8"
 
-	ExtraLandscapingTools_settingsButton.style.backgroundColor = "rgba(255, 255, 255, 255)"
-	ExtraLandscapingTools_settingsButton.style.borderColor = "rgba(212, 23, 23, 255)"
-	ExtraLandscapingTools_settingsButton.style.color = "rgba(212, 23, 23, 255)"
+	ExtraLandscapingTools_settingsButton.style.backgroundColor =  "var(--menuControl1)" //"rgba(255, 255, 255, 0)" 
+	ExtraLandscapingTools_settingsButton.style.borderBottomColor = "var(--menuControlBorder)"
+	ExtraLandscapingTools_settingsButton.style.borderLeftColor = "var(--menuControlBorder)"
+	ExtraLandscapingTools_settingsButton.style.borderTopColor = "var(--menuControlBorder)"
+	ExtraLandscapingTools_settingsButton.style.borderRightColor = "var(--menuControlBorder)"
+	ExtraLandscapingTools_settingsButton.style.borderStyle = "solid"
+	ExtraLandscapingTools_settingsButton.style.color = "var(--menuControlBorder)" //"rgba(212, 23, 23, 255)"
 	ExtraLandscapingTools_settingsButton.innerHTML = name
 
 	ExtraLandscapingTools_settingsButton.addEventListener("click", function () {
@@ -268,21 +273,37 @@ function ExtraLandscapingTools_CreateSettingsCatButton(panelname, name, event) {
 
 	ExtraLandscapingTools_settingsButton.addEventListener("mouseover", function () {
 
-		this.style.backgroundColor = "rgba(212, 23, 23, 255)"
-		this.style.color = "rgba(255, 255, 255, 255)"
+		// this.style.setProperty("background-color", "var(--menuControlBorder)")
+		// this.style.setProperty("color", "var(--menuControl1)")
+
+		this.style.backgroundColor = "var(--menuControlBorder)"//"rgba(212, 23, 23, 255)"
+		this.style.color = "var(--menuControl1)"//"rgba(255, 255, 255, 0)"
+		// this.style.borderColor = "var(--menuControl1)"
 
 	})
 
 	ExtraLandscapingTools_settingsButton.addEventListener("mouseout", function () {
 
-		this.style.backgroundColor = "rgba(255, 255, 255, 255)"
-		this.style.color = "rgba(212, 23, 23, 255)"
+		// this.style.setProperty("background-color", "var(--menuControl1)")
+		// this.style.setProperty("color", "var(--menuControlBorder)")
+
+		this.style.backgroundColor = "var(--menuControl1)"//"rgba(255, 255, 255, 0)"
+		this.style.color = "var(--menuControlBorder)"//"rgba(212, 23, 23, 255)"
+		// this.style.borderColor = "var(--menuControlBorder)"//"rgba(212, 23, 23, 255)"
 
 	})
 
 	ExtraLandscapingTools_settingsButton.addEventListener("mouseenter", function() {
 		engine.trigger("audio.playSound", "hover-item", 1);
 	})
+
+	if(buttonDescription != undefined) {
+		var ExtraLandscapingTools_settingsButtonLabel = document.createElement("div")
+		ExtraLandscapingTools_settingsButtonLabel.className = "label_DGc label_ZLb"
+		ExtraLandscapingTools_settingsButtonLabel.innerHTML = buttonDescription
+		ExtraLandscapingTools_settingsButtonLabel.style.color = "rgba(255,255,255,255)"
+		ExtraLandscapingTools_settingsContainer.appendChild(ExtraLandscapingTools_settingsButtonLabel)
+	}
 
 	ExtraLandscapingTools_settingsContainer.appendChild(ExtraLandscapingTools_settingsButton)
 

@@ -28,6 +28,7 @@ namespace ExtraLandscapingTools
 	internal class ELTSettings
 	{
 		public bool LoadCustomSurfaces = true;
+		public bool LoadCustomDecals = true;
 		public bool EnableTransformSection = true;
 		public bool EnableSnowSurfaces = false;
 	}

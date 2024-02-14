@@ -35,10 +35,10 @@ public class CustomDecals
 
 
 
-		Material material = new(DecalRenderPrefab.ObtainMaterial(0))  //new(Shader.Find( "BH/Decals/DefaultDecalShader" )); 
-		{
-			name = $"{decalName}_Material",
-		};
+		// Material material = new(DecalRenderPrefab.ObtainMaterial(0))  //new(Shader.Find( "BH/Decals/DefaultDecalShader" )); 
+		// {
+		// 	name = $"{decalName}_Material",
+		// };
 
 		// foreach (string s in material.GetPropertyNames(MaterialPropertyType.Float)) {Plugin.Logger.LogMessage($"Float : {s} | {material.GetFloat(s)}");}
 		// foreach(string s in material.GetPropertyNames(MaterialPropertyType.Vector)) {Plugin.Logger.LogMessage($"Vector : {s} | {material.GetVector(s)}");}
@@ -67,8 +67,8 @@ public class CustomDecals
 
 		// texture2D_BaseColorMap.LoadRawTextureData(texture2D_BaseColorMap_Temp.GetRawTextureData());
 
-		if(!File.Exists(folderPath+"\\icon.png")) ELT.ResizeTexture(texture2D_BaseColorMap, 64, folderPath+"\\icon.png");
-		material.SetTexture("_BaseColorMap", texture2D_BaseColorMap);
+		if(!File.Exists(folderPath+"\\icon.png")) ELT.ResizeTexture(texture2D_BaseColorMap_Temp, 64, folderPath+"\\icon.png");
+		// material.SetTexture("_BaseColorMap", texture2D_BaseColorMap);
 
 		// Texture2D texture2D_NormalMap = new(1, 1);
 		// texture2D_NormalMap.name = $"{name}_NormalMap";
@@ -168,18 +168,18 @@ public class CustomDecals
 
         // surfaceAsset.SetMaterialHash(DecalRenderPrefab.surfaceAssets.ToArray()[0].materialTemplateHash);
         // surfaceAsset.SetData(material);
-        surfaceAsset.SetData(decalSurface);
 		AssetDataPath assetDataPath = AssetDataPath.Create($"ELT/CustomDecals/{decalName}", "SurfaceAsset");
 		surfaceAsset.database.AddAsset<SurfaceAsset>(assetDataPath, surfaceAsset.guid);
+        surfaceAsset.SetData(decalSurface);
+		// surfaceAsset.SetData((Surface)surfaceAsset.database.GetAsset("10df77a53394eca40a4f73fd116763b3"));
 		// surfaceAsset.SaveData();
 		surfaceAsset.Save(force: false, saveTextures: true, vt: false);
+
+		// TextureAsset textureAsset = surfaceAsset.database.AddAsset(base.subPath, kvp.Value, uniqueName: true);
 
 		// Colossal.IO.AssetDatabase.TextureAssetExtensions.AddAsset
 
 		// Plugin.Logger.LogMessage(SystemInfo.GetCompatibleFormat( ,FormatUsage.Sample));
-
-		Plugin.Logger.LogMessage("RenderPrefab");
-		RenderPrefab renderPrefab = (RenderPrefab)ScriptableObject.CreateInstance("RenderPrefab");
 
 		Vector4 MeshSize = decalSurface.GetVectorProperty("colossal_MeshSize");
 		Vector4 TextureArea = decalSurface.GetVectorProperty("colossal_TextureArea");
@@ -191,13 +191,15 @@ public class CustomDecals
 		};
 
 		AssetDataPath assetDataPath2 = AssetDataPath.Create($"ELT/CustomDecals/{decalName}", "geometryAsset");
-
+		geometryAsset.database.AddAsset<GeometryAsset>(assetDataPath2, geometryAsset.guid);
 		geometryAsset.SetData(meshes);
 		// DecalRenderPrefab.geometryAsset.SetData(meshes);
 		// DecalRenderPrefab.geometryAsset.ReleaseMeshes();
 		// DecalRenderPrefab.geometryAsset.database.AddAsset(assetDataPath, geometryAsset.guid);
-		geometryAsset.database.AddAsset<GeometryAsset>(assetDataPath2, geometryAsset.guid);
 		geometryAsset.Save(true);
+
+		Plugin.Logger.LogMessage("RenderPrefab");
+		RenderPrefab renderPrefab = (RenderPrefab)ScriptableObject.CreateInstance("RenderPrefab");
 		renderPrefab.geometryAsset = new AssetReference<GeometryAsset>(geometryAsset.guid);//DecalRenderPrefab.geometryAsset;
 		renderPrefab.surfaceAssets = [surfaceAsset];//DecalRenderPrefab.surfaceAssets; //
 		// renderPrefab.surfaceArea = DecalRenderPrefab.surfaceArea;
@@ -208,7 +210,8 @@ public class CustomDecals
 		renderPrefab.manualVTRequired = false;
 
 		DecalProperties decalProperties = renderPrefab.AddComponent<DecalProperties>();
-		decalProperties.m_TextureArea = new(new(-TextureArea.x * 0.5f, -TextureArea.y * 0.5f), new(TextureArea.x * 0.5f, TextureArea.y * 0.5f));
+		// decalProperties.m_TextureArea = new(new(-TextureArea.x * 0.5f, -TextureArea.y * 0.5f), new(TextureArea.x * 0.5f, TextureArea.y * 0.5f));
+		decalProperties.m_TextureArea = new(new(TextureArea.x, TextureArea.y), new(TextureArea.z, TextureArea.w));
 		decalProperties.m_LayerMask = (DecalLayers)decalSurface.GetFloatProperty("colossal_DecalLayerMask");
 		decalProperties.m_RendererPriority = DecalPropertiesPrefab.m_RendererPriority;
 		decalProperties.m_EnableInfoviewColor = DecalPropertiesPrefab.m_EnableInfoviewColor;
@@ -344,5 +347,4 @@ public class CustomDecals
 
 		return mesh;
 	}
-
 }

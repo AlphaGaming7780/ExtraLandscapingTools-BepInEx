@@ -23,6 +23,12 @@ namespace ExtraLandscapingTools
 			return Assembly.GetExecutingAssembly().GetManifestResourceStream("ExtraLandscapingTools.embedded."+embeddedPath);
 		}
 
+		internal static void ClearData() {
+			if(Directory.Exists(GameManager_Awake.ELTDataPath)) {
+				Directory.Delete(GameManager_Awake.ELTDataPath, true);
+			}
+		}
+
 		public static Texture2D ResizeTexture( Texture2D texture, int newSize, string savePath = null) {
 
 			if(texture is null) {

@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 using Colossal.Entities;
+using Colossal.IO.AssetDatabase;
 using Colossal.Json;
 using Colossal.UI.Binding;
 using ExtraLandscapingTools.Patches;
@@ -24,17 +25,21 @@ namespace ExtraLandscapingTools
 
 		internal static List<SettingsUI> settings = [
 			new("ELT Base", [
-				new(SettingUI.SettingUIType.CheckBox, "[RESTART] Load Custom Surfaces", "elt.loadcustomsurfaces"), 
+				new SettingsCheckBox("[RESTART] Load Custom Surfaces", "elt.loadcustomsurfaces"),
+				new(SettingUI.SettingUIType.CheckBox, "[RESTART] Load Custom Decals", "elt.loadcustomdecals"),
 				new(SettingUI.SettingUIType.CheckBox, "Enable Transfrom Section", "elt.enabletransformsection"),
+				new SettingsButton("Clear Data", "elt.cleardata", "Use this before uninstalling."),
+				new(SettingUI.SettingUIType.CheckBox, "[EXPERIMENTAL] [RESTART] Enable Snow On Surfaces.", "elt.enableSnowSurfaces"),
 			]),
-			new("Surfaces", [
-				new(SettingUI.SettingUIType.CheckBox, "[EXPERIMENTAL] [RESTART] Enable Snow", "elt.enableSnowSurfaces"),
-				new(SettingUI.SettingUIType.Button, "Clear Cache", "elt.clearsurfacescache"),
-			])
+			// new("Surfaces", [
+				
+			// 	new(SettingUI.SettingUIType.Button, "Clear Cache", "elt.clearsurfacescache"),
+			// ])
 		];
 
 		private static GetterValueBinding<bool> showMarker;
 		private static GetterValueBinding<bool> loadcustomsurfaces;
+		private static GetterValueBinding<bool> loadcustomdecals;
 		private static GetterValueBinding<bool> enableTransformSection;
 		private static GetterValueBinding<bool> enableSnowSurfaces;
 		internal static bool isMarkerVisible = false;
@@ -52,7 +57,6 @@ namespace ExtraLandscapingTools
 			eLT_UI_Mono = eLT_UI_Object.AddComponent<ELT_UI_Mono>();
 
 			AddBinding(new GetterValueBinding<string>("elt", "settings", () => Encoder.Encode(settings, EncodeOptions.None)));
-			AddBinding(new TriggerBinding("elt", "clearsurfacescache", new Action(ClearSurfacesCache)));
 
 			AddBinding(showMarker = new GetterValueBinding<bool>("elt", "showmarker", () => ELT.m_RenderingSystem.markersVisible));
 			AddBinding(new TriggerBinding<bool, bool>("elt", "showmarker", new Action<bool, bool>(ShowMarker)));
@@ -60,14 +64,18 @@ namespace ExtraLandscapingTools
 			AddBinding(loadcustomsurfaces = new GetterValueBinding<bool>("elt", "loadcustomsurfaces", () => Settings.settings.LoadCustomSurfaces));
 			AddBinding(new TriggerBinding<bool>("elt", "loadcustomsurfaces", new Action<bool>(LoadCustomSurfaces)));
 
+			AddBinding(loadcustomdecals = new GetterValueBinding<bool>("elt", "loadcustomdecals", () => Settings.settings.LoadCustomDecals));
+			AddBinding(new TriggerBinding<bool>("elt", "loadcustomdecals", new Action<bool>(LoadCustomDecals)));
+
 			AddBinding(enableTransformSection = new GetterValueBinding<bool>("elt", "enabletransformsection", () => Settings.settings.EnableTransformSection));
 			AddBinding(new TriggerBinding<bool>("elt", "enabletransformsection", new Action<bool>(EnableTransformSection)));
 
 			AddBinding(enableSnowSurfaces = new GetterValueBinding<bool>("elt", "enableSnowSurfaces", () => Settings.settings.EnableSnowSurfaces));
 			AddBinding(new TriggerBinding<bool>("elt", "enableSnowSurfaces", new Action<bool>(EnableSurfacesSnow)));
 
-			// AddBinding(new GetterValueBinding<bool>("elt", "getsettings", () => isEnableCustomSurfaces));
-			// AddBinding(new TriggerBinding<bool>("elt", "enablecustomsurfaces", new Action<bool>(EnableCustomSurfaces)));
+
+			// AddBinding(new TriggerBinding("elt", "clearsurfacescache", new Action(CustomSurfaces.ClearSurfacesCache)));
+			AddBinding(new TriggerBinding("elt", "cleardata", new Action(ELT.ClearData)));
 
 			// surfaceQuery = GetEntityQuery(new EntityQueryDesc
 			// {
@@ -87,12 +95,6 @@ namespace ExtraLandscapingTools
 			showMarker.Update();
 		}
 
-		private void ClearSurfacesCache() {
-			if(Directory.Exists($"{GameManager_Awake.resourcesCache}/Surfaces")) {
-				Directory.Delete($"{GameManager_Awake.resourcesCache}/Surfaces", true);
-			}
-		}
-
 		private void LoadCustomSurfaces(bool b) {
 			// NativeArray<Entity> entities =  surfaceQuery.ToEntityArray(AllocatorManager.Temp);
 
@@ -106,6 +108,19 @@ namespace ExtraLandscapingTools
 			loadcustomsurfaces.Update();
 		}
 
+		private void LoadCustomDecals(bool b) {
+			// NativeArray<Entity> entities =  surfaceQuery.ToEntityArray(AllocatorManager.Temp);
+
+			// foreach(Entity entity in entities) {
+			// 	if(b) AddEntityObjectToCategoryUI(entity);
+			// 	else RemoveEntityObjectFromCategoryUI(entity);
+			// }
+
+			Settings.settings.LoadCustomDecals = b;
+			Settings.SaveSettings("ELT", Settings.settings);
+			loadcustomdecals.Update();
+		}
+
 		private void EnableTransformSection( bool b ) {
 			Settings.settings.EnableTransformSection = b;
 			Settings.SaveSettings("ELT", Settings.settings);
@@ -115,6 +130,7 @@ namespace ExtraLandscapingTools
 		private void EnableSurfacesSnow( bool b ) {
 			Settings.settings.EnableSnowSurfaces = b;
 			Settings.SaveSettings("ELT", Settings.settings);
+			if(!b) CustomSurfaces.ClearSurfacesCache();
 			enableSnowSurfaces.Update();
 		}
 
@@ -279,5 +295,34 @@ namespace ExtraLandscapingTools
         {
         }
     }
+
+	public class SettingsButton : SettingUI
+	{
+		public string buttonDescription;
+
+		public SettingsButton(string displayName, string name, string buttonDescription = null) {
+			settingUIType = SettingUIType.Button;
+			this.displayName = displayName;
+			this.name = name;
+			this.buttonDescription = buttonDescription;
+        }
+
+        public SettingsButton()
+        {
+        }
+	}
+
+	public class SettingsCheckBox : SettingUI
+	{
+		public SettingsCheckBox(string displayName, string name) {
+			settingUIType = SettingUIType.CheckBox;
+			this.displayName = displayName;
+			this.name = name;
+        }
+
+        public SettingsCheckBox()
+        {
+        }
+	}
 
 }
