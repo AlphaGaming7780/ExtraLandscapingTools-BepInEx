@@ -107,7 +107,7 @@ public class CustomSurfaces
 		newMaterial.SetFloat("_DrawOrder", GetRendererPriorityByCat(CatName));
 
 		if(File.Exists(folderPath+"\\surface.json")) {
-			JSONMaterail jSONMaterail = Decoder.Decode(File.ReadAllText(folderPath+"\\surface.json")).Make<JSONMaterail>();
+			JSONSurfacesMaterail jSONMaterail = Decoder.Decode(File.ReadAllText(folderPath+"\\surface.json")).Make<JSONSurfacesMaterail>();
 			foreach(string key in jSONMaterail.Float.Keys) {
 				if(material.HasProperty(key)) newMaterial.SetFloat(key, jSONMaterail.Float[key]);
 				else { 
