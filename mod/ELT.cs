@@ -29,6 +29,10 @@ namespace ExtraLandscapingTools
 			}
 		}
 
+		internal static void ExtractZip(string pathToZip) {
+
+		}
+
 		public static Texture2D ResizeTexture( Texture2D texture, int newSize, string savePath = null) {
 
 			if(texture is null) {

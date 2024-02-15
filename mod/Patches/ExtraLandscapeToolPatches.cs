@@ -29,7 +29,7 @@ namespace ExtraLandscapingTools.Patches
 		static private readonly string PathToParent = Directory.GetParent(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location)).FullName;
 		public static readonly string PathToMods = Path.Combine(PathToParent,"ExtraLandscapingTools_mods");
 		public static readonly string PathToCustomBrushes = Path.Combine(PathToMods,"CustomBrushes");
-		public static readonly string PathToCustomSurface = Path.Combine(PathToMods,"CustomSurfaces");
+		// public static readonly string PathToCustomSurface = Path.Combine(PathToMods,"CustomSurfaces");
 		public static readonly string PathToCustomDecal = Path.Combine(PathToMods,"CustomDecals");
 
 		static readonly string pathToZip = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location)+"\\resources.zip";
@@ -49,10 +49,12 @@ namespace ExtraLandscapingTools.Patches
 
 			ELT.ClearData();
 
+			CustomSurfaces.SearchForCustomSurfacesFolder(PathToParent);
+			CustomDecals.SearchForCustomDecalsFolder(PathToParent);
+
 			if(!PrefabSystem_OnCreate.FolderToLoadBrush.Contains(resourcesBrushes) && Directory.Exists(resourcesBrushes)) PrefabSystem_OnCreate.FolderToLoadBrush.Add(resourcesBrushes);
 			if(!PrefabSystem_OnCreate.FolderToLoadBrush.Contains(PathToCustomBrushes) && Directory.Exists(PathToCustomBrushes)) PrefabSystem_OnCreate.FolderToLoadBrush.Add(PathToCustomBrushes);
-			if(!CustomSurfaces.FolderToLoadSurface.Contains(PathToCustomSurface) && Directory.Exists(PathToCustomSurface)) CustomSurfaces.FolderToLoadSurface.Add(PathToCustomSurface);
-			if(!CustomDecals.FolderToLoadDecals.Contains(PathToCustomDecal) && Directory.Exists(PathToCustomDecal)) CustomDecals.FolderToLoadDecals.Add(PathToCustomDecal);
+			// if(!CustomDecals.FolderToLoadDecals.Contains(PathToCustomDecal) && Directory.Exists(PathToCustomDecal)) CustomDecals.FolderToLoadDecals.Add(PathToCustomDecal);
 
 			Settings.settings = Settings.LoadSettings("ELT", new ELTSettings());
 		}
@@ -264,7 +266,7 @@ namespace ExtraLandscapingTools.Patches
 					return true;
 				}
 
-				if (prefab is StaticObjectPrefab && !prefab.name.ToLower().Contains("decal") && !prefab.name.ToLower().Contains("roadarrow")) 
+				if (prefab is StaticObjectPrefab && !prefab.name.ToLower().Contains("decal") && !prefab.name.ToLower().Contains("roadarrow") && prefab.GetComponent<CustomDecal>() == null) 
 				{
 					return true;
 				}
@@ -294,7 +296,7 @@ namespace ExtraLandscapingTools.Patches
 						} catch (Exception e) {Plugin.Logger.LogWarning(e);}
 					}
 
-					if(Settings.settings.EnableSnowSurfaces && !surfacePrefab.Has<CustomSurfaceComponent>()) CustomSurfaces.GetOrCreateSnowTexture((Texture2D)material.GetTexture("_BaseColorMap"), surfacePrefab.name);
+					if(Settings.settings.EnableSnowSurfaces && !surfacePrefab.Has<CustomSurface>()) CustomSurfaces.GetOrCreateSnowTexture((Texture2D)material.GetTexture("_BaseColorMap"), surfacePrefab.name);
 
 				}	
 
@@ -310,8 +312,7 @@ namespace ExtraLandscapingTools.Patches
 
 				if(prefab is TerraformingPrefab) TerraformingUI.m_Group = Prefab.GetExistingToolCategory(prefab, "Terraforming") ?? TerraformingUI.m_Group;
 				else if(prefab is SurfacePrefab) TerraformingUI.m_Group ??= CustomSurfaces.SetupUIGroupe(__instance, prefab);
-				else if(prefab.name.ToLower().Contains("decal")) TerraformingUI.m_Group = Prefab.GetOrCreateNewToolCategory(prefab, "Landscaping", "Decals", "Pathways") ?? TerraformingUI.m_Group;
-				else if(prefab.name.ToLower().Contains("roadarrow")) TerraformingUI.m_Group = Prefab.GetOrCreateNewToolCategory(prefab, "Landscaping", "Decals", "Pathways") ?? TerraformingUI.m_Group;
+				else if(prefab.name.ToLower().Contains("decal") || prefab.name.ToLower().Contains("roadarrow") || prefab.GetComponent<CustomDecal>() != null) TerraformingUI.m_Group = Prefab.GetOrCreateNewToolCategory(prefab, "Landscaping", "Decals", "Pathways") ?? TerraformingUI.m_Group;
 				else TerraformingUI.m_Group ??= Prefab.GetOrCreateNewToolCategory(prefab, "Landscaping", "[ELT] Failed Prefab, IF you see this tab, repport it, it's a bug.");
 
 				if(TerraformingUI.m_Group == null) {

@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.IO.Compression;
 using Colossal;
 using Colossal.Json;
 using ExtraLandscapingTools.Patches;
@@ -16,12 +17,22 @@ public class CustomSurfaces
 
 	internal static List<string> FolderToLoadSurface = [];
 
+	internal static void SearchForCustomSurfacesFolder(string ModsFolderPath) {
+		foreach(DirectoryInfo directory in new DirectoryInfo(ModsFolderPath).GetDirectories()) {
+			if(File.Exists($"{directory.FullName}\\CustomSurfaces.zip")) {
+				if(Directory.Exists($"{directory.FullName}\\CustomSurfaces")) Directory.Delete($"{directory.FullName}\\CustomSurfaces", true);
+				ZipFile.ExtractToDirectory($"{directory.FullName}\\CustomSurfaces", directory.FullName);
+				File.Delete($"{directory.FullName}\\CustomSurfaces.zip");
+			}
+			if(Directory.Exists($"{directory.FullName}\\CustomSurfaces") && !FolderToLoadSurface.Contains($"{directory.FullName}\\CustomSurfaces")) FolderToLoadSurface.Add($"{directory.FullName}\\CustomSurfaces");
+		}
+	}
+
 	internal static void ClearSurfacesCache() {
 		if(Directory.Exists($"{GameManager_Awake.resourcesCache}/Surfaces")) {
 			Directory.Delete($"{GameManager_Awake.resourcesCache}/Surfaces", true);
 		}
 	}
-
 
 	public static void AddCustomSurfacesFolder(string path) {
 		// Plugin.Logger.LogMessage(path);
@@ -212,7 +223,7 @@ public class CustomSurfaces
 		surfacePrefabUI.m_Priority = -1;
 		surfacePrefabUI.m_Group = SetupUIGroupe(prefabSystem, surfacePrefab, CatName);
 
-		surfacePrefab.AddComponent<CustomSurfaceComponent>();
+		surfacePrefab.AddComponent<CustomSurface>();
 
 		prefabSystem.AddPrefab(surfacePrefab);
 		prefabSystem.AddPrefab(surfacePrefabPlaceHolder);
@@ -261,7 +272,7 @@ public class CustomSurfaces
 }
 
 
-internal class CustomSurfaceComponent : ComponentBase
+internal class CustomSurface : ComponentBase
 {
     public override void GetArchetypeComponents(HashSet<ComponentType> components) {}
     public override void GetPrefabComponents(HashSet<ComponentType> components) {}

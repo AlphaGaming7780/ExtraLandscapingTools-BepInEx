@@ -10,8 +10,8 @@ public abstract class Extension {
 	{
 		Other = 0,
 		Surfaces = 1,
-		// Decals = 2,
-		Assets = 2
+		Decals = 2,
+		Assets = 3
 	}
 
 	public static List<Extension> Extensions {private set; get;} = [];
