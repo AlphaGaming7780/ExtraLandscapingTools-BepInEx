@@ -4,7 +4,6 @@ using System.IO;
 using System.Linq;
 using Colossal.AssetPipeline;
 using Colossal.AssetPipeline.Importers;
-using Colossal.AssetPipeline.Native;
 using Colossal.IO.AssetDatabase;
 using Colossal.Json;
 using ExtraLandscapingTools.Patches;
@@ -44,7 +43,7 @@ public class CustomDecals
 		// foreach(string s in material.GetPropertyNames(MaterialPropertyType.Vector)) {Plugin.Logger.LogMessage($"Vector : {s} | {material.GetVector(s)}");}
 		// foreach(string s in material.GetPropertyNames(MaterialPropertyType.Texture)) {Plugin.Logger.LogMessage($"Texture : {s}");}
 
-		byte[] fileData; 
+		byte[] fileData;
 
 		fileData = File.ReadAllBytes(folderPath+"\\_BaseColorMap.png");
 		Texture2D texture2D_BaseColorMap_Temp = new(1, 1);

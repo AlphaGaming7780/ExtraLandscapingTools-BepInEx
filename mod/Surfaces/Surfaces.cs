@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
+using Colossal;
 using Colossal.Json;
 using ExtraLandscapingTools.Patches;
 using Game.Prefabs;
@@ -67,17 +68,24 @@ public class CustomSurfaces
 			texture2D.LoadImage(data);
 		} else {
 			Plugin.Logger.LogMessage($"Creating snow texture for {surfaceName} surface.");
-			if(!texture2D.isReadable) texture2D = ELT.GetTextureFromNonReadable(texture2D);
-			for(int x = 0; x < texture2D.width; x++) {
-				for(int y = 0; y < texture2D.height; y++) {
-					Color color = texture2D.GetPixel(x, y);
-					color.a -= snowAmount;
-					texture2D.SetPixel(x, y, color);
+			using (PerformanceCounter.Start(delegate (TimeSpan t)
+            {
+                // log?.InfoFormat("GameManager created! ({0}ms)", t.TotalMilliseconds);
+				Plugin.Logger.LogMessage($"Done it take {t.TotalMilliseconds}ms.");
+            })) {
+				if(!texture2D.isReadable) texture2D = ELT.GetTextureFromNonReadable(texture2D);
+				for(int i = 0; i < texture2D.mipmapCount; i++) {
+					List<Color> colors = [];
+					foreach(Color color in texture2D.GetPixels(i)) {
+						Color color1 = color;
+						color1.a -= snowAmount;
+						colors.Add(color1);
+					}
+					texture2D.SetPixels([.. colors], i);
 				}
+				texture2D.Apply();
+				ELT.SaveTexture(texture2D, $"{GameManager_Awake.resourcesCache}/Surfaces/{surfaceName}/_BaseColorMap_Snow.png");
 			}
-			texture2D.Apply();
-			ELT.SaveTexture(texture2D, $"{GameManager_Awake.resourcesCache}/Surfaces/{surfaceName}/_BaseColorMap_Snow.png");
-			Plugin.Logger.LogMessage($"Done.");
 		}
 		return texture2D;
 	}

@@ -79,7 +79,7 @@ function ExtraLandscapingTools_CreateSettingsPanel() {
     ExtraLandscapingTools_settingsPanel = document.createElement("div");
 	ExtraLandscapingTools_settingsPanel.className = "content_XD5 content_AD7 child-opacity-transition_nkS"
 	ExtraLandscapingTools_settingsPanel.id = "ExtraLandscapingTools_settingsPanel"
-	// ExtraLandscapingTools_settingsPanel.style.height = "100%"
+	ExtraLandscapingTools_settingsPanel.style.height = "calc( var(--assetMenuRows) *( var(--assetMenuItemSize) + var(--assetMenuItemGap) )- var(--assetMenuItemGap)  +16rem)"
 	// ExtraLandscapingTools_settingsPanel.style.width = "100%"
 	ExtraLandscapingTools_settingsPanel.style.display = "none"
 	ExtraLandscapingTools_settingsPanel.style.flexDirection = "row"
@@ -88,7 +88,8 @@ function ExtraLandscapingTools_CreateSettingsPanel() {
 	ExtraLandscapingTools_settingsPanel_Tabs = document.createElement("div")
 	ExtraLandscapingTools_settingsPanel_Tabs.className = "ExtraLandscapingTools_settingsPanel_Tabs" //detail_eTp
 	ExtraLandscapingTools_settingsPanel_Tabs.style.overflowY = "auto"
-	ExtraLandscapingTools_settingsPanel_Tabs.style.height = "100%"
+	// ExtraLandscapingTools_settingsPanel_Tabs.style.height = "100%"
+	// ExtraLandscapingTools_settingsPanel_Tabs.style.minHeight = "100%"
 	ExtraLandscapingTools_settingsPanel_Tabs.style.width = "80%"
 	ExtraLandscapingTools_settingsPanel_Tabs.style.display = "flex"
 	ExtraLandscapingTools_settingsPanel_Tabs.style.flexDirection = "column"
@@ -96,7 +97,8 @@ function ExtraLandscapingTools_CreateSettingsPanel() {
 
 	ExtraLandscapingTools_settingsPanel_TabsButton = document.createElement("div")
 	ExtraLandscapingTools_settingsPanel_TabsButton.className = "ExtraLandscapingTools_settingsPanel_TabsButton" //menu_hb1
-	ExtraLandscapingTools_settingsPanel_TabsButton.style.height = "100%"
+	// ExtraLandscapingTools_settingsPanel_TabsButton.style.height = "100%"
+	// ExtraLandscapingTools_settingsPanel_TabsButton.style.minHeight = "100%"
 	ExtraLandscapingTools_settingsPanel_TabsButton.style.width = "20%"
 	ExtraLandscapingTools_settingsPanel_TabsButton.style.overflowY = "auto"
 	ExtraLandscapingTools_settingsPanel_TabsButton.style.borderRightStyle = "solid"

@@ -24,17 +24,18 @@ namespace ExtraLandscapingTools
 		internal static ELT_UI_Mono eLT_UI_Mono;
 
 		internal static List<SettingsUI> settings = [
-			new("ELT Base", [
-				new SettingsCheckBox("[RESTART] Load Custom Surfaces", "elt.loadcustomsurfaces"),
-				new(SettingUI.SettingUIType.CheckBox, "[RESTART] Load Custom Decals", "elt.loadcustomdecals"),
-				new(SettingUI.SettingUIType.CheckBox, "Enable Transfrom Section", "elt.enabletransformsection"),
+			new("ELT", [
+				new SettingsCheckBox("Enable Transfrom Section", "elt.enabletransformsection"),
 				new SettingsButton("Clear Data", "elt.cleardata", "Use this before uninstalling."),
-				new(SettingUI.SettingUIType.CheckBox, "[EXPERIMENTAL] [RESTART] Enable Snow On Surfaces.", "elt.enableSnowSurfaces"),
 			]),
-			// new("Surfaces", [
-				
-			// 	new(SettingUI.SettingUIType.Button, "Clear Cache", "elt.clearsurfacescache"),
-			// ])
+			new("Surfaces", [
+				new SettingsCheckBox("[RESTART] Load Custom Surfaces", "elt.loadcustomsurfaces"),
+				new SettingsCheckBox("[EXPERIMENTAL] [RESTART] Enable Snow On Surfaces.", "elt.enableSnowSurfaces"),
+				new SettingsButton("Clear Cache", "elt.clearsurfacescache"),
+			]),
+			new("Decals", [
+				new SettingsCheckBox("[RESTART] Load Custom Decals", "elt.loadcustomdecals"),
+			])
 		];
 
 		private static GetterValueBinding<bool> showMarker;
