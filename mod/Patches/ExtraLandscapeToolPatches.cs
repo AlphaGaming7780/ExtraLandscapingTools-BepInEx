@@ -25,7 +25,7 @@ namespace ExtraLandscapingTools.Patches
 	[HarmonyPatch(typeof(GameManager), "Awake")]
 	internal class GameManager_Awake
 	{	
-		static internal readonly string ELTDataPath = $"{EnvPath.kStreamingDataPath}\\ELT";
+		static internal readonly string ELTDataPath = $"{EnvPath.kUserDataPath}\\Mods\\ELT";
 		static private readonly string PathToParent = Directory.GetParent(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location)).FullName;
 		public static readonly string PathToMods = Path.Combine(PathToParent,"ExtraLandscapingTools_mods");
 		public static readonly string PathToCustomBrushes = Path.Combine(PathToMods,"CustomBrushes");
@@ -103,14 +103,23 @@ namespace ExtraLandscapingTools.Patches
 		public static void Postfix(UpdateSystem updateSystem) {
 			updateSystem.UpdateAt<ELT_UI>(SystemUpdatePhase.UIUpdate);
 			updateSystem.UpdateAt<TransformSection>(SystemUpdatePhase.UIUpdate);
+			updateSystem.UpdateAt<SurfaceReplacerTool>(SystemUpdatePhase.ToolUpdate);
+		}
+	}
+
+	[HarmonyPatch(typeof(AreaToolSystem), nameof(AreaToolSystem.TrySetPrefab))]
+	public class AreaToolSystem_TrySetPrefab 
+	{
+		private static bool Prefix(PrefabBase prefab) {
+			if(ELT.m_ToolSystem.activeTool is SurfaceReplacerTool) return false;
+			return true;
 		}
 	}
 
 	[HarmonyPatch(typeof(ToolUISystem), "OnCreate")]
-
 	public class ToolUISystem_OnCreate 
 	{
-		public static ToolUISystem toolUISystem;
+		// public static ToolUISystem toolUISystem;
 		public static Traverse toolUISystemTraverse;
 		internal static PrefabSystem m_PrefabSystem;
 		internal static EntityQuery m_BrushQuery;
@@ -120,7 +129,7 @@ namespace ExtraLandscapingTools.Patches
 
 		static void Postfix( ToolUISystem __instance) {
 
-			toolUISystem = __instance;
+			ELT.m_ToolUISystem = __instance;
 			toolUISystemTraverse = Traverse.Create(__instance);
 
 			m_PrefabSystem = toolUISystemTraverse.Field("m_PrefabSystem").GetValue<PrefabSystem>();
@@ -143,7 +152,7 @@ namespace ExtraLandscapingTools.Patches
 				ELT_UI.eLT_UI_Mono.ChangeUiNextFrame(ELT_UI.GetStringFromEmbbededJSFile("REMOVE_UI.js"));
 			}
 
-			if(tool is AreaToolSystem) { //|| tool is ObjectToolSystem
+			if(tool is AreaToolSystem || tool is SurfaceReplacerTool) { //|| tool is ObjectToolSystem
 				// if(!showMarker) 
 				ELT_UI.eLT_UI_Mono.ChangeUiNextFrame(ELT_UI.GetStringFromEmbbededJSFile("ShowMarker.js"));
 				showMarker = true;

@@ -4,6 +4,8 @@ using System.Reflection;
 using ExtraLandscapingTools.Patches;
 using Game.Prefabs;
 using Game.Rendering;
+using Game.Tools;
+using Game.UI.InGame;
 using Unity.Entities;
 using UnityEngine;
 
@@ -15,6 +17,9 @@ namespace ExtraLandscapingTools
 		public static PrefabSystem m_PrefabSystem;
 		public static RenderingSystem m_RenderingSystem;
 		public static EntityManager m_EntityManager;
+		public static ToolSystem m_ToolSystem;
+		public static ToolUISystem m_ToolUISystem;
+		public static SurfaceReplacerTool m_SurfaceReplacerTool;
 
 		internal delegate string OnGetIcon(PrefabBase prefabBase);
 		internal static OnGetIcon onGetIcon;

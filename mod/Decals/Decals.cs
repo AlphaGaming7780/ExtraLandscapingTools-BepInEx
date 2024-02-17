@@ -42,9 +42,9 @@ public class CustomDecals
 
 	public static void CreateCustomDecal(StaticObjectPrefab DecalPrefab, string folderPath, string decalName) {
 
-		RenderPrefab DecalRenderPrefab = (RenderPrefab)DecalPrefab.m_Meshes[0].m_Mesh;
+		// RenderPrefab DecalRenderPrefab = (RenderPrefab)DecalPrefab.m_Meshes[0].m_Mesh;
 		// SpawnableObject DecalSpawnableObjectPrefab = DecalPrefab.GetComponent<SpawnableObject>();
-		DecalProperties DecalPropertiesPrefab = DecalRenderPrefab.GetComponent<DecalProperties>();
+		// DecalProperties DecalPropertiesPrefab = DecalRenderPrefab.GetComponent<DecalProperties>();
 
 		Surface decalSurface = new(decalName, "DefaultDecal");
 		if(File.Exists(folderPath+"\\decal.json")) {
@@ -113,11 +113,11 @@ public class CustomDecals
 			};
 		}
 
-		AssetDataPath assetDataPath = AssetDataPath.Create($"ELT/CustomDecals/{decalName}", "SurfaceAsset");
+		AssetDataPath assetDataPath = AssetDataPath.Create($"Mods/ELT/CustomDecals/{decalName}", "SurfaceAsset");
 		SurfaceAsset surfaceAsset = new()
 		{
 			guid = Guid.NewGuid(), //DecalRenderPrefab.surfaceAssets.ToArray()[0].guid, //
-			database = DecalRenderPrefab.surfaceAssets.ToArray()[0].database,
+			database = AssetDatabase.user //DecalRenderPrefab.surfaceAssets.ToArray()[0].database,
 		};
 		surfaceAsset.database.AddAsset<SurfaceAsset>(assetDataPath, surfaceAsset.guid);
         surfaceAsset.SetData(decalSurface);
@@ -129,10 +129,10 @@ public class CustomDecals
 		GeometryAsset geometryAsset = new()
 		{
 			guid = Guid.NewGuid(),
-			database = DecalRenderPrefab.geometryAsset.database
+			database = AssetDatabase.user //DecalRenderPrefab.geometryAsset.database
 		};
 
-		AssetDataPath assetDataPath2 = AssetDataPath.Create($"ELT/CustomDecals/{decalName}", "geometryAsset");
+		AssetDataPath assetDataPath2 = AssetDataPath.Create($"Mods/ELT/CustomDecals/{decalName}", "geometryAsset");
 		geometryAsset.database.AddAsset<GeometryAsset>(assetDataPath2, geometryAsset.guid);
 		geometryAsset.SetData(meshes);
 		geometryAsset.Save(true);
@@ -151,8 +151,9 @@ public class CustomDecals
 		DecalProperties decalProperties = renderPrefab.AddComponent<DecalProperties>();
 		decalProperties.m_TextureArea = new(new(TextureArea.x, TextureArea.y), new(TextureArea.z, TextureArea.w));
 		decalProperties.m_LayerMask = (DecalLayers)decalSurface.GetFloatProperty("colossal_DecalLayerMask");
-		decalProperties.m_RendererPriority = DecalPropertiesPrefab.m_RendererPriority;
-		decalProperties.m_EnableInfoviewColor = DecalPropertiesPrefab.m_EnableInfoviewColor;
+		decalProperties.m_RendererPriority = 0;//DecalPropertiesPrefab.m_RendererPriority;
+		decalProperties.m_EnableInfoviewColor = false; //DecalPropertiesPrefab.m_EnableInfoviewColor;
+
 
 		Plugin.Logger.LogMessage("ObjectMeshInfo");
 		ObjectMeshInfo objectMeshInfo = new()

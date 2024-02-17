@@ -10,7 +10,9 @@ using ExtraLandscapingTools.Patches;
 using Game.Prefabs;
 using Game.Rendering;
 using Game.SceneFlow;
+using Game.Tools;
 using Game.UI;
+using Game.UI.InGame;
 using Unity.Entities;
 using UnityEngine;
 
@@ -39,6 +41,7 @@ namespace ExtraLandscapingTools
 		];
 
 		private static GetterValueBinding<bool> showMarker;
+		private static GetterValueBinding<bool> selectSurfaceReplacerTool;
 		private static GetterValueBinding<bool> loadcustomsurfaces;
 		private static GetterValueBinding<bool> loadcustomdecals;
 		private static GetterValueBinding<bool> enableTransformSection;
@@ -49,18 +52,26 @@ namespace ExtraLandscapingTools
 		// private static EntityQuery surfaceQuery;
 		internal static List<string> validMenuForELTSettings = ["Landscaping"];
 
+		private static ToolBaseSystem previousTool;
+
 		protected override void OnCreate() {
 
 			base.OnCreate();
 			ELT.m_RenderingSystem = base.World.GetOrCreateSystemManaged<RenderingSystem>();
+			ELT.m_ToolSystem = base.World.GetOrCreateSystemManaged<ToolSystem>();
+			// ELT.m_ToolUISystem = base.World.GetOrCreateSystemManaged<ToolUISystem>();
+			ELT.m_SurfaceReplacerTool = base.World.GetOrCreateSystemManaged<SurfaceReplacerTool>();
 			ELT.m_EntityManager = EntityManager;
-
+			
 			eLT_UI_Mono = eLT_UI_Object.AddComponent<ELT_UI_Mono>();
 
 			AddBinding(new GetterValueBinding<string>("elt", "settings", () => Encoder.Encode(settings, EncodeOptions.None)));
 
+			AddBinding(selectSurfaceReplacerTool = new GetterValueBinding<bool>("elt", "selectsurfacereplacertool", () => ELT.m_ToolSystem.activeTool is SurfaceReplacerTool));
+			AddBinding(new TriggerBinding<bool>("elt", "selectsurfacereplacertool", new Action<bool>(SelectSurfaceReplacerTool)));
+
 			AddBinding(showMarker = new GetterValueBinding<bool>("elt", "showmarker", () => ELT.m_RenderingSystem.markersVisible));
-			AddBinding(new TriggerBinding<bool, bool>("elt", "showmarker", new Action<bool, bool>(ShowMarker)));
+			AddBinding(new TriggerBinding<bool>("elt", "showmarker", new Action<bool>(ShowMarker)));
 
 			AddBinding(loadcustomsurfaces = new GetterValueBinding<bool>("elt", "loadcustomsurfaces", () => Settings.settings.LoadCustomSurfaces));
 			AddBinding(new TriggerBinding<bool>("elt", "loadcustomsurfaces", new Action<bool>(LoadCustomSurfaces)));
@@ -91,7 +102,18 @@ namespace ExtraLandscapingTools
 
 		}
 
-		public static void ShowMarker(bool b, bool forceUpdate = false) {
+		public static void SelectSurfaceReplacerTool(bool b) {
+			if(b) {
+				previousTool = ELT.m_ToolSystem.activeTool;
+				ELT.m_SurfaceReplacerTool.TrySetPrefab(ELT.m_ToolSystem.activePrefab);
+				ELT.m_ToolUISystem.SelectTool(ELT.m_SurfaceReplacerTool);
+				// ELT.m_ToolSystem.activeTool = ELT.m_SurfaceReplacerTool;
+			}
+			else ELT.m_ToolUISystem.SelectTool(previousTool);
+			selectSurfaceReplacerTool.Update();
+		}
+
+		public static void ShowMarker(bool b) {
 			ELT.m_RenderingSystem.markersVisible = b;
 			showMarker.Update();
 		}
