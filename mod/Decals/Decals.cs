@@ -28,15 +28,24 @@ public class CustomDecals
 				ZipFile.ExtractToDirectory($"{directory.FullName}\\CustomDecals", directory.FullName);
 				File.Delete($"{directory.FullName}\\CustomDecals.zip");
 			}
-			if(Directory.Exists($"{directory.FullName}\\CustomDecals") && !FolderToLoadDecals.Contains($"{directory.FullName}\\CustomDecals")) FolderToLoadDecals.Add($"{directory.FullName}\\CustomDecals");
+			if(Directory.Exists($"{directory.FullName}\\CustomDecals")) AddCustomDecalsFolder($"{directory.FullName}\\CustomDecals"); 
+		}
+	}
+
+	public static void AddCustomDecalsFolder(string path) {
+		if(!FolderToLoadDecals.Contains(path)) {
+			FolderToLoadDecals.Add(path);
+			GameManager_InitializeThumbnails.AddNewIconsFolder(new DirectoryInfo(path).Parent.FullName);
 		}
 	}
 
 	public static void CreateCustomDecals(StaticObjectPrefab DecalPrefab) {
 		foreach(string folder in FolderToLoadDecals) {
-			foreach(string decalsFolder in Directory.GetDirectories( folder )) {
-				CreateCustomDecal(DecalPrefab, decalsFolder, new DirectoryInfo(decalsFolder).Name);
-			}
+			// foreach(string catFolder in Directory.GetDirectories( folder )) {
+				foreach(string decalsFolder in Directory.GetDirectories( folder )) {
+					CreateCustomDecal(DecalPrefab, decalsFolder, new DirectoryInfo(decalsFolder).Name);
+				}
+			// }
 		}
 	}
 
@@ -132,7 +141,7 @@ public class CustomDecals
 			database = AssetDatabase.user //DecalRenderPrefab.geometryAsset.database
 		};
 
-		AssetDataPath assetDataPath2 = AssetDataPath.Create($"Mods/ELT/CustomDecals/{decalName}", "geometryAsset");
+		AssetDataPath assetDataPath2 = AssetDataPath.Create($"Mods/ELT/CustomDecals/{decalName}", "GeometryAsset");
 		geometryAsset.database.AddAsset<GeometryAsset>(assetDataPath2, geometryAsset.guid);
 		geometryAsset.SetData(meshes);
 		geometryAsset.Save(true);
@@ -152,7 +161,7 @@ public class CustomDecals
 		decalProperties.m_TextureArea = new(new(TextureArea.x, TextureArea.y), new(TextureArea.z, TextureArea.w));
 		decalProperties.m_LayerMask = (DecalLayers)decalSurface.GetFloatProperty("colossal_DecalLayerMask");
 		decalProperties.m_RendererPriority = 0;//DecalPropertiesPrefab.m_RendererPriority;
-		decalProperties.m_EnableInfoviewColor = false; //DecalPropertiesPrefab.m_EnableInfoviewColor;
+		decalProperties.m_EnableInfoviewColor = false;//DecalPropertiesPrefab.m_EnableInfoviewColor;
 
 
 		Plugin.Logger.LogMessage("ObjectMeshInfo");

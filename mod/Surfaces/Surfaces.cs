@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.IO.Compression;
 using Colossal;
+using Colossal.IO.AssetDatabase;
 using Colossal.Json;
 using ExtraLandscapingTools.Patches;
 using Game.Prefabs;
@@ -24,7 +25,7 @@ public class CustomSurfaces
 				ZipFile.ExtractToDirectory($"{directory.FullName}\\CustomSurfaces", directory.FullName);
 				File.Delete($"{directory.FullName}\\CustomSurfaces.zip");
 			}
-			if(Directory.Exists($"{directory.FullName}\\CustomSurfaces") && !FolderToLoadSurface.Contains($"{directory.FullName}\\CustomSurfaces")) FolderToLoadSurface.Add($"{directory.FullName}\\CustomSurfaces");
+			if(Directory.Exists($"{directory.FullName}\\CustomSurfaces")) AddCustomSurfacesFolder($"{directory.FullName}\\CustomSurfaces");
 		}
 	}
 
@@ -35,10 +36,9 @@ public class CustomSurfaces
 	}
 
 	public static void AddCustomSurfacesFolder(string path) {
-		// Plugin.Logger.LogMessage(path);
 		if(!FolderToLoadSurface.Contains(path)) {
 			FolderToLoadSurface.Add(path);
-			GameManager_InitializeThumbnails.pathToIconToLoad.Add(new DirectoryInfo(path).Parent.FullName);
+			GameManager_InitializeThumbnails.AddNewIconsFolder(new DirectoryInfo(path).Parent.FullName);
 		}
 	}
 
@@ -48,7 +48,7 @@ public class CustomSurfaces
 
 		foreach(string folder in FolderToLoadSurface) {
 			foreach(string surfacesCat in Directory.GetDirectories( folder )) {
-
+				
 				if(!csLocalisation.ContainsKey($"SubServices.NAME[{new DirectoryInfo(surfacesCat).Name} Surfaces]")) {
 					csLocalisation.Add($"SubServices.NAME[{new DirectoryInfo(surfacesCat).Name} Surfaces]", new DirectoryInfo(surfacesCat).Name);
 				}
@@ -59,8 +59,10 @@ public class CustomSurfaces
 
 				foreach(string filePath in Directory.GetDirectories( surfacesCat )) 
 				{	
-					csLocalisation.Add($"Assets.NAME[{new DirectoryInfo(filePath).Name}]", new DirectoryInfo(filePath).Name);
-					csLocalisation.Add($"Assets.DESCRIPTION[{new DirectoryInfo(filePath).Name}]", new DirectoryInfo(filePath).Name);
+					string surfaceName = $"{new DirectoryInfo(folder).Parent.Name}_{new DirectoryInfo(surfacesCat).Name}_{new DirectoryInfo(filePath).Name}";
+
+					if(!csLocalisation.ContainsKey($"Assets.NAME[{surfaceName}]")) csLocalisation.Add($"Assets.NAME[{surfaceName}]", new DirectoryInfo(filePath).Name);
+					if(!csLocalisation.ContainsKey($"Assets.DESCRIPTION[{surfaceName}]")) csLocalisation.Add($"Assets.DESCRIPTION[{surfaceName}]", new DirectoryInfo(filePath).Name);
 				}
 			}
 		}
@@ -106,20 +108,22 @@ public class CustomSurfaces
 			foreach(string surfacesCat in Directory.GetDirectories( folder )) {
 				foreach(string filePath in Directory.GetDirectories( surfacesCat )) 
 				{	
-					CreateCustomSurface(ELT.m_PrefabSystem, filePath, material, new DirectoryInfo(surfacesCat).Name);
+					CreateCustomSurface(filePath, material, new DirectoryInfo(surfacesCat).Name, new DirectoryInfo(folder).Parent.Name);
 				}
 			}
 		}
 	}
 
-	private static void CreateCustomSurface(PrefabSystem prefabSystem, string folderPath, Material material, string CatName) {
+	private static void CreateCustomSurface(string folderPath, Material material, string CatName, string modName) {
 
 		if(!File.Exists(folderPath+"\\"+"_BaseColorMap.png")) {Plugin.Logger.LogError($"No _BaseColorMap.png file for the {new DirectoryInfo(folderPath).Name} surface in {CatName} category.");return;}
+
+		string surfaceName = $"{modName}_{CatName}_{new DirectoryInfo(folderPath).Name}";
 
 		Dictionary<string, object> SurfaceInformation = [];
 
 		SurfacePrefab surfacePrefab = (SurfacePrefab)ScriptableObject.CreateInstance("SurfacePrefab");
-		surfacePrefab.name = new DirectoryInfo(folderPath).Name;
+		surfacePrefab.name = surfaceName;
 		surfacePrefab.m_Color = new(255f,255f,255f,0.05f);
 
 		SurfacePrefab surfacePrefabPlaceHolder = (SurfacePrefab)ScriptableObject.CreateInstance("SurfacePrefab");
@@ -141,7 +145,12 @@ public class CustomSurfaces
 				}
 			}
 			foreach(string key in jSONMaterail.Vector.Keys) {newMaterial.SetVector(key, jSONMaterail.Vector[key]);}
-		} 
+
+			if(jSONMaterail.prefabIdentifierInfos.Count > 0) {
+				ObsoleteIdentifiers obsoleteIdentifiers = surfacePrefab.AddComponent<ObsoleteIdentifiers>();
+				obsoleteIdentifiers.m_PrefabIdentifiers = [..jSONMaterail.prefabIdentifierInfos];
+			}
+		}
 
 		byte[] fileData; 
 
@@ -221,16 +230,16 @@ public class CustomSurfaces
 		surfacePrefabUI.m_IsDebugObject = false;
 		surfacePrefabUI.m_Icon = File.Exists(folderPath+"\\icon.png") ? $"{GameManager_InitializeThumbnails.COUIBaseLocation}/CustomSurfaces/{CatName}/{new DirectoryInfo(folderPath).Name}/icon.png" : ELT.GetIcon(surfacePrefab);
 		surfacePrefabUI.m_Priority = -1;
-		surfacePrefabUI.m_Group = SetupUIGroupe(prefabSystem, surfacePrefab, CatName);
+		surfacePrefabUI.m_Group = SetupUIGroupe(surfacePrefab, CatName);
 
 		surfacePrefab.AddComponent<CustomSurface>();
 
-		prefabSystem.AddPrefab(surfacePrefab);
-		prefabSystem.AddPrefab(surfacePrefabPlaceHolder);
+		ELT.m_PrefabSystem.AddPrefab(surfacePrefab);
+		ELT.m_PrefabSystem.AddPrefab(surfacePrefabPlaceHolder);
 
 	}
 
-	internal static UIAssetCategoryPrefab SetupUIGroupe(PrefabSystem prefabSystem, PrefabBase prefab, string cat = null) {
+	internal static UIAssetCategoryPrefab SetupUIGroupe(PrefabBase prefab, string cat = null) {
 
 		cat ??= GetCatByRendererPriority(prefab.GetComponent<RenderedArea>().m_RendererPriority);
 

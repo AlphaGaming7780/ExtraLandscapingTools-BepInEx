@@ -104,8 +104,8 @@ public class SurfaceReplacerTool : ToolBaseSystem
 		if (m_ApplyAction.WasPressedThisFrame() && raycastFlag)
 		{
 			Entity newEntity = ELT.m_PrefabSystem.GetEntity(prefab);
-			prefabRef.m_Prefab = newEntity;
-			ELT.m_EntityManager.SetComponentData(e, prefabRef);
+			// prefabRef.m_Prefab = newEntity;
+			ELT.m_EntityManager.SetComponentData(e, new PrefabRef(newEntity));
 			ELT.m_EntityManager.AddComponentData(e, new Updated());
 		}
 

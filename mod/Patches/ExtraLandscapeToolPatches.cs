@@ -54,7 +54,6 @@ namespace ExtraLandscapingTools.Patches
 
 			if(!PrefabSystem_OnCreate.FolderToLoadBrush.Contains(resourcesBrushes) && Directory.Exists(resourcesBrushes)) PrefabSystem_OnCreate.FolderToLoadBrush.Add(resourcesBrushes);
 			if(!PrefabSystem_OnCreate.FolderToLoadBrush.Contains(PathToCustomBrushes) && Directory.Exists(PathToCustomBrushes)) PrefabSystem_OnCreate.FolderToLoadBrush.Add(PathToCustomBrushes);
-			// if(!CustomDecals.FolderToLoadDecals.Contains(PathToCustomDecal) && Directory.Exists(PathToCustomDecal)) CustomDecals.FolderToLoadDecals.Add(PathToCustomDecal);
 
 			Settings.settings = Settings.LoadSettings("ELT", new ELTSettings());
 		}
@@ -82,7 +81,7 @@ namespace ExtraLandscapingTools.Patches
 		static void Prefix(GameManager __instance)
 		{
 
-			if(Directory.Exists(GameManager_Awake.PathToMods)) pathToIconToLoad.Add(GameManager_Awake.PathToMods);
+			// if(Directory.Exists(GameManager_Awake.PathToMods)) pathToIconToLoad.Add(GameManager_Awake.PathToMods);
 
 			var gameUIResourceHandler = (GameUIResourceHandler)GameManager.instance.userInterface.view.uiSystem.resourceHandler;
 			
@@ -96,6 +95,11 @@ namespace ExtraLandscapingTools.Patches
 				IconsResourceKey, pathToIconToLoad
 			);
 		}
+
+		internal static void AddNewIconsFolder(string pathToFolder) {
+			if(!pathToIconToLoad.Contains(pathToFolder)) pathToIconToLoad.Add(pathToFolder);
+		}
+
 	}
 
 	[HarmonyPatch(typeof(SystemOrder), "Initialize")]
@@ -103,7 +107,7 @@ namespace ExtraLandscapingTools.Patches
 		public static void Postfix(UpdateSystem updateSystem) {
 			updateSystem.UpdateAt<ELT_UI>(SystemUpdatePhase.UIUpdate);
 			updateSystem.UpdateAt<TransformSection>(SystemUpdatePhase.UIUpdate);
-			updateSystem.UpdateAt<SurfaceReplacerTool>(SystemUpdatePhase.ToolUpdate);
+			// updateSystem.UpdateAt<SurfaceReplacerTool>(SystemUpdatePhase.ToolUpdate);
 		}
 	}
 
@@ -320,7 +324,7 @@ namespace ExtraLandscapingTools.Patches
 				}
 
 				if(prefab is TerraformingPrefab) TerraformingUI.m_Group = Prefab.GetExistingToolCategory(prefab, "Terraforming") ?? TerraformingUI.m_Group;
-				else if(prefab is SurfacePrefab) TerraformingUI.m_Group ??= CustomSurfaces.SetupUIGroupe(__instance, prefab);
+				else if(prefab is SurfacePrefab) TerraformingUI.m_Group ??= CustomSurfaces.SetupUIGroupe(prefab);
 				else if(prefab.name.ToLower().Contains("decal") || prefab.name.ToLower().Contains("roadarrow") || prefab.GetComponent<CustomDecal>() != null) TerraformingUI.m_Group = Prefab.GetOrCreateNewToolCategory(prefab, "Landscaping", "Decals", "Pathways") ?? TerraformingUI.m_Group;
 				else TerraformingUI.m_Group ??= Prefab.GetOrCreateNewToolCategory(prefab, "Landscaping", "[ELT] Failed Prefab, IF you see this tab, repport it, it's a bug.");
 

@@ -13,12 +13,12 @@ if(document.getElementById("ExtraLandscapingTools_showMarker_item") == null) {
 	ExtraLandscapingTools_showMarker_label.className = "label_RZX"
 	ExtraLandscapingTools_showMarker_label.innerHTML = "Show Markers"
 
-	ExtraLandscapingTools_CreateToolOptionButton("Media/Tools/Snap Options/All.svg", "elt.showmarker")
-	ExtraLandscapingTools_CreateToolOptionButton("Media/Tools/Snap Options/All.svg", "elt.selectsurfacereplacertool")
-
 	ExtraLandscapingTools_toolOption.insertBefore(ExtraLandscapingTools_showMarker_item, ExtraLandscapingTools_toolOption_first)
 	ExtraLandscapingTools_showMarker_item.appendChild(ExtraLandscapingTools_showMarker_itemContent)
 	ExtraLandscapingTools_showMarker_itemContent.appendChild(ExtraLandscapingTools_showMarker_label)
+
+	ExtraLandscapingTools_CreateToolOptionButton("Media/Tools/Snap Options/All.svg", "elt.showmarker")
+	// ExtraLandscapingTools_CreateToolOptionButton("Media/Tools/Snap Options/All.svg", "elt.selectsurfacereplacertool")
 
 }
 
