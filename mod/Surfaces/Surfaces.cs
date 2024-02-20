@@ -50,11 +50,11 @@ public class CustomSurfaces
 			foreach(string surfacesCat in Directory.GetDirectories( folder )) {
 				
 				if(!csLocalisation.ContainsKey($"SubServices.NAME[{new DirectoryInfo(surfacesCat).Name} Surfaces]")) {
-					csLocalisation.Add($"SubServices.NAME[{new DirectoryInfo(surfacesCat).Name} Surfaces]", new DirectoryInfo(surfacesCat).Name);
+					csLocalisation.Add($"SubServices.NAME[{new DirectoryInfo(surfacesCat).Name} Surfaces]", $"{new DirectoryInfo(surfacesCat).Name} Surfaces");
 				}
 
 				if(!csLocalisation.ContainsKey($"Assets.SUB_SERVICE_DESCRIPTION[{new DirectoryInfo(surfacesCat).Name} Surfaces]")) {
-					csLocalisation.Add($"Assets.SUB_SERVICE_DESCRIPTION[{new DirectoryInfo(surfacesCat).Name} Surfaces]", new DirectoryInfo(surfacesCat).Name);
+					csLocalisation.Add($"Assets.SUB_SERVICE_DESCRIPTION[{new DirectoryInfo(surfacesCat).Name} Surfaces]", $"{new DirectoryInfo(surfacesCat).Name} Surfaces");
 				}
 
 				foreach(string filePath in Directory.GetDirectories( surfacesCat )) 
@@ -116,7 +116,7 @@ public class CustomSurfaces
 
 	private static void CreateCustomSurface(string folderPath, Material material, string CatName, string modName) {
 
-		if(!File.Exists(folderPath+"\\"+"_BaseColorMap.png")) {Plugin.Logger.LogError($"No _BaseColorMap.png file for the {new DirectoryInfo(folderPath).Name} surface in {CatName} category.");return;}
+		if(!File.Exists(folderPath+"\\"+"_BaseColorMap.png")) {Plugin.Logger.LogError($"No _BaseColorMap.png file for the {new DirectoryInfo(folderPath).Name} surface in {CatName} category in {modName}.");return;}
 
 		string surfaceName = $"{modName}_{CatName}_{new DirectoryInfo(folderPath).Name}";
 

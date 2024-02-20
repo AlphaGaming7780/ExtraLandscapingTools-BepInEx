@@ -20,6 +20,7 @@ namespace ExtraLandscapingTools;
 public class CustomDecals
 {
 	internal static List<string> FolderToLoadDecals = [];
+	internal static Dictionary<PrefabBase, string> DecalsDataBase = [];
 
 	internal static void SearchForCustomDecalsFolder(string ModsFolderPath) {
 		foreach(DirectoryInfo directory in new DirectoryInfo(ModsFolderPath).GetDirectories()) {
@@ -32,6 +33,48 @@ public class CustomDecals
 		}
 	}
 
+	internal static void LoadLocalization() {
+
+		Dictionary<string, string> csLocalisation = [];
+
+		csLocalisation.Add($"SubServices.NAME[Parking Decals]", "Parking Decals");
+		csLocalisation.Add($"Assets.SUB_SERVICE_DESCRIPTION[Parking Decals]", "Parking Decals");
+
+		csLocalisation.Add($"SubServices.NAME[Arrow Decals]", "Arrow Decals");
+		csLocalisation.Add($"Assets.SUB_SERVICE_DESCRIPTION[Arrow Decals]", "Arrow Decals");
+
+		csLocalisation.Add($"SubServices.NAME[Misc Decals]", "Misc Decals");
+		csLocalisation.Add($"Assets.SUB_SERVICE_DESCRIPTION[Misc Decals]", "Misc Decals");
+
+		foreach(string folder in FolderToLoadDecals) {
+			foreach(string decalsCat in Directory.GetDirectories( folder )) {
+				
+				if(!csLocalisation.ContainsKey($"SubServices.NAME[{new DirectoryInfo(decalsCat).Name} Decals]")) {
+					csLocalisation.Add($"SubServices.NAME[{new DirectoryInfo(decalsCat).Name} Decals]", $"{new DirectoryInfo(decalsCat).Name} Decals");
+				}
+
+				if(!csLocalisation.ContainsKey($"Assets.SUB_SERVICE_DESCRIPTION[{new DirectoryInfo(decalsCat).Name} Decals]")) {
+					csLocalisation.Add($"Assets.SUB_SERVICE_DESCRIPTION[{new DirectoryInfo(decalsCat).Name} Decals]", $"{new DirectoryInfo(decalsCat).Name} Decals");
+				}
+
+				foreach(string filePath in Directory.GetDirectories( decalsCat )) 
+				{	
+					string decalName = $"{new DirectoryInfo(folder).Parent.Name}_{new DirectoryInfo(decalsCat).Name}_{new DirectoryInfo(filePath).Name}";
+
+					if(!csLocalisation.ContainsKey($"Assets.NAME[{decalName}]")) csLocalisation.Add($"Assets.NAME[{decalName}]", new DirectoryInfo(filePath).Name);
+					if(!csLocalisation.ContainsKey($"Assets.DESCRIPTION[{decalName}]")) csLocalisation.Add($"Assets.DESCRIPTION[{decalName}]", new DirectoryInfo(filePath).Name);
+				}
+			}
+		}
+
+		foreach(string key in Localization.localization.Keys) {
+
+			foreach(string s in csLocalisation.Keys) {
+				if(!Localization.localization[key].ContainsKey(s)) Localization.localization[key].Add(s, csLocalisation[s]);
+			}
+		}
+	}
+
 	public static void AddCustomDecalsFolder(string path) {
 		if(!FolderToLoadDecals.Contains(path)) {
 			FolderToLoadDecals.Add(path);
@@ -41,25 +84,34 @@ public class CustomDecals
 
 	public static void CreateCustomDecals(StaticObjectPrefab DecalPrefab) {
 		foreach(string folder in FolderToLoadDecals) {
-			// foreach(string catFolder in Directory.GetDirectories( folder )) {
-				foreach(string decalsFolder in Directory.GetDirectories( folder )) {
-					CreateCustomDecal(DecalPrefab, decalsFolder, new DirectoryInfo(decalsFolder).Name);
+			foreach(string catFolder in Directory.GetDirectories( folder )) {
+				foreach(string decalsFolder in Directory.GetDirectories( catFolder )) {
+					CreateCustomDecal(DecalPrefab, decalsFolder, new DirectoryInfo(decalsFolder).Name, new DirectoryInfo(catFolder).Name, new DirectoryInfo(folder).Parent.Name);
 				}
-			// }
+			}
 		}
 	}
 
-	public static void CreateCustomDecal(StaticObjectPrefab DecalPrefab, string folderPath, string decalName) {
+	public static void CreateCustomDecal(StaticObjectPrefab DecalPrefab, string folderPath, string decalName, string catName, string modName) {
 
 		// RenderPrefab DecalRenderPrefab = (RenderPrefab)DecalPrefab.m_Meshes[0].m_Mesh;
 		// SpawnableObject DecalSpawnableObjectPrefab = DecalPrefab.GetComponent<SpawnableObject>();
 		// DecalProperties DecalPropertiesPrefab = DecalRenderPrefab.GetComponent<DecalProperties>();
 
+		string fullDecalName = $"{modName}_{catName}_{decalName}";
+
+		StaticObjectPrefab decalPrefab = (StaticObjectPrefab)ScriptableObject.CreateInstance("StaticObjectPrefab");
+		decalPrefab.name = fullDecalName;
+
 		Surface decalSurface = new(decalName, "DefaultDecal");
 		if(File.Exists(folderPath+"\\decal.json")) {
-			JSONSurfacesMaterail jSONMaterail = Decoder.Decode(File.ReadAllText(folderPath+"\\decal.json")).Make<JSONSurfacesMaterail>();
+			JSONDecalsMaterail jSONMaterail = Decoder.Decode(File.ReadAllText(folderPath+"\\decal.json")).Make<JSONDecalsMaterail>();
 			foreach(string key in jSONMaterail.Float.Keys) {decalSurface.AddProperty(key, jSONMaterail.Float[key]);}
 			foreach(string key in jSONMaterail.Vector.Keys) {decalSurface.AddProperty(key, jSONMaterail.Vector[key]);}
+			if(jSONMaterail.prefabIdentifierInfos.Count > 0) {
+				ObsoleteIdentifiers obsoleteIdentifiers = decalPrefab.AddComponent<ObsoleteIdentifiers>();
+				obsoleteIdentifiers.m_PrefabIdentifiers = [..jSONMaterail.prefabIdentifierInfos];
+			}
 		}
 
 		byte[] fileData;
@@ -80,7 +132,6 @@ public class CustomDecals
 		if(!File.Exists(folderPath+"\\icon.png")) ELT.ResizeTexture(texture2D_BaseColorMap_Temp, 64, folderPath+"\\icon.png");
 		TextureImporter.Texture textureImporterBaseColorMap = new($"{decalName}_BaseColorMap", folderPath+"\\"+"_BaseColorMap.png", texture2D_BaseColorMap);
 		decalSurface.AddProperty("_BaseColorMap", textureImporterBaseColorMap);
-
 		
 		Texture2D texture2D_NormalMap_temp = new(1, 1);
 		if(File.Exists(folderPath+"\\_NormalMap.png")) {
@@ -122,7 +173,7 @@ public class CustomDecals
 			};
 		}
 
-		AssetDataPath assetDataPath = AssetDataPath.Create($"Mods/ELT/CustomDecals/{decalName}", "SurfaceAsset");
+		AssetDataPath assetDataPath = AssetDataPath.Create($"Mods/ELT/CustomDecals/{modName}/{catName}/{decalName}", "SurfaceAsset");
 		SurfaceAsset surfaceAsset = new()
 		{
 			guid = Guid.NewGuid(), //DecalRenderPrefab.surfaceAssets.ToArray()[0].guid, //
@@ -141,14 +192,13 @@ public class CustomDecals
 			database = AssetDatabase.user //DecalRenderPrefab.geometryAsset.database
 		};
 
-		AssetDataPath assetDataPath2 = AssetDataPath.Create($"Mods/ELT/CustomDecals/{decalName}", "GeometryAsset");
+		AssetDataPath assetDataPath2 = AssetDataPath.Create($"Mods/ELT/CustomDecals/{modName}/{catName}/{decalName}", "GeometryAsset");
 		geometryAsset.database.AddAsset<GeometryAsset>(assetDataPath2, geometryAsset.guid);
 		geometryAsset.SetData(meshes);
 		geometryAsset.Save(true);
 
-		Plugin.Logger.LogMessage("RenderPrefab");
 		RenderPrefab renderPrefab = (RenderPrefab)ScriptableObject.CreateInstance("RenderPrefab");
-		renderPrefab.name = $"{decalName}_RenderPrefab";
+		renderPrefab.name = $"{fullDecalName}_RenderPrefab";
 		renderPrefab.geometryAsset = new AssetReference<GeometryAsset>(geometryAsset.guid);
 		renderPrefab.surfaceAssets = [surfaceAsset];
 		renderPrefab.bounds = new(new(-MeshSize.x * 0.5f, -MeshSize.y * 0.5f, -MeshSize.z * 0.5f), new(MeshSize.x * 0.5f, MeshSize.y * 0.5f, MeshSize.z * 0.5f));
@@ -163,8 +213,6 @@ public class CustomDecals
 		decalProperties.m_RendererPriority = 0;//DecalPropertiesPrefab.m_RendererPriority;
 		decalProperties.m_EnableInfoviewColor = false;//DecalPropertiesPrefab.m_EnableInfoviewColor;
 
-
-		Plugin.Logger.LogMessage("ObjectMeshInfo");
 		ObjectMeshInfo objectMeshInfo = new()
 		{
 			m_Mesh = renderPrefab,
@@ -172,28 +220,25 @@ public class CustomDecals
 			m_RequireState = Game.Objects.ObjectState.None
 		};
 
-		Plugin.Logger.LogMessage("StaticObjectPrefab");
-		StaticObjectPrefab staticObjectPrefab = (StaticObjectPrefab)ScriptableObject.CreateInstance("StaticObjectPrefab");
-		staticObjectPrefab.name = decalName;
-		staticObjectPrefab.m_Meshes = [objectMeshInfo];
+		decalPrefab.m_Meshes = [objectMeshInfo];
 
 		StaticObjectPrefab placeholder = (StaticObjectPrefab)ScriptableObject.CreateInstance("StaticObjectPrefab");
-		placeholder.name = $"{decalName}_Placeholders";
+		placeholder.name = $"{fullDecalName}_Placeholders";
 		placeholder.m_Meshes = [objectMeshInfo];
 		placeholder.AddComponent<PlaceholderObject>();
 
-		SpawnableObject spawnableObject = staticObjectPrefab.AddComponent<SpawnableObject>();
+		SpawnableObject spawnableObject = decalPrefab.AddComponent<SpawnableObject>();
 		spawnableObject.m_Placeholders = [placeholder];
 
-		Plugin.Logger.LogMessage("UIObject");
-		UIObject surfacePrefabUI = staticObjectPrefab.AddComponent<UIObject>();
-		surfacePrefabUI.m_IsDebugObject = false;
-		surfacePrefabUI.m_Icon = File.Exists(folderPath+"\\icon.png") ? $"{GameManager_InitializeThumbnails.COUIBaseLocation}/CustomDecals/{decalName}/icon.png" : ELT.GetIcon(staticObjectPrefab);
-		surfacePrefabUI.m_Priority = -1;
+		UIObject decalPrefabUI = decalPrefab.AddComponent<UIObject>();
+		decalPrefabUI.m_IsDebugObject = false;
+		decalPrefabUI.m_Icon = File.Exists(folderPath+"\\icon.png") ? $"{GameManager_InitializeThumbnails.COUIBaseLocation}/CustomDecals/{catName}/{decalName}/icon.png" : ELT.GetIcon(decalPrefab);
+		decalPrefabUI.m_Priority = -1;
+		decalPrefabUI.m_Group = SetupUIGroupe(decalPrefab, catName);
 
-		staticObjectPrefab.AddComponent<CustomDecal>();
+		decalPrefab.AddComponent<CustomDecal>();
 
-		ELT.m_PrefabSystem.AddPrefab(staticObjectPrefab);
+		ELT.m_PrefabSystem.AddPrefab(decalPrefab);
 
 	}
 
@@ -292,7 +337,29 @@ public class CustomDecals
 
 		return mesh;
 	}
+
+	internal static UIAssetCategoryPrefab SetupUIGroupe(PrefabBase prefab, string cat = null) {
+
+		cat ??= GetCatByDecalName(prefab.name);
+
+		if(!DecalsDataBase.ContainsKey(prefab)) DecalsDataBase.Add(prefab, cat);
+
+		if(DecalsDataBase.Count > 0 && Settings.settings.LoadCustomDecals) {
+			return Prefab.GetOrCreateNewToolCategory(prefab, "Custom Surfaces", DecalsDataBase[prefab]+" Decals");
+		} else {
+			return Prefab.GetOrCreateNewToolCategory(prefab, "Landscaping", "Decals", "Pathways");
+		}
+	}
+
+	private static string GetCatByDecalName(string decalName) {
+		if(decalName.ToLower().Contains("parking")) return "Parking";
+		if(decalName.ToLower().Contains("arrow")) return "Arrow";
+		return "Misc";
+	}
+
 }
+
+
 
 internal class CustomDecal: ComponentBase
 {

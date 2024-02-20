@@ -1,5 +1,4 @@
 using System.Collections.Generic;
-using Game;
 using Game.Areas;
 using Game.Common;
 using Game.Input;
@@ -7,7 +6,6 @@ using Game.Prefabs;
 using Game.Tools;
 using Unity.Entities;
 using Unity.Jobs;
-using UnityEngine.InputSystem.EnhancedTouch;
 
 namespace ExtraLandscapingTools;
 

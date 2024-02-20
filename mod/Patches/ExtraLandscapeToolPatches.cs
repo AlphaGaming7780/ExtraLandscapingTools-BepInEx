@@ -279,7 +279,12 @@ namespace ExtraLandscapingTools.Patches
 					return true;
 				}
 
-				if (prefab is StaticObjectPrefab && !prefab.name.ToLower().Contains("decal") && !prefab.name.ToLower().Contains("roadarrow") && prefab.GetComponent<CustomDecal>() == null) 
+				if(prefab.GetComponent<PlaceholderObject>() != null) return true;
+
+				if (prefab is StaticObjectPrefab && 
+					!prefab.name.ToLower().Contains("decal") && 
+					!prefab.name.ToLower().Contains("roadarrow") && 
+					prefab.GetComponent<CustomDecal>() == null) 
 				{
 					return true;
 				}
@@ -325,7 +330,7 @@ namespace ExtraLandscapingTools.Patches
 
 				if(prefab is TerraformingPrefab) TerraformingUI.m_Group = Prefab.GetExistingToolCategory(prefab, "Terraforming") ?? TerraformingUI.m_Group;
 				else if(prefab is SurfacePrefab) TerraformingUI.m_Group ??= CustomSurfaces.SetupUIGroupe(prefab);
-				else if(prefab.name.ToLower().Contains("decal") || prefab.name.ToLower().Contains("roadarrow") || prefab.GetComponent<CustomDecal>() != null) TerraformingUI.m_Group = Prefab.GetOrCreateNewToolCategory(prefab, "Landscaping", "Decals", "Pathways") ?? TerraformingUI.m_Group;
+				else if(prefab.name.ToLower().Contains("decal") || prefab.name.ToLower().Contains("roadarrow") || prefab.GetComponent<CustomDecal>() != null) TerraformingUI.m_Group = CustomDecals.SetupUIGroupe(prefab);
 				else TerraformingUI.m_Group ??= Prefab.GetOrCreateNewToolCategory(prefab, "Landscaping", "[ELT] Failed Prefab, IF you see this tab, repport it, it's a bug.");
 
 				if(TerraformingUI.m_Group == null) {

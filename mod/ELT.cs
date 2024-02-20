@@ -135,7 +135,6 @@ namespace ExtraLandscapingTools
 				return "Media/Game/Icons/LotTool.svg";
 
 			} else if (prefab is UIAssetCategoryPrefab) {
-
 				// return prefab.name switch
 				// {   
 				// 	"Surfaces" => $"{GameManager_InitializeThumbnails.COUIBaseLocation}/resources/Icons/UIAssetMenuPrefab/Custom Surfaces.svg",
