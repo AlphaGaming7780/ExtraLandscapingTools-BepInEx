@@ -49,7 +49,7 @@ function ExtraLandscapingTools_TransformSection_SubInfoview(name, event) {
 	ExtraLandscapingTools_TransformSection_content_InfoRow_right.style.justifyContent = "flex-end"
 	ExtraLandscapingTools_TransformSection_content_InfoRow_right.style.alignContent = "flex-end"
 
-	ExtraLandscapingTools_TransformSection_content_InfoRow_left.innerHTML = name
+	ExtraLandscapingTools_TransformSection_content_InfoRow_left.innerHTML = name + " Increment"
 
 	var ExtraLandscapingTools_TransformSection_content_InfoRow_left_input = document.createElement("input")
 	ExtraLandscapingTools_TransformSection_content_InfoRow_left_input.className = "slider-input_DXM input_Wfi"

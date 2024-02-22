@@ -13,7 +13,8 @@ ExtraLandscapingTools_CustomAssetCategory.className = "asset-category-tab-bar_IG
 ExtraLandscapingTools_CustomAssetCategory_Items.className = "items_gPf"
 
 ExtraLandscapingTools_getterValue("elt.assetscat", ExtraLandscapingTools_CustomAssetCategory, ExtraLandscapingTools_CreateCustomCatButtonCallBack)
-ExtraLandscapingTools_SelectButtonAssetCat(ExtraLandscapingTools_CustomCatButtonDict[Object.keys(ExtraLandscapingTools_CustomCatButtonDict)[0]])
+if(ExtraLandscapingTools_SelectedCustomAssetCategory == undefined) ExtraLandscapingTools_SelectButtonAssetCat(ExtraLandscapingTools_CustomCatButtonDict[Object.keys(ExtraLandscapingTools_CustomCatButtonDict)[0]])
+else ExtraLandscapingTools_SelectButtonAssetCat(ExtraLandscapingTools_CustomCatButtonDict[ExtraLandscapingTools_SelectedCustomAssetCategory.id], false)
 
 ExtraLandscapingTools_CustomAssetCategory.appendChild(ExtraLandscapingTools_CustomAssetCategory_Items)
 // ExtraLandscapingTools_CustomAssetCategory.appendChild(ExtraLandscapingTools_AssetCategory.children[1])
@@ -30,7 +31,7 @@ function ExtraLandscapingTools_CreateCustomCatButton(name, icon) {
     var ExtraLandscapingTools_CustomCatButton_Div = document.createElement("div")
 
     ExtraLandscapingTools_CustomCatButton.className = "button_Yym button_Yym"
-    ExtraLandscapingTools_CustomCatButton.id = (name)
+    ExtraLandscapingTools_CustomCatButton.id = name
     ExtraLandscapingTools_CustomCatButton_Icon.className = "icon_LAz"
     ExtraLandscapingTools_CustomCatButton_Icon.src = icon
     ExtraLandscapingTools_CustomCatButton_Div.className = "item-inner_NKx"
@@ -52,11 +53,11 @@ function ExtraLandscapingTools_CreateCustomCatButton(name, icon) {
     ExtraLandscapingTools_CustomAssetCategory_Items.appendChild(ExtraLandscapingTools_CustomCatButton)
 }
 
-function ExtraLandscapingTools_SelectButtonAssetCat(element) {
+function ExtraLandscapingTools_SelectButtonAssetCat(element, bool = true) {
     if(ExtraLandscapingTools_SelectedCustomAssetCategory != undefined) {
         ExtraLandscapingTools_SelectedCustomAssetCategory.classList.remove('selected');
     }
-    engine.trigger("elt.assetscat", element.id)
+    if(bool) engine.trigger("elt.assetscat", element.id)
     ExtraLandscapingTools_SelectedCustomAssetCategory = element
     ExtraLandscapingTools_SelectedCustomAssetCategory.classList.add("selected")
 }

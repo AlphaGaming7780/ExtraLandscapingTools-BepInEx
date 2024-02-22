@@ -132,7 +132,7 @@ public class CustomDecals
 		}
 		texture2D_BaseColorMap.Apply();
 		if(!File.Exists(folderPath+"\\icon.png")) ELT.ResizeTexture(texture2D_BaseColorMap_Temp, 128, folderPath+"\\icon.png");
-		TextureImporter.Texture textureImporterBaseColorMap = new($"{decalName}_BaseColorMap", folderPath+"\\"+"_BaseColorMap.png", texture2D_BaseColorMap);
+		TextureImporter.Texture textureImporterBaseColorMap = new($"{decalName}_BaseColorMap", folderPath+"\\"+"_BaseColorMap.png", texture2D_BaseColorMap);	
 		decalSurface.AddProperty("_BaseColorMap", textureImporterBaseColorMap);
 		
 		Texture2D texture2D_NormalMap_temp = new(1, 1);
