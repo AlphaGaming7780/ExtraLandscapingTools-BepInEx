@@ -1,12 +1,8 @@
-using cohtml.Net;
 using Colossal.UI.Binding;
-using Game.Common;
 using Game.Prefabs;
-using Game.UI;
 using Game.UI.InGame;
 using HarmonyLib;
 using Unity.Entities;
-using UnityEngine.InputSystem.EnhancedTouch;
 
 namespace ExtraLandscapingTools.Patches;
 
