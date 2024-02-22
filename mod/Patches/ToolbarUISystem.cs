@@ -12,35 +12,6 @@ namespace ExtraLandscapingTools.Patches;
 
 public class ToolbarUISystemPatch
 {
-	// private static EntityQuery UIAssetCategoryQuery;
-
-	// [HarmonyPatch( typeof( ToolbarUISystem ), "OnCreate" )]
-	// class OnCreate 
-	// {
-    //     static void Postfix(ToolbarUISystem __instance, Entity assetMenu ) {
-	// 		UIAssetCategoryQuery = Traverse.Create(__instance).Method("GetEntityQuery", [typeof(EntityQueryDesc)]).GetValue<EntityQuery>(
-	// 			new EntityQueryDesc
-	// 			{
-	// 				All =
-	// 				[
-	// 					ComponentType.ReadOnly<Updated>()
-	// 				],
-	// 				Any = 
-	// 				[
-	// 					ComponentType.ReadOnly<UIAssetCategoryData>(),
-	// 					ComponentType.ReadOnly<UIAssetMenuData>()
-	// 				]
-	// 			}
-	// 		);
-	// 	}
-	// }
-
-	// [HarmonyPatch( typeof( ToolbarUISystem ), "OnUpdate" )]
-	// class OnUpdate 
-	// {
-
-	// }
-
 	[HarmonyPatch( typeof( ToolbarUISystem ), "SelectAssetMenu" )]
 	class SelectAssetMenu 
 	{

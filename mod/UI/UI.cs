@@ -48,8 +48,6 @@ namespace ExtraLandscapingTools
 			new("Custom Surfaces", $"{GameManager_InitializeThumbnails.COUIBaseLocation}/resources/Icons/UIAssetCategoryPrefab/Surfaces.svg"),
 			new("Custom Decals", $"{GameManager_InitializeThumbnails.COUIBaseLocation}/resources/Icons/UIAssetCategoryPrefab/Decals.svg")
 		];
-		// private static string selectedAssetscat = assetsCats[0].catName; 
-		// private static GetterValueBinding<string> selectedAssetCat;
 
 		private static GetterValueBinding<bool> showMarker;
 		private static GetterValueBinding<bool> selectSurfaceReplacerTool;
@@ -101,7 +99,6 @@ namespace ExtraLandscapingTools
 			AddBinding(enableSnowSurfaces = new GetterValueBinding<bool>("elt", "enableSnowSurfaces", () => Settings.settings.EnableSnowSurfaces));
 			AddBinding(new TriggerBinding<bool>("elt", "enableSnowSurfaces", new Action<bool>(EnableSurfacesSnow)));
 
-
 			// AddBinding(new TriggerBinding("elt", "clearsurfacescache", new Action(CustomSurfaces.ClearSurfacesCache)));
 			AddBinding(new TriggerBinding("elt", "cleardata", new Action(ELT.ClearData)));
 
@@ -112,9 +109,6 @@ namespace ExtraLandscapingTools
 					ComponentType.ReadOnly<UIAssetCategoryData>()
 			   ],
 			});
-
-			// GameManager.instance.userInterface.view.View.ExecuteScript(GetStringFromEmbbededJSFile("Setup.js"));
-
 		}
 
 		public static void SelectSurfaceReplacerTool(bool b) {
@@ -185,8 +179,6 @@ namespace ExtraLandscapingTools
 					else if(uIAssetCategoryPrefab.name.ToLower().Contains("surfaces")) RemoveEntityCategoryUiFromMenuUI(entity);
 				}
 			}
-			// selectedAssetscat = assetCat;
-			// selectedAssetCat.Update();
 			ToolbarUISystemPatch.UpdateMenuUI();
 		}
 
@@ -245,8 +237,6 @@ namespace ExtraLandscapingTools
 					break;
 				}
 			}
-			
-			// ELT.m_EntityManager.AddComponentData(uIAssetCategoryData.m_Menu, new Unlock(uIAssetCategoryData.m_Menu));
 		}
 
 		public static void AddEntityCategoryUiToMenuUI(Entity entity) {
