@@ -97,4 +97,15 @@ public class Prefab
 			failedPrefabs[cat].Add(prefabBase);
 		}
 	}
+	internal static string GetCustomAssetMenuName() {
+		if(CanCreateCustomAssetMenu()) return "Custom Assets";
+		else if(CustomSurfaces.CanCreateCustomSurfaces()) return "Custom Surfaces";
+		else if(CustomDecals.CanCreateCustomDecals()) return "Custom Decals";
+		else return "Custom Assets";
+	}
+
+	internal static bool CanCreateCustomAssetMenu() {
+		return CustomSurfaces.CanCreateCustomSurfaces() && CustomDecals.CanCreateCustomDecals();
+	}
+
 }

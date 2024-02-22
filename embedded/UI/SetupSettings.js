@@ -1,10 +1,14 @@
 
 var ExtraLandscapingTools_LandscapingMenu = document.getElementsByClassName("asset-panel_VFR")[0]
-// var ExtraLandscapingTools_header = ExtraLandscapingTools_LandscapingMenu.childNodes[0]
+// var ExtraLandscapingTools_AssetCategory = ExtraLandscapingTools_LandscapingMenu.childNodes[0]
 var ExtraLandscapingTools_bottomPanel = ExtraLandscapingTools_LandscapingMenu.children[1]
-var ExtraLandscapingTools_header = document.getElementsByClassName("asset-category-tab-bar_IGA")[0]
+var ExtraLandscapingTools_AssetCategory = document.getElementsByClassName("asset-category-tab-bar_IGA")[0]
 
-if(!ExtraLandscapingTools_header.contains(document.getElementById("ExtraLandscapingTools_settingsButton"))) {
+if(ExtraLandscapingTools_AssetCategory.id == "ExtraLandscapingTools_CustomAssetCategory") {
+	ExtraLandscapingTools_AssetCategory = document.getElementsByClassName("asset-category-tab-bar_IGA")[1]
+}
+
+if(!ExtraLandscapingTools_AssetCategory.contains(document.getElementById("ExtraLandscapingTools_settingsButton"))) {
 	if(document.getElementById("ExtraLandscapingTools_settingsButton") == null) {
 
 		var ExtraLandscapingTools_settingsButton = null
@@ -23,12 +27,12 @@ if(!ExtraLandscapingTools_header.contains(document.getElementById("ExtraLandscap
 		ExtraLandscapingTools_CreateSettingsButton()
 
 	} else {
-		ExtraLandscapingTools_header.insertBefore(ExtraLandscapingTools_settingsButton, ExtraLandscapingTools_header.childNodes[0])
+		ExtraLandscapingTools_AssetCategory.insertBefore(ExtraLandscapingTools_settingsButton, ExtraLandscapingTools_AssetCategory.children[0])
 	}
 }
 
 function ExtraLandscapingTools_CreateSettingsButton() {
-	ExtraLandscapingTools_settingsButton = document.createElement("button", ExtraLandscapingTools_header.childNodes[1]);
+	ExtraLandscapingTools_settingsButton = document.createElement("button", ExtraLandscapingTools_AssetCategory.childNodes[1]);
 	var ExtraLandscapingTools_settingsButtonImage = document.createElement("div")
 	ExtraLandscapingTools_settingsButton.className = "button_bvQ button_bvQ close-button_wKK close-button_kMj"
 	ExtraLandscapingTools_settingsButton.id = "ExtraLandscapingTools_settingsButton"
@@ -64,7 +68,7 @@ function ExtraLandscapingTools_CreateSettingsButton() {
 	
 	ExtraLandscapingTools_settingsButton.appendChild(ExtraLandscapingTools_settingsButtonImage)
 	
-	ExtraLandscapingTools_header.insertBefore(ExtraLandscapingTools_settingsButton, ExtraLandscapingTools_header.childNodes[0])
+	ExtraLandscapingTools_AssetCategory.insertBefore(ExtraLandscapingTools_settingsButton, ExtraLandscapingTools_AssetCategory.children[0])
 }
 
 function ExtraLandscapingTools_CreateSettingsPanel() {

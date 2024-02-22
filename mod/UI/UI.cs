@@ -3,16 +3,20 @@ using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 using Colossal.Entities;
-using Colossal.IO.AssetDatabase;
 using Colossal.Json;
 using Colossal.UI.Binding;
 using ExtraLandscapingTools.Patches;
+using ExtraLandscapingTools.UI;
+using Game.Common;
 using Game.Prefabs;
 using Game.Rendering;
 using Game.SceneFlow;
+using Game.Simulation;
 using Game.Tools;
 using Game.UI;
 using Game.UI.InGame;
+using HarmonyLib;
+using Unity.Collections;
 using Unity.Entities;
 using UnityEngine;
 
@@ -33,12 +37,19 @@ namespace ExtraLandscapingTools
 			new("Surfaces", [
 				new SettingsCheckBox("[RESTART] Load Custom Surfaces", "elt.loadcustomsurfaces"),
 				new SettingsCheckBox("[EXPERIMENTAL] [RESTART] Enable Snow On Surfaces.", "elt.enableSnowSurfaces"),
-				new SettingsButton("Clear Cache", "elt.clearsurfacescache"),
+				// new SettingsButton("Clear Cache", "elt.clearsurfacescache"),
 			]),
 			new("Decals", [
 				new SettingsCheckBox("[RESTART] Load Custom Decals", "elt.loadcustomdecals"),
 			])
 		];
+
+		private static readonly List<AssetCat> assetsCats = [
+			new("Custom Surfaces", $"{GameManager_InitializeThumbnails.COUIBaseLocation}/resources/Icons/UIAssetCategoryPrefab/Surfaces.svg"),
+			new("Custom Decals", $"{GameManager_InitializeThumbnails.COUIBaseLocation}/resources/Icons/UIAssetCategoryPrefab/Decals.svg")
+		];
+		// private static string selectedAssetscat = assetsCats[0].catName; 
+		// private static GetterValueBinding<string> selectedAssetCat;
 
 		private static GetterValueBinding<bool> showMarker;
 		private static GetterValueBinding<bool> selectSurfaceReplacerTool;
@@ -49,7 +60,7 @@ namespace ExtraLandscapingTools
 		internal static bool isMarkerVisible = false;
 		// private static bool isEnableCustomSurfaces = true;
 
-		// private static EntityQuery surfaceQuery;
+		private static EntityQuery UIAssetCategoryQuery;
 		internal static List<string> validMenuForELTSettings = ["Landscaping"];
 
 		private static ToolBaseSystem previousTool;
@@ -59,6 +70,7 @@ namespace ExtraLandscapingTools
 			base.OnCreate();
 			ELT.m_RenderingSystem = base.World.GetOrCreateSystemManaged<RenderingSystem>();
 			ELT.m_ToolSystem = base.World.GetOrCreateSystemManaged<ToolSystem>();
+			ELT.m_ToolbarUISystem = base.World.GetOrCreateSystemManaged<ToolbarUISystem>();
 			// ELT.m_ToolUISystem = base.World.GetOrCreateSystemManaged<ToolUISystem>();
 			ELT.m_SurfaceReplacerTool = base.World.GetOrCreateSystemManaged<SurfaceReplacerTool>();
 			ELT.m_EntityManager = EntityManager;
@@ -66,7 +78,11 @@ namespace ExtraLandscapingTools
 			eLT_UI_Mono = eLT_UI_Object.AddComponent<ELT_UI_Mono>();
 
 			AddBinding(new GetterValueBinding<string>("elt", "settings", () => Encoder.Encode(settings, EncodeOptions.None)));
-
+			if(Prefab.CanCreateCustomAssetMenu()) {
+				AddBinding(new GetterValueBinding<string>("elt", "assetscat", () => Encoder.Encode(assetsCats, EncodeOptions.None)));
+				// AddBinding(selectedAssetCat = new GetterValueBinding<string>("elt", "selectedassetcat", () => selectedAssetscat));
+				AddBinding(new TriggerBinding<string>("elt", "assetscat", new Action<string>(OnAssetCatClick)));
+			}
 			AddBinding(selectSurfaceReplacerTool = new GetterValueBinding<bool>("elt", "selectsurfacereplacertool", () => ELT.m_ToolSystem.activeTool is SurfaceReplacerTool));
 			AddBinding(new TriggerBinding<bool>("elt", "selectsurfacereplacertool", new Action<bool>(SelectSurfaceReplacerTool)));
 
@@ -89,16 +105,15 @@ namespace ExtraLandscapingTools
 			// AddBinding(new TriggerBinding("elt", "clearsurfacescache", new Action(CustomSurfaces.ClearSurfacesCache)));
 			AddBinding(new TriggerBinding("elt", "cleardata", new Action(ELT.ClearData)));
 
-			// surfaceQuery = GetEntityQuery(new EntityQueryDesc
-			// {
-			//     All =
-            //    [
-            //         ComponentType.ReadOnly<SurfaceData>(),
-			//         ComponentType.ReadOnly<UIObjectData>(),
-			//    ],
-			// });
+			UIAssetCategoryQuery = GetEntityQuery(new EntityQueryDesc
+			{
+				All =
+			   [
+					ComponentType.ReadOnly<UIAssetCategoryData>()
+			   ],
+			});
 
-			GameManager.instance.userInterface.view.View.ExecuteScript(GetStringFromEmbbededJSFile("Setup.js"));
+			// GameManager.instance.userInterface.view.View.ExecuteScript(GetStringFromEmbbededJSFile("Setup.js"));
 
 		}
 
@@ -119,26 +134,12 @@ namespace ExtraLandscapingTools
 		}
 
 		private void LoadCustomSurfaces(bool b) {
-			// NativeArray<Entity> entities =  surfaceQuery.ToEntityArray(AllocatorManager.Temp);
-
-			// foreach(Entity entity in entities) {
-			// 	if(b) AddEntityObjectToCategoryUI(entity);
-			// 	else RemoveEntityObjectFromCategoryUI(entity);
-			// }
-
 			Settings.settings.LoadCustomSurfaces = b;
 			Settings.SaveSettings("ELT", Settings.settings);
 			loadcustomsurfaces.Update();
 		}
 
 		private void LoadCustomDecals(bool b) {
-			// NativeArray<Entity> entities =  surfaceQuery.ToEntityArray(AllocatorManager.Temp);
-
-			// foreach(Entity entity in entities) {
-			// 	if(b) AddEntityObjectToCategoryUI(entity);
-			// 	else RemoveEntityObjectFromCategoryUI(entity);
-			// }
-
 			Settings.settings.LoadCustomDecals = b;
 			Settings.SaveSettings("ELT", Settings.settings);
 			loadcustomdecals.Update();
@@ -153,8 +154,40 @@ namespace ExtraLandscapingTools
 		private void EnableSurfacesSnow( bool b ) {
 			Settings.settings.EnableSnowSurfaces = b;
 			Settings.SaveSettings("ELT", Settings.settings);
-			if(!b) CustomSurfaces.ClearSurfacesCache();
+			// if(!b) CustomSurfaces.ClearSurfacesCache();
 			enableSnowSurfaces.Update();
+		}
+
+		private void OnAssetCatClick(string assetCat) {
+			bool first = true;
+			NativeArray<Entity> entities =  UIAssetCategoryQuery.ToEntityArray(AllocatorManager.Temp);
+			foreach(Entity entity in entities) {
+				UIAssetCategoryPrefab uIAssetCategoryPrefab = ELT.m_PrefabSystem.GetPrefab<UIAssetCategoryPrefab>(entity);
+				if(uIAssetCategoryPrefab.m_Menu.name != "Custom Assets") continue;
+				if(assetCat == "Custom Surfaces") {
+					if(uIAssetCategoryPrefab.name.ToLower().Contains("decals")) RemoveEntityCategoryUiFromMenuUI(entity);
+					else if(uIAssetCategoryPrefab.name.ToLower().Contains("surfaces")) {
+						AddEntityCategoryUiToMenuUI(entity);
+						if(first) {
+							first = false;
+							ToolbarUISystemPatch.SelectCatUI(entity);
+						}
+					}
+				}
+				else if(assetCat == "Custom Decals") {
+					if(uIAssetCategoryPrefab.name.ToLower().Contains("decals")) {
+						AddEntityCategoryUiToMenuUI(entity);
+						if(first) {
+							first = false;
+							ToolbarUISystemPatch.SelectCatUI(entity);
+						}
+					}
+					else if(uIAssetCategoryPrefab.name.ToLower().Contains("surfaces")) RemoveEntityCategoryUiFromMenuUI(entity);
+				}
+			}
+			// selectedAssetscat = assetCat;
+			// selectedAssetCat.Update();
+			ToolbarUISystemPatch.UpdateMenuUI();
 		}
 
 		public static void RemoveEntityObjectFromCategoryUI(Entity entity) {
@@ -212,6 +245,8 @@ namespace ExtraLandscapingTools
 					break;
 				}
 			}
+			
+			// ELT.m_EntityManager.AddComponentData(uIAssetCategoryData.m_Menu, new Unlock(uIAssetCategoryData.m_Menu));
 		}
 
 		public static void AddEntityCategoryUiToMenuUI(Entity entity) {
@@ -221,7 +256,7 @@ namespace ExtraLandscapingTools
 				Plugin.Logger.LogError($"Could not get the buffer for AddEntityCategoryUiToMenuUI");
 				return;
 			};
-
+			
 			bool isNotInTheBuffer = true;
 			for (int i = 0; i < uiGroupBuffer.Length; i++)
 			{
@@ -232,7 +267,6 @@ namespace ExtraLandscapingTools
 			}
 
 			if(isNotInTheBuffer) uiGroupBuffer.Add(new UIGroupElement(entity));
-
 		}
 
 		internal static string GetStringFromEmbbededJSFile(string path) {
@@ -278,74 +312,4 @@ namespace ExtraLandscapingTools
 			yield return null;
 		}
 	}
-
-	[Serializable]
-	public class  SettingsUI {
-		public string TabName;
-		public List<SettingUI> settings;
-
-		public SettingsUI(string TabName, List<SettingUI> settings) {
-			this.TabName = TabName;
-			this.settings = settings;
-        }
-
-        public SettingsUI()
-        {
-        }
-
-	}
-
-	[Serializable]
-	public class SettingUI
-    {
-
-		public enum SettingUIType {
-			CheckBox,
-			Button,
-		}
-
-		public SettingUIType settingUIType;
-		public string displayName;
-		public string name;
-
-		public SettingUI(SettingUIType settingUIType, string displayName, string name) {
-			this.settingUIType = settingUIType;
-			this.displayName = displayName;
-			this.name = name;
-        }
-
-        public SettingUI()
-        {
-        }
-    }
-
-	public class SettingsButton : SettingUI
-	{
-		public string buttonDescription;
-
-		public SettingsButton(string displayName, string name, string buttonDescription = null) {
-			settingUIType = SettingUIType.Button;
-			this.displayName = displayName;
-			this.name = name;
-			this.buttonDescription = buttonDescription;
-        }
-
-        public SettingsButton()
-        {
-        }
-	}
-
-	public class SettingsCheckBox : SettingUI
-	{
-		public SettingsCheckBox(string displayName, string name) {
-			settingUIType = SettingUIType.CheckBox;
-			this.displayName = displayName;
-			this.name = name;
-        }
-
-        public SettingsCheckBox()
-        {
-        }
-	}
-
 }

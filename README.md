@@ -45,8 +45,9 @@ See the [wiki](https://github.com/AlphaGaming7780/ExtraLandscapingTools/wiki).
 - [CynicalBusiness](https://lab.vevox.io/games/cities-skylines-2/surface-tools/-/tree/develop?ref_type=heads) For its surface tools which help me a lot to make this mod.
 - [CityRat](https://thunderstore.io/c/cities-skylines-ii/p/CityRat/) For the custom icons.
 - Chamëleon TBN For the custom icons.
-- [optimus-code](https://thunderstore.io/c/cities-skylines-ii/p/Cities2Modding/)
-- [Yenyang](https://thunderstore.io/c/cities-skylines-ii/p/yenyang/)
+- [optimus-code](https://thunderstore.io/c/cities-skylines-ii/p/Cities2Modding/) Thanks for your knowledge and you help on various stuff in this mod.
+- [Yenyang](https://thunderstore.io/c/cities-skylines-ii/p/yenyang/) Thank you for all your help and knowledge on various game aspect.
+- [Quboid]() For is knowledge on entity for my Transform Section tool.
 
 # Community
 Looking to discuss Cities: Skylines 2 Unofficial modding together with other modders? You're welcome to join [Cities 2 Modding Discord](https://discord.gg/vd7HXnpPJf) or the [Cities: Skylines Modding Discord](https://discord.gg/27CVdGFA47).

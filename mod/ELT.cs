@@ -19,6 +19,7 @@ namespace ExtraLandscapingTools
 		public static EntityManager m_EntityManager;
 		public static ToolSystem m_ToolSystem;
 		public static ToolUISystem m_ToolUISystem;
+		public static ToolbarUISystem m_ToolbarUISystem;
 		public static SurfaceReplacerTool m_SurfaceReplacerTool;
 
 		internal delegate string OnGetIcon(PrefabBase prefabBase);
@@ -51,6 +52,8 @@ namespace ExtraLandscapingTools
 			// 	texture2D = new Texture2D(texture.width, texture.height, TextureFormat.RGBA32, true);
 			// 	Graphics.CopyTexture(texture, texture2D);
 			// }
+
+			// int height = (int)((float)texture.height/texture.width * newSize);
 
 			RenderTexture scaledRT = RenderTexture.GetTemporary( newSize, newSize );
 			Graphics.Blit(texture, scaledRT);
@@ -99,6 +102,7 @@ namespace ExtraLandscapingTools
 
 		public static string GetIcon(PrefabBase prefab) {
 
+			if(prefab is null) return $"{GameManager_InitializeThumbnails.COUIBaseLocation}/resources/Icons/Misc/placeholder.svg";
 
 			if(onGetIcon is not null) foreach(Delegate @delegate in onGetIcon.GetInvocationList()) {
 

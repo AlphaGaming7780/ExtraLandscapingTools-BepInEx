@@ -22,6 +22,8 @@ public class CustomDecals
 	internal static List<string> FolderToLoadDecals = [];
 	internal static Dictionary<PrefabBase, string> DecalsDataBase = [];
 
+	private static List<string> validName = ["_BaseColorMap.png", "_NormalMap.png", "_MaskMap.png"];
+
 	internal static void SearchForCustomDecalsFolder(string ModsFolderPath) {
 		foreach(DirectoryInfo directory in new DirectoryInfo(ModsFolderPath).GetDirectories()) {
 			if(File.Exists($"{directory.FullName}\\CustomDecals.zip")) {
@@ -82,17 +84,17 @@ public class CustomDecals
 		}
 	}
 
-	public static void CreateCustomDecals(StaticObjectPrefab DecalPrefab) {
+	public static void CreateCustomDecals() {
 		foreach(string folder in FolderToLoadDecals) {
 			foreach(string catFolder in Directory.GetDirectories( folder )) {
 				foreach(string decalsFolder in Directory.GetDirectories( catFolder )) {
-					CreateCustomDecal(DecalPrefab, decalsFolder, new DirectoryInfo(decalsFolder).Name, new DirectoryInfo(catFolder).Name, new DirectoryInfo(folder).Parent.Name);
+					CreateCustomDecal(decalsFolder, new DirectoryInfo(decalsFolder).Name, new DirectoryInfo(catFolder).Name, new DirectoryInfo(folder).Parent.Name);
 				}
 			}
 		}
 	}
 
-	public static void CreateCustomDecal(StaticObjectPrefab DecalPrefab, string folderPath, string decalName, string catName, string modName) {
+	public static void CreateCustomDecal(string folderPath, string decalName, string catName, string modName) {
 
 		// RenderPrefab DecalRenderPrefab = (RenderPrefab)DecalPrefab.m_Meshes[0].m_Mesh;
 		// SpawnableObject DecalSpawnableObjectPrefab = DecalPrefab.GetComponent<SpawnableObject>();
@@ -129,7 +131,7 @@ public class CustomDecals
 			texture2D_BaseColorMap.SetPixels(texture2D_BaseColorMap_Temp.GetPixels(i), i);
 		}
 		texture2D_BaseColorMap.Apply();
-		if(!File.Exists(folderPath+"\\icon.png")) ELT.ResizeTexture(texture2D_BaseColorMap_Temp, 64, folderPath+"\\icon.png");
+		if(!File.Exists(folderPath+"\\icon.png")) ELT.ResizeTexture(texture2D_BaseColorMap_Temp, 128, folderPath+"\\icon.png");
 		TextureImporter.Texture textureImporterBaseColorMap = new($"{decalName}_BaseColorMap", folderPath+"\\"+"_BaseColorMap.png", texture2D_BaseColorMap);
 		decalSurface.AddProperty("_BaseColorMap", textureImporterBaseColorMap);
 		
@@ -146,7 +148,6 @@ public class CustomDecals
 					texture2D_NormalMap.SetPixels(texture2D_NormalMap_temp.GetPixels(i), i);
 				}
 				texture2D_NormalMap.Apply();
-				if(!File.Exists(folderPath+"\\icon.png")) ELT.ResizeTexture(texture2D_NormalMap_temp, 64, folderPath+"\\icon.png");
 				TextureImporter.Texture textureImporterNormalMap = new($"{decalName}_NormalMap", folderPath+"\\"+"_NormalMap.png", texture2D_NormalMap);
 				decalSurface.AddProperty("_NormalMap", textureImporterNormalMap);
 
@@ -166,11 +167,21 @@ public class CustomDecals
 					texture2D.SetPixels(texture2D_MaskMap_temp.GetPixels(i), i);
 				}
 				texture2D.Apply();
-				if(!File.Exists(folderPath+"\\icon.png")) ELT.ResizeTexture(texture2D_MaskMap_temp, 64, folderPath+"\\icon.png");
 				TextureImporter.Texture textureImporterNormalMap = new($"{decalName}_MaskMap", folderPath+"\\"+"_MaskMap.png", texture2D);
 				decalSurface.AddProperty("_MaskMap", textureImporterNormalMap);
 
 			};
+		}
+
+		if(File.Exists(folderPath+"\\icon.png")) {
+			fileData = File.ReadAllBytes(folderPath+"\\icon.png");
+			Texture2D texture2D_Icon = new(1, 1);
+			if(texture2D_Icon.LoadImage(fileData)) {
+				if(texture2D_Icon.width > 128 || texture2D_Icon.height > 128) {
+					ELT.ResizeTexture(texture2D_Icon, 128, folderPath+"\\icon.png");
+				}
+			}
+
 		}
 
 		AssetDataPath assetDataPath = AssetDataPath.Create($"Mods/ELT/CustomDecals/{modName}/{catName}/{decalName}", "SurfaceAsset");
@@ -293,7 +304,6 @@ public class CustomDecals
 			up, up, up, up	                    // Top
 		];
 
-
 		//6) Define each vertex's UV co-ordinates
 		Vector2 uv00 = new(0f, 0f);
 		Vector2 uv10 = new(1f, 0f);
@@ -344,8 +354,8 @@ public class CustomDecals
 
 		if(!DecalsDataBase.ContainsKey(prefab)) DecalsDataBase.Add(prefab, cat);
 
-		if(DecalsDataBase.Count > 0 && Settings.settings.LoadCustomDecals) {
-			return Prefab.GetOrCreateNewToolCategory(prefab, "Custom Surfaces", DecalsDataBase[prefab]+" Decals");
+		if(CanCreateCustomDecals()) {
+			return Prefab.GetOrCreateNewToolCategory(prefab, Prefab.GetCustomAssetMenuName(), DecalsDataBase[prefab]+" Decals");
 		} else {
 			return Prefab.GetOrCreateNewToolCategory(prefab, "Landscaping", "Decals", "Pathways");
 		}
@@ -357,9 +367,10 @@ public class CustomDecals
 		return "Misc";
 	}
 
+	internal static bool CanCreateCustomDecals() {
+		return Settings.settings.LoadCustomDecals && FolderToLoadDecals.Count > 0;
+	}
 }
-
-
 
 internal class CustomDecal: ComponentBase
 {

@@ -31,10 +31,12 @@
 		<EmbeddedResource Include="embedded\UI\UI.js"></EmbeddedResource>
 		<EmbeddedResource Include="embedded\UI\Setup.js"></EmbeddedResource>
 		<EmbeddedResource Include="embedded\UI\SetupSettings.js"></EmbeddedResource>
+		<EmbeddedResource Include="embedded\UI\SetupCustomAssetTopBar.js"></EmbeddedResource>
 		<EmbeddedResource Include="embedded\UI\ShowMarker.js"></EmbeddedResource>
 		<EmbeddedResource Include="embedded\UI\REMOVE_UI.js"></EmbeddedResource>
 		<EmbeddedResource Include="embedded\UI\REMOVE_Settings.js"></EmbeddedResource>
 		<EmbeddedResource Include="embedded\UI\REMOVE_ShowMarker.js"></EmbeddedResource>
+		<EmbeddedResource Include="embedded\UI\REMOVE_CustomAssetTopBar.js"></EmbeddedResource>
 		<EmbeddedResource Include="embedded\Localization\Localization.jsonc"></EmbeddedResource>
 	</ItemGroup>
 

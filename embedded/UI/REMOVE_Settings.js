@@ -10,7 +10,7 @@ try {
 } catch (error) {}
 
 try {
-	if(ExtraLandscapingTools_header.contains(ExtraLandscapingTools_settingsButton)) {
-		ExtraLandscapingTools_header.removeChild(ExtraLandscapingTools_settingsButton)
+	if(ExtraLandscapingTools_AssetCategory.contains(ExtraLandscapingTools_settingsButton)) {
+		ExtraLandscapingTools_AssetCategory.removeChild(ExtraLandscapingTools_settingsButton)
 	}
 } catch (error) {}

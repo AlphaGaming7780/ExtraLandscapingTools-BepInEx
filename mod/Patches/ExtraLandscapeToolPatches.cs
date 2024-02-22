@@ -221,8 +221,8 @@ namespace ExtraLandscapingTools.Patches
 
 		private static string UIAssetCategoryPrefabName = "";
 
-		private static bool setupCustomSurfaces = true;
-		private static bool setupCustomDecals = true;
+		private static bool setupCustomSurfaces = CustomSurfaces.CanCreateCustomSurfaces();
+		private static bool setupCustomDecals = CustomDecals.CanCreateCustomDecals();
 
 		public static bool Prefix( PrefabSystem __instance, PrefabBase prefab)
 		{
@@ -234,9 +234,11 @@ namespace ExtraLandscapingTools.Patches
 
 			if(prefab is UIAssetMenuPrefab) {
 
-				if(prefab.name == "Landscaping" && CustomSurfaces.FolderToLoadSurface.Count > 0 && Settings.settings.LoadCustomSurfaces) {
+				if(prefab.name == "Landscaping") {
+					Prefab.CreateNewUiToolMenu(prefab, Prefab.GetCustomAssetMenuName());
 
-					Prefab.CreateNewUiToolMenu(prefab, "Custom Surfaces");
+					// Prefab.CreateNewUiToolMenu(prefab, "Custom Assets");
+					// Prefab.CreateNewUiToolMenu(prefab, "Custom Surfaces");
 				}
 			}
 
@@ -266,7 +268,8 @@ namespace ExtraLandscapingTools.Patches
 					(	
 						prefab is not TerraformingPrefab && 
 						prefab is not SurfacePrefab && 
-						prefab is not StaticObjectPrefab
+						prefab is not StaticObjectPrefab //&&
+						// prefab is not NetLanePrefab
 					) || 
 					prefab is BuildingPrefab || 
 					prefab is BuildingExtensionPrefab)
@@ -294,7 +297,7 @@ namespace ExtraLandscapingTools.Patches
 						return true;
 					}else if(setupCustomDecals) {
 						setupCustomDecals = false;
-						CustomDecals.CreateCustomDecals(staticObjectPrefab);
+						CustomDecals.CreateCustomDecals();
 					}
 				}
 
@@ -306,7 +309,7 @@ namespace ExtraLandscapingTools.Patches
 
 					Material material = surfacePrefab.GetComponent<RenderedArea>().m_Material;
 
-					if(setupCustomSurfaces && Settings.settings.LoadCustomSurfaces) {
+					if(setupCustomSurfaces) {
 						setupCustomSurfaces = false;
 						try {
 							CustomSurfaces.CreateCustomSurfaces(material);
@@ -314,8 +317,11 @@ namespace ExtraLandscapingTools.Patches
 						} catch (Exception e) {Plugin.Logger.LogWarning(e);}
 					}
 
-					if(Settings.settings.EnableSnowSurfaces && !surfacePrefab.Has<CustomSurface>()) CustomSurfaces.GetOrCreateSnowTexture((Texture2D)material.GetTexture("_BaseColorMap"), surfacePrefab.name);
-
+					if(Settings.settings.EnableSnowSurfaces && !surfacePrefab.Has<CustomSurface>()) {
+						Vector4 baseColor = material.GetVector("_BaseColor");
+						baseColor.w -= 0.1f;
+						material.SetVector("_BaseColor", baseColor);
+					}
 				}	
 
 				var TerraformingUI = prefab.GetComponent<UIObject>();
@@ -331,8 +337,9 @@ namespace ExtraLandscapingTools.Patches
 				if(prefab is TerraformingPrefab) TerraformingUI.m_Group = Prefab.GetExistingToolCategory(prefab, "Terraforming") ?? TerraformingUI.m_Group;
 				else if(prefab is SurfacePrefab) TerraformingUI.m_Group ??= CustomSurfaces.SetupUIGroupe(prefab);
 				else if(prefab.name.ToLower().Contains("decal") || prefab.name.ToLower().Contains("roadarrow") || prefab.GetComponent<CustomDecal>() != null) TerraformingUI.m_Group = CustomDecals.SetupUIGroupe(prefab);
+				// else if(prefab is NetLanePrefab) TerraformingUI.m_Group ??= Prefab.GetOrCreateNewToolCategory(prefab, "Landscaping", "NetLanePrefab");
 				else TerraformingUI.m_Group ??= Prefab.GetOrCreateNewToolCategory(prefab, "Landscaping", "[ELT] Failed Prefab, IF you see this tab, repport it, it's a bug.");
-
+				
 				if(TerraformingUI.m_Group == null) {
 					return false;
 				} else {
@@ -341,22 +348,6 @@ namespace ExtraLandscapingTools.Patches
 			} catch (Exception e) {Plugin.Logger.LogError(e);}
 
 			return true;
-		}
-	}
-
-	[HarmonyPatch( typeof( ToolbarUISystem ), "SelectAssetMenu" )]
-	class ToolbarUISystem_SelectAssetMenu //: UISystemBase 
-	{
-        static void Postfix( Entity assetMenu ) {
-
-			if (assetMenu != Entity.Null && ELT.m_EntityManager.HasComponent<UIAssetMenuData>(assetMenu)) {
-				ELT.m_PrefabSystem.TryGetPrefab(assetMenu, out PrefabBase prefabBase);
-				if(prefabBase is UIAssetMenuPrefab && ELT_UI.validMenuForELTSettings.Contains(prefabBase.name)) {
-					ELT_UI.ShowELTSettingsButton(true);
-				} else {
-					ELT_UI.ShowELTSettingsButton(false);
-				}
-			}
 		}
 	}
 }

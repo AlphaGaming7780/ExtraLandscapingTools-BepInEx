@@ -29,11 +29,11 @@ public class CustomSurfaces
 		}
 	}
 
-	internal static void ClearSurfacesCache() {
-		if(Directory.Exists($"{GameManager_Awake.resourcesCache}/Surfaces")) {
-			Directory.Delete($"{GameManager_Awake.resourcesCache}/Surfaces", true);
-		}
-	}
+	// internal static void ClearSurfacesCache() {
+	// 	if(Directory.Exists($"{GameManager_Awake.resourcesCache}/Surfaces")) {
+	// 		Directory.Delete($"{GameManager_Awake.resourcesCache}/Surfaces", true);
+	// 	}
+	// }
 
 	public static void AddCustomSurfacesFolder(string path) {
 		if(!FolderToLoadSurface.Contains(path)) {
@@ -73,34 +73,6 @@ public class CustomSurfaces
 				if(!Localization.localization[key].ContainsKey(s)) Localization.localization[key].Add(s, csLocalisation[s]);
 			}
 		}
-	}
-
-	internal static Texture2D GetOrCreateSnowTexture(Texture2D texture2D, string surfaceName, float snowAmount = 0.15f) { // string folderPath,
-		if(File.Exists($"{GameManager_Awake.resourcesCache}/Surfaces/{surfaceName}/_BaseColorMap_Snow.png")) {
-			byte[] data = File.ReadAllBytes($"{GameManager_Awake.resourcesCache}/Surfaces/{surfaceName}/_BaseColorMap_Snow.png");
-			texture2D.LoadImage(data);
-		} else {
-			Plugin.Logger.LogMessage($"Creating snow texture for {surfaceName} surface.");
-			using (PerformanceCounter.Start(delegate (TimeSpan t)
-            {
-                // log?.InfoFormat("GameManager created! ({0}ms)", t.TotalMilliseconds);
-				Plugin.Logger.LogMessage($"Done it take {t.TotalMilliseconds}ms.");
-            })) {
-				if(!texture2D.isReadable) texture2D = ELT.GetTextureFromNonReadable(texture2D);
-				for(int i = 0; i < texture2D.mipmapCount; i++) {
-					List<Color> colors = [];
-					foreach(Color color in texture2D.GetPixels(i)) {
-						Color color1 = color;
-						color1.a -= snowAmount;
-						colors.Add(color1);
-					}
-					texture2D.SetPixels([.. colors], i);
-				}
-				texture2D.Apply();
-				ELT.SaveTexture(texture2D, $"{GameManager_Awake.resourcesCache}/Surfaces/{surfaceName}/_BaseColorMap_Snow.png");
-			}
-		}
-		return texture2D;
 	}
 
 	internal static void CreateCustomSurfaces(Material material) {
@@ -159,11 +131,10 @@ public class CustomSurfaces
 			Texture2D texture2D_BaseColorMap = new(1, 1);
 			if(!texture2D_BaseColorMap.LoadImage(fileData)) {UnityEngine.Debug.LogError($"[ELT] Failed to Load the BaseColorMap image for the {surfacePrefab.name} surface."); return;}
 
-			if(!File.Exists(folderPath+"\\icon.png")) ELT.ResizeTexture(texture2D_BaseColorMap, 64, folderPath+"\\icon.png");
+			if(!File.Exists(folderPath+"\\icon.png")) ELT.ResizeTexture(texture2D_BaseColorMap, 128, folderPath+"\\icon.png");
 			// if(texture2D_BaseColorMap.width > 512 || texture2D_BaseColorMap.height > 512) texture2D_BaseColorMap = ELT.ResizeTexture(texture2D_BaseColorMap, 512, folderPath+"\\_BaseColorMap.png");
 			
 			if(!SurfaceInformation.ContainsKey("ELT_SnowAmount")) SurfaceInformation.Add("ELT_SnowAmount", 0.15f);
-			if(Settings.settings.EnableSnowSurfaces && (float)SurfaceInformation["ELT_SnowAmount"] > 0.0f) texture2D_BaseColorMap = GetOrCreateSnowTexture(texture2D_BaseColorMap, surfacePrefab.name, (float)SurfaceInformation["ELT_SnowAmount"]);
 
 			newMaterial.SetTexture("_BaseColorMap", texture2D_BaseColorMap);
 		} catch (Exception e) {Plugin.Logger.LogWarning(e); return;}
@@ -186,6 +157,12 @@ public class CustomSurfaces
 				newMaterial.SetTexture("_MaskMap", texture2D_MaskMap);
 			}
 		} catch {}
+
+		if(Settings.settings.EnableSnowSurfaces) {
+			Vector4 baseColor = newMaterial.GetVector("_BaseColor");
+			baseColor.w -= (float)SurfaceInformation["ELT_SnowAmount"];
+			newMaterial.SetVector("_BaseColor", baseColor);
+		}
 
 		// try {
 		// 	Texture2D texture2D = (Texture2D)newMaterial.GetTexture("_BaseColorMap");
@@ -218,8 +195,8 @@ public class CustomSurfaces
 			fileData = File.ReadAllBytes(folderPath+"\\icon.png");
 			Texture2D texture2D_Icon = new(1, 1);
 			if(texture2D_Icon.LoadImage(fileData)) {
-				if(texture2D_Icon.width > 64 || texture2D_Icon.height > 64) {
-					ELT.ResizeTexture(texture2D_Icon, 64, folderPath+"\\icon.png");
+				if(texture2D_Icon.width > 128 || texture2D_Icon.height > 128) {
+					ELT.ResizeTexture(texture2D_Icon, 128, folderPath+"\\icon.png");
 				}
 			}
 
@@ -245,8 +222,8 @@ public class CustomSurfaces
 
 		if(!SurfacesDataBase.ContainsKey(prefab)) SurfacesDataBase.Add(prefab, cat);
 
-		if(FolderToLoadSurface.Count > 0 && Settings.settings.LoadCustomSurfaces) {
-			return Prefab.GetOrCreateNewToolCategory(prefab, "Custom Surfaces", SurfacesDataBase[prefab]+" Surfaces");
+		if(CanCreateCustomSurfaces()) {
+			return Prefab.GetOrCreateNewToolCategory(prefab, Prefab.GetCustomAssetMenuName(), SurfacesDataBase[prefab]+" Surfaces");
 		} else {
 			return Prefab.GetOrCreateNewToolCategory(prefab, "Landscaping", "Surfaces", "Terraforming");
 		}
@@ -277,6 +254,9 @@ public class CustomSurfaces
 			-95 => "Tiles",
 			_ => "Misc"
 		};
+	}
+	internal static bool CanCreateCustomSurfaces() {
+		return Settings.settings.LoadCustomSurfaces && FolderToLoadSurface.Count > 0;
 	}
 }
 
