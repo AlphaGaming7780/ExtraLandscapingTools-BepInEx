@@ -1,28 +1,48 @@
 var ExtraLandscapingTools_Header = document.getElementsByClassName("header_H_U")[0]
-var ExtraLandscapingTools_AssetCategory = document.getElementsByClassName("asset-category-tab-bar_IGA")[0]
-var ExtraLandscapingTools_AssetCategory_CloseButton = document.getElementsByClassName("close-button_kMj")[0]
+// var ExtraLandscapingTools_AssetCategory = document.getElementsByClassName("asset-category-tab-bar_IGA")[0]
+// var ExtraLandscapingTools_AssetCategory_CloseButton = document.getElementsByClassName("close-button_kMj")[0]
 
-var ExtraLandscapingTools_CustomAssetCategory = document.createElement("div");
-var ExtraLandscapingTools_CustomAssetCategory_Items = document.createElement("div")
+if(!ExtraLandscapingTools_Header.contains(document.getElementById("ExtraLandscapingTools_CustomAssetCategory"))) {
+	if(document.getElementById("ExtraLandscapingTools_CustomAssetCategory") == null) {
 
-var ExtraLandscapingTools_CustomCatButtonDict = {}
-var ExtraLandscapingTools_SelectedCustomAssetCategory;
+        var ExtraLandscapingTools_CustomAssetCategory = null
+        var ExtraLandscapingTools_CustomAssetCategory_Items = null
 
-ExtraLandscapingTools_CustomAssetCategory.id = "ExtraLandscapingTools_CustomAssetCategory"
-ExtraLandscapingTools_CustomAssetCategory.className = "asset-category-tab-bar_IGA";
-ExtraLandscapingTools_CustomAssetCategory_Items.className = "items_gPf"
+        var ExtraLandscapingTools_CustomCatButtonDict = {}
+        var ExtraLandscapingTools_SelectedCustomAssetCategory;
 
-ExtraLandscapingTools_getterValue("elt.assetscat", ExtraLandscapingTools_CustomAssetCategory, ExtraLandscapingTools_CreateCustomCatButtonCallBack)
-if(ExtraLandscapingTools_SelectedCustomAssetCategory == undefined) ExtraLandscapingTools_SelectButtonAssetCat(ExtraLandscapingTools_CustomCatButtonDict[Object.keys(ExtraLandscapingTools_CustomCatButtonDict)[0]])
-else ExtraLandscapingTools_SelectButtonAssetCat(ExtraLandscapingTools_CustomCatButtonDict[ExtraLandscapingTools_SelectedCustomAssetCategory.id], false)
+		ExtraLandscapingTools_CreateCustomAssetsCat()
 
-ExtraLandscapingTools_CustomAssetCategory.appendChild(ExtraLandscapingTools_CustomAssetCategory_Items)
-// ExtraLandscapingTools_CustomAssetCategory.appendChild(ExtraLandscapingTools_AssetCategory.children[1])
-// ExtraLandscapingTools_Header.appendChild(ExtraLandscapingTools_CustomAssetCategory)
-if(ExtraLandscapingTools_Header.children[0] != null) {
-    ExtraLandscapingTools_Header.insertBefore(ExtraLandscapingTools_CustomAssetCategory, ExtraLandscapingTools_Header.children[0])
-} else {
-    ExtraLandscapingTools_Header.appendChild(ExtraLandscapingTools_CustomAssetCategory)
+	} else {
+        if(ExtraLandscapingTools_Header.children[0] != null) {
+            ExtraLandscapingTools_Header.insertBefore(ExtraLandscapingTools_CustomAssetCategory, ExtraLandscapingTools_Header.children[0])
+        } else {
+            ExtraLandscapingTools_Header.appendChild(ExtraLandscapingTools_CustomAssetCategory)
+        }
+	}
+}
+
+
+function ExtraLandscapingTools_CreateCustomAssetsCat() {
+    ExtraLandscapingTools_CustomAssetCategory = document.createElement("div");
+    ExtraLandscapingTools_CustomAssetCategory_Items = document.createElement("div")
+    
+    ExtraLandscapingTools_CustomAssetCategory.id = "ExtraLandscapingTools_CustomAssetCategory"
+    ExtraLandscapingTools_CustomAssetCategory.className = "asset-category-tab-bar_IGA";
+    ExtraLandscapingTools_CustomAssetCategory_Items.className = "items_gPf"
+    
+    ExtraLandscapingTools_getterValue("elt.assetscat", ExtraLandscapingTools_CustomAssetCategory, ExtraLandscapingTools_CreateCustomCatButtonCallBack)
+    if(ExtraLandscapingTools_SelectedCustomAssetCategory == undefined) ExtraLandscapingTools_SelectButtonAssetCat(ExtraLandscapingTools_CustomCatButtonDict[Object.keys(ExtraLandscapingTools_CustomCatButtonDict)[0]])
+    else ExtraLandscapingTools_SelectButtonAssetCat(ExtraLandscapingTools_CustomCatButtonDict[ExtraLandscapingTools_SelectedCustomAssetCategory.id], false)
+    
+    ExtraLandscapingTools_CustomAssetCategory.appendChild(ExtraLandscapingTools_CustomAssetCategory_Items)
+    // ExtraLandscapingTools_CustomAssetCategory.appendChild(ExtraLandscapingTools_AssetCategory.children[1])
+    // ExtraLandscapingTools_Header.appendChild(ExtraLandscapingTools_CustomAssetCategory)
+    if(ExtraLandscapingTools_Header.children[0] != null) {
+        ExtraLandscapingTools_Header.insertBefore(ExtraLandscapingTools_CustomAssetCategory, ExtraLandscapingTools_Header.children[0])
+    } else {
+        ExtraLandscapingTools_Header.appendChild(ExtraLandscapingTools_CustomAssetCategory)
+    }
 }
 
 function ExtraLandscapingTools_CreateCustomCatButton(name, icon) {
