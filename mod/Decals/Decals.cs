@@ -221,7 +221,7 @@ public class CustomDecals
 		DecalProperties decalProperties = renderPrefab.AddComponent<DecalProperties>();
 		decalProperties.m_TextureArea = new(new(TextureArea.x, TextureArea.y), new(TextureArea.z, TextureArea.w));
 		decalProperties.m_LayerMask = (DecalLayers)decalSurface.GetFloatProperty("colossal_DecalLayerMask");
-		decalProperties.m_RendererPriority = 0;//DecalPropertiesPrefab.m_RendererPriority;
+		decalProperties.m_RendererPriority = (int)decalSurface.GetFloatProperty("_DrawOrder"); //0;//DecalPropertiesPrefab.m_RendererPriority;
 		decalProperties.m_EnableInfoviewColor = false;//DecalPropertiesPrefab.m_EnableInfoviewColor;
 
 		ObjectMeshInfo objectMeshInfo = new()

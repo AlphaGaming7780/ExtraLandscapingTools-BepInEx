@@ -2,8 +2,6 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.IO.Compression;
-using Colossal;
-using Colossal.IO.AssetDatabase;
 using Colossal.Json;
 using ExtraLandscapingTools.Patches;
 using Game.Prefabs;
