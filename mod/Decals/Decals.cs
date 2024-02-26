@@ -42,8 +42,8 @@ public class CustomDecals
 		csLocalisation.Add($"SubServices.NAME[Parking Decals]", "Parking Decals");
 		csLocalisation.Add($"Assets.SUB_SERVICE_DESCRIPTION[Parking Decals]", "Parking Decals");
 
-		csLocalisation.Add($"SubServices.NAME[Arrow Decals]", "Arrow Decals");
-		csLocalisation.Add($"Assets.SUB_SERVICE_DESCRIPTION[Arrow Decals]", "Arrow Decals");
+		csLocalisation.Add($"SubServices.NAME[RoadMarkings Decals]", "RoadMarkings Decals");
+		csLocalisation.Add($"Assets.SUB_SERVICE_DESCRIPTION[RoadMarkings Decals]", "RoadMarkings Decals");
 
 		csLocalisation.Add($"SubServices.NAME[Misc Decals]", "Misc Decals");
 		csLocalisation.Add($"Assets.SUB_SERVICE_DESCRIPTION[Misc Decals]", "Misc Decals");
