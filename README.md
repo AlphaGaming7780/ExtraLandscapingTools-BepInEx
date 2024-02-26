@@ -30,7 +30,6 @@ See the [wiki](https://github.com/AlphaGaming7780/ExtraLandscapingTools/wiki).
 See the [wiki](https://github.com/AlphaGaming7780/ExtraLandscapingTools/wiki).
 
 ## Feature roadmap
-- ✔️ More Pathway ([ELT-Assets](https://github.com/AlphaGaming7780/ELT-Assets))
 - ✔️ More Surfaces (Custom) ([ELT-Surfaces](https://github.com/AlphaGaming7780/ELT-Surfaces))
 - ✔️ Custom Surfaces Support
 - ✔️ Decals

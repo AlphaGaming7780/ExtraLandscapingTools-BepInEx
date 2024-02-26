@@ -32,7 +32,7 @@ if(!ExtraLandscapingTools_AssetCategory.contains(document.getElementById("ExtraL
 }
 
 function ExtraLandscapingTools_CreateSettingsButton() {
-	ExtraLandscapingTools_settingsButton = document.createElement("button", ExtraLandscapingTools_AssetCategory.childNodes[1]);
+	ExtraLandscapingTools_settingsButton = document.createElement("button", ExtraLandscapingTools_AssetCategory.children[1]);
 	var ExtraLandscapingTools_settingsButtonImage = document.createElement("div")
 	ExtraLandscapingTools_settingsButton.className = "button_bvQ button_bvQ close-button_wKK close-button_kMj"
 	ExtraLandscapingTools_settingsButton.id = "ExtraLandscapingTools_settingsButton"

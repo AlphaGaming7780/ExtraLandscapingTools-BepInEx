@@ -24,7 +24,7 @@ if(!ExtraLandscapingTools_Header.contains(document.getElementById("ExtraLandscap
 
 
 function ExtraLandscapingTools_CreateCustomAssetsCat() {
-	ExtraLandscapingTools_CustomAssetCategory = document.createElement("div");
+	ExtraLandscapingTools_CustomAssetCategory = document.createElement("div", ExtraLandscapingTools_Header.children[0]);
 	ExtraLandscapingTools_CustomAssetCategory_Items = document.createElement("div")
 	
 	ExtraLandscapingTools_CustomAssetCategory.id = "ExtraLandscapingTools_CustomAssetCategory"
