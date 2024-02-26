@@ -106,6 +106,7 @@ public class CustomDecals
 		decalPrefab.name = fullDecalName;
 
 		Surface decalSurface = new(decalName, "DefaultDecal");
+
 		if(File.Exists(folderPath+"\\decal.json")) {
 			JSONDecalsMaterail jSONMaterail = Decoder.Decode(File.ReadAllText(folderPath+"\\decal.json")).Make<JSONDecalsMaterail>();
 			foreach(string key in jSONMaterail.Float.Keys) {decalSurface.AddProperty(key, jSONMaterail.Float[key]);}
@@ -115,6 +116,8 @@ public class CustomDecals
 				obsoleteIdentifiers.m_PrefabIdentifiers = [..jSONMaterail.prefabIdentifierInfos];
 			}
 		}
+
+		if(!decalSurface.floats.ContainsKey("_DrawOrder")) decalSurface.AddProperty("_DrawOrder", 0f);
 
 		byte[] fileData;
 
