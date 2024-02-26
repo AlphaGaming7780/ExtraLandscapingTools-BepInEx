@@ -36,10 +36,9 @@ public class CustomSurfaces
 	// }
 
 	public static void AddCustomSurfacesFolder(string path) {
-		if(!FolderToLoadSurface.Contains(path)) {
-			FolderToLoadSurface.Add(path);
-			GameManager_InitializeThumbnails.AddNewIconsFolder(new DirectoryInfo(path).Parent.FullName);
-		}
+		if(FolderToLoadSurface.Contains(path)) return;
+		FolderToLoadSurface.Add(path);
+		GameManager_InitializeThumbnails.AddNewIconsFolder(new DirectoryInfo(path).Parent.FullName);
 	}
 
 	internal static void LoadLocalization() {
