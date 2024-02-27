@@ -19,13 +19,12 @@ public abstract class Extension {
 	public abstract string ExtensionID { get; }
 	public abstract ExtensionType Type { get; }
 	public virtual SettingsUI UISettings { get; internal set;}
-	public static ExtensionSettings ExtensionSettings; //{ get; internal set;}
+	// public ExtensionSettings ExtensionSettings; //{ get; internal set;}
 
 	protected virtual void OnCreate() {
 		if(UISettings != null) ELT_UI.settings.Add(UISettings);
 		Prefab.onAddPrefab += OnAddPrefab;
 		ELT.onGetIcon += OnGetIcon;
-		if (ExtensionSettings != null) ExtensionSettings = Settings.LoadSettings(ExtensionID, ExtensionSettings);
 	}
 
 	// public virtual void OnLoadLocalization(LocaleAsset localeAsset) {}
@@ -34,7 +33,11 @@ public abstract class Extension {
 
 	public virtual void OnELTSettings() {}
 
-	public void SaveSettings() {
+	public T LoadSettings<T>(T ExtensionSettings) {
+		return Settings.LoadSettings(ExtensionID, ExtensionSettings);
+	}
+
+	public void SaveSettings<T>(T ExtensionSettings) {
 		Settings.SaveSettings(ExtensionID, ExtensionSettings);
 	}
 
