@@ -2,36 +2,24 @@ using System;
 using System.Collections.Generic;
 using ExtraLandscapingTools.UI;
 using Game.Prefabs;
+using static ExtraLandscapingTools.Extensions;
 
 namespace ExtraLandscapingTools;
 
 public abstract class Extension {
-
-	public enum ExtensionType : int
-	{
-		Other = 0,
-		Surfaces = 1,
-		Decals = 2,
-		Assets = 3
-	}
-
-	public static List<Extension> Extensions {private set; get;} = [];
 	public abstract string ExtensionID { get; }
 	public abstract ExtensionType Type { get; }
 	public virtual SettingsUI UISettings { get; internal set;}
-	// public ExtensionSettings ExtensionSettings; //{ get; internal set;}
 
-	protected virtual void OnCreate() {
+	internal protected virtual void OnCreate() {
 		if(UISettings != null) ELT_UI.settings.Add(UISettings);
 		Prefab.onAddPrefab += OnAddPrefab;
 		ELT.onGetIcon += OnGetIcon;
+		Localization.onLoadLocalization += OnLoadLocalization;
 	}
-
-	// public virtual void OnLoadLocalization(LocaleAsset localeAsset) {}
-	public virtual bool OnAddPrefab(PrefabBase prefabBase) {return true;}
-	public virtual string OnGetIcon(PrefabBase prefabBase) {return null;}
-
-	public virtual void OnELTSettings() {}
+	public virtual bool OnAddPrefab(PrefabBase prefabBase) { return true; }
+	public virtual string OnGetIcon(PrefabBase prefabBase) { return null; }
+	public virtual Dictionary<string , Dictionary<string, string>> OnLoadLocalization() { return null; }
 
 	public T LoadSettings<T>(T ExtensionSettings) {
 		return Settings.LoadSettings(ExtensionID, ExtensionSettings);
@@ -39,12 +27,6 @@ public abstract class Extension {
 
 	public void SaveSettings<T>(T ExtensionSettings) {
 		Settings.SaveSettings(ExtensionID, ExtensionSettings);
-	}
-
-	public static void RegisterELTExtension( Extension extension ) {
-		if(Extensions.Contains(extension)) return;
-		Extensions.Add(extension);
-		extension.OnCreate();
 	}
 }
 

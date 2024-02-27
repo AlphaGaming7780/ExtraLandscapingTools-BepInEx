@@ -6,42 +6,45 @@ using Colossal.Json;
 
 namespace ExtraLandscapingTools
 {
-	class Localization
+	public class Localization
 	{
-
+		internal delegate Dictionary<string, Dictionary<string, string>> OnLoadLocalization();
+		internal static OnLoadLocalization onLoadLocalization = LoadLocalization;
 		internal static Dictionary<string, Dictionary<string, string>> localization;
 
 		internal static void AddCustomLocal(LocaleAsset localeAsset) { //Dictionary<string, string>
 
-			if(localization == null) {
-				LoadLocalization();
+			if(onLoadLocalization != null) foreach(Delegate @delegate in onLoadLocalization.GetInvocationList()) {
+
+				object result = @delegate.DynamicInvoke();
+
+				if(result is not Dictionary<string, Dictionary<string, string>> localization) return;
+
+				string loc = localeAsset.localeId;
+
+				if(!localization.ContainsKey(loc)) loc = "en-US";
+
+				foreach(string key in localization[loc].Keys) {
+					if(localeAsset.data.entries.ContainsKey(key)) localeAsset.data.entries[key] = localization[loc][key];
+					else localeAsset.data.entries.Add(key, localization[loc][key]);
+
+					if(localeAsset.data.indexCounts.ContainsKey(key)) localeAsset.data.indexCounts[key] = localeAsset.data.indexCounts.Count;
+					else localeAsset.data.indexCounts.Add(key, localeAsset.data.indexCounts.Count);
+				}
 			}
-
-			string loc = localeAsset.localeId;
-
-			if(!localization.ContainsKey(loc)) loc = "en-US";
-
-			foreach(string key in localization[loc].Keys) {
-				if(localeAsset.data.entries.ContainsKey(key)) localeAsset.data.entries[key] = localization[loc][key];
-				else localeAsset.data.entries.Add(key, localization[loc][key]);
-
-				if(localeAsset.data.indexCounts.ContainsKey(key)) localeAsset.data.indexCounts[key] = localeAsset.data.indexCounts.Count;
-				else localeAsset.data.indexCounts.Add(key, localeAsset.data.indexCounts.Count);
-				
-			}
-
 		}
 
-		private static void LoadLocalization() {
+		private static Dictionary<string, Dictionary<string, string>> LoadLocalization() {
 			localization = Decoder.Decode(new StreamReader(ELT.GetEmbedded("Localization.Localization.jsonc")).ReadToEnd()).Make<LocalizationJS>().Localization;
-			if(CustomSurfaces.FolderToLoadSurface.Count > 0) CustomSurfaces.LoadLocalization();
-			if(CustomDecals.FolderToLoadDecals.Count > 0) CustomDecals.LoadLocalization();
+			if(CustomSurfaces.CanCreateCustomSurfaces()) CustomSurfaces.LoadLocalization();
+			if(CustomDecals.CanCreateCustomDecals()) CustomDecals.LoadLocalization();
+			return localization;
 		}
 
 	}
 
 	[Serializable]
-	internal class LocalizationJS
+	public class LocalizationJS
 	{	
 		public Dictionary<string, Dictionary<string, string>> Localization = [];
 
