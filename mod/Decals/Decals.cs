@@ -138,9 +138,9 @@ public class CustomDecals
 		TextureImporter.Texture textureImporterBaseColorMap = new($"{decalName}_BaseColorMap", folderPath+"\\"+"_BaseColorMap.png", texture2D_BaseColorMap);	
 		decalSurface.AddProperty("_BaseColorMap", textureImporterBaseColorMap);
 		
-		Texture2D texture2D_NormalMap_temp = new(1, 1);
 		if(File.Exists(folderPath+"\\_NormalMap.png")) {
 			fileData = File.ReadAllBytes(folderPath+"\\_NormalMap.png");
+			Texture2D texture2D_NormalMap_temp = new(1, 1);
 			if(texture2D_NormalMap_temp.LoadImage(fileData)) {
 				Texture2D texture2D_NormalMap = new(texture2D_NormalMap_temp.width, texture2D_NormalMap_temp.height, texture2D_NormalMap_temp.isDataSRGB ? GraphicsFormat.R8G8B8A8_SRGB : GraphicsFormat.R8G8B8A8_SNorm, texture2D_NormalMap_temp.mipmapCount, TextureCreationFlags.MipChain)
 				{
@@ -158,9 +158,9 @@ public class CustomDecals
 			};
 		}
 
-		Texture2D texture2D_MaskMap_temp = new(1, 1);
 		if(File.Exists(folderPath+"\\_MaskMap.png")) {
 			fileData = File.ReadAllBytes(folderPath+"\\_MaskMap.png");
+			Texture2D texture2D_MaskMap_temp = new(1, 1);
 			if(texture2D_MaskMap_temp.LoadImage(fileData)) {
 				Texture2D texture2D_MaskMap = new(texture2D_MaskMap_temp.width, texture2D_MaskMap_temp.height, texture2D_MaskMap_temp.isDataSRGB ? GraphicsFormat.R8G8B8A8_SRGB : GraphicsFormat.R8G8B8A8_SNorm, texture2D_MaskMap_temp.mipmapCount, TextureCreationFlags.MipChain)
 				{
