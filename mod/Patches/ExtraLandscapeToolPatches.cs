@@ -157,7 +157,6 @@ namespace ExtraLandscapingTools.Patches
 			}
 
 			if(tool is AreaToolSystem || tool is SurfaceReplacerTool) { //|| tool is ObjectToolSystem
-				// if(!showMarker) 
 				ELT_UI.eLT_UI_Mono.ChangeUiNextFrame(ELT_UI.GetStringFromEmbbededJSFile("ShowMarker.js"));
 				showMarker = true;
 			} else if(showMarker){

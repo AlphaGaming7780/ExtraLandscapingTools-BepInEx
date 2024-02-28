@@ -282,7 +282,7 @@ namespace ExtraLandscapingTools
 
 		internal static void SetUpMarker(PrefabBase prefabBase) {
 
-			if (prefabBase != null && !ELT.m_RenderingSystem.markersVisible)
+			if (prefabBase != null)
 			{
 				Entity entity = ELT.m_PrefabSystem.GetEntity(prefabBase);
 				
