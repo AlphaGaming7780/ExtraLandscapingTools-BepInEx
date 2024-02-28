@@ -162,16 +162,16 @@ public class CustomDecals
 		if(File.Exists(folderPath+"\\_MaskMap.png")) {
 			fileData = File.ReadAllBytes(folderPath+"\\_MaskMap.png");
 			if(texture2D_MaskMap_temp.LoadImage(fileData)) {
-				Texture2D texture2D = new(texture2D_MaskMap_temp.width, texture2D_MaskMap_temp.height, texture2D_MaskMap_temp.isDataSRGB ? GraphicsFormat.R8G8B8A8_SRGB : GraphicsFormat.R8G8B8A8_SNorm, texture2D_MaskMap_temp.mipmapCount, TextureCreationFlags.MipChain)
+				Texture2D texture2D_MaskMap = new(texture2D_MaskMap_temp.width, texture2D_MaskMap_temp.height, texture2D_MaskMap_temp.isDataSRGB ? GraphicsFormat.R8G8B8A8_SRGB : GraphicsFormat.R8G8B8A8_SNorm, texture2D_MaskMap_temp.mipmapCount, TextureCreationFlags.MipChain)
 				{
 					name = $"{decalName}_MaskMap"
 				};
 
 				for(int i = 0; i < texture2D_MaskMap_temp.mipmapCount; i++) {
-					texture2D.SetPixels(texture2D_MaskMap_temp.GetPixels(i), i);
+					texture2D_MaskMap.SetPixels(texture2D_MaskMap_temp.GetPixels(i), i);
 				}
-				texture2D.Apply();
-				TextureImporter.Texture textureImporterMaskMap = new($"{decalName}_MaskMap", folderPath+"\\"+"_MaskMap.png", texture2D);
+				texture2D_MaskMap.Apply();
+				TextureImporter.Texture textureImporterMaskMap = new($"{decalName}_MaskMap", folderPath+"\\"+"_MaskMap.png", texture2D_MaskMap);
 				decalSurface.AddProperty("_MaskMap", textureImporterMaskMap);
 
 			};

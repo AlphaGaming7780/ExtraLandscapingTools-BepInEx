@@ -11,9 +11,9 @@ This mod aims to add features and improve existing ones for the game's landscapi
 - [Cities: Skylines 2](https://store.steampowered.com/app/949230/Cities_Skylines_II/)
 - BepInEx 5
 
-## Instalation 
+## Installation 
 
-You can download this mod directly for this GitHub or from the [C:S2 Thunderstorm mod page](https://thunderstore.io/c/cities-skylines-ii/p/TritonSupreme/ExtraLandscapingTools/).
+You can download this mod directly for this GitHub or from the [C:S2 Thunderstore mod page](https://thunderstore.io/c/cities-skylines-ii/p/TritonSupreme/ExtraLandscapingTools/).
 
 If you download it from the GitHub or the Thunderstore page without using the mod manger, you need to put the folder named `ExtraLandscapingTools` inside the `YourGamePath/BepInEx/Plugins` folder.
 
