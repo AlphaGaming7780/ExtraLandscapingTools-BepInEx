@@ -32,11 +32,19 @@ public class ToolbarUISystemPatch
 		}
 	}
 
-	internal static void UpdateCatUI() {
+	// [HarmonyPatch( typeof( ToolbarUISystem ), "SelectAsset", [typeof(Entity)] )]
+	// class SelectAsset 
+	// {
+	// 	static void Postfix( Entity asset ) {
+	// 		Plugin.Logger.LogMessage("nice");
+	// 	}
+	// }
+
+	public static void UpdateCatUI() {
 		Traverse.Create(ELT.m_ToolbarUISystem).Field("RawValueBinding").GetValue< RawMapBinding<Entity>>().UpdateAll();
 	}
 
-	internal static void UpdateMenuUI() {
+	public static void UpdateMenuUI() {
 		Traverse.Create(ELT.m_ToolbarUISystem).Field("m_AssetMenuCategoriesBinding").GetValue< RawMapBinding<Entity>>().UpdateAll();
 	}
 
