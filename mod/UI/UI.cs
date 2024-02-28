@@ -71,6 +71,26 @@ namespace ExtraLandscapingTools
 			ELT.m_EntityManager = EntityManager;
 			
 			eLT_UI_Mono = eLT_UI_Object.AddComponent<ELT_UI_Mono>();
+			// eLT_UI_Object.transform.localScale = Vector3.one * 1000f;
+			// MeshFilter meshFilter = eLT_UI_Object.AddComponent<MeshFilter>();
+			// meshFilter.mesh = CustomDecals.ConstructMesh(1,1,1);
+			// MeshRenderer meshRenderer = eLT_UI_Object.AddComponent<MeshRenderer>();
+			// Material material = new(Shader.Find("HDRP/Lit"));
+			// byte[] fileData;
+
+			// fileData = File.ReadAllBytes("C:\\Program Files (x86)\\Steam\\steamapps\\common\\Cities Skylines II\\BepInEx\\plugins\\ExtraLandscapingTools_mods\\CustomDecals\\Misc\\Scattered Leaves\\_NormalMap.png");
+			// Texture2D texture2D_BaseColorMap_Temp = new(1, 1);
+			// if (texture2D_BaseColorMap_Temp.LoadImage(fileData)) material.SetTexture("_BaseColorMap", texture2D_BaseColorMap_Temp);
+			// fileData = File.ReadAllBytes("C:\\Program Files (x86)\\Steam\\steamapps\\common\\Cities Skylines II\\BepInEx\\plugins\\ExtraLandscapingTools_mods\\CustomDecals\\Misc\\Scattered Leaves\\_BaseColorMap.png");
+
+			// fileData = File.ReadAllBytes("C:\\Program Files (x86)\\Steam\\steamapps\\common\\Cities Skylines II\\BepInEx\\plugins\\ExtraLandscapingTools_mods\\CustomDecals\\Misc\\Scattered Leaves\\_NormalMap.png");
+			// Texture2D texture2D_Norma_Temp = new(1, 1, TextureFormat.RGB24, false);
+			// // if (texture2D_Norma_Temp.LoadImage(fileData)) 
+			// material.SetTexture("_NormalMap", texture2D_Norma_Temp);
+
+			// foreach(string s in material.GetPropertyNames(MaterialPropertyType.Float)) Plugin.Logger.LogMessage(s);
+			// material.SetFloat("_NormalScale", 10);
+			// meshRenderer.material = material;
 
 			AddBinding(new GetterValueBinding<string>("elt", "settings", () => Encoder.Encode(settings, EncodeOptions.None)));
 			if(Prefab.CanCreateCustomAssetMenu()) {

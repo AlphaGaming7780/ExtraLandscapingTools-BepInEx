@@ -122,7 +122,7 @@
 					copy /Y &quot;$(TargetDir)0Harmony.dll&quot; &quot;$(Cities2_Location)\BepInEx\plugins\$(ProjectName)\0Harmony.dll&quot;&#xD;&#xA;
 					copy /Y &quot;$(TargetDir)$(ProjectName).dll&quot; &quot;$(Cities2_Location)\BepInEx\plugins\$(ProjectName)\$(ProjectName).dll&quot;&#xD;&#xA;
 					if not exist &quot;$(Cities2_Location)\BepInEx\plugins\$(ProjectName)\resources&quot; mkdir &quot;$(Cities2_Location)\BepInEx\plugins\$(ProjectName)\resources&quot;&#xD;&#xA;
-					
+					xcopy /Y /S &quot;$(ProjectDir)resources\*&quot; &quot;$(Cities2_Location)\BepInEx\plugins\$(ProjectName)\resources\&quot;&#xD;&#xA;
 					" />
 	</Target>
 </Project>

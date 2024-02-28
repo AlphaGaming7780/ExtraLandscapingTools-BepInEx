@@ -152,6 +152,7 @@ public class CustomDecals
 				}
 				texture2D_NormalMap.Apply();
 				TextureImporter.Texture textureImporterNormalMap = new($"{decalName}_NormalMap", folderPath+"\\"+"_NormalMap.png", texture2D_NormalMap);
+				textureImporterNormalMap.CompressBC(1, Colossal.AssetPipeline.Native.NativeTextures.BlockCompressionFormat.BC5);
 				decalSurface.AddProperty("_NormalMap", textureImporterNormalMap);
 
 			};
@@ -170,8 +171,8 @@ public class CustomDecals
 					texture2D.SetPixels(texture2D_MaskMap_temp.GetPixels(i), i);
 				}
 				texture2D.Apply();
-				TextureImporter.Texture textureImporterNormalMap = new($"{decalName}_MaskMap", folderPath+"\\"+"_MaskMap.png", texture2D);
-				decalSurface.AddProperty("_MaskMap", textureImporterNormalMap);
+				TextureImporter.Texture textureImporterMaskMap = new($"{decalName}_MaskMap", folderPath+"\\"+"_MaskMap.png", texture2D);
+				decalSurface.AddProperty("_MaskMap", textureImporterMaskMap);
 
 			};
 		}
@@ -256,7 +257,7 @@ public class CustomDecals
 
 	}
 
-	private static Mesh ConstructMesh( float length, float height, float width) {
+	internal static Mesh ConstructMesh( float length, float height, float width) {
 		Mesh mesh = new();
 
 		//3) Define the co-ordinates of each Corner of the cube 
@@ -346,7 +347,9 @@ public class CustomDecals
 		mesh.normals = normals;
 		mesh.uv = uvs;
 		mesh.Optimize();
-		mesh.RecalculateNormals();
+		// mesh.RecalculateNormals();
+		mesh.RecalculateTangents();
+		mesh.RecalculateBounds();
 
 		return mesh;
 	}

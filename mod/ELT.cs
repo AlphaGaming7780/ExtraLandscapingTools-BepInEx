@@ -151,7 +151,7 @@ namespace ExtraLandscapingTools
 				// 	"Decals" => $"{GameManager_InitializeThumbnails.COUIBaseLocation}/resources/Icons/UIAssetCategoryPrefab/Decals.svg",
 				// 	_ => "Media/Game/Icons/LotTool.svg"
 				// };
-				return "Media/Game/Icons/LotTool.svg";
+				return $"{GameManager_InitializeThumbnails.COUIBaseLocation}/resources/Icons/Misc/placeholder.svg";
 			} else if(prefab is UIAssetMenuPrefab) {
 
 				// return prefab.name switch
