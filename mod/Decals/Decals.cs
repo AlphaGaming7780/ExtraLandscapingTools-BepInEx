@@ -28,7 +28,7 @@ public class CustomDecals
 		foreach(DirectoryInfo directory in new DirectoryInfo(ModsFolderPath).GetDirectories()) {
 			if(File.Exists($"{directory.FullName}\\CustomDecals.zip")) {
 				if(Directory.Exists($"{directory.FullName}\\CustomDecals")) Directory.Delete($"{directory.FullName}\\CustomDecals", true);
-				ZipFile.ExtractToDirectory($"{directory.FullName}\\CustomDecals", directory.FullName);
+				ZipFile.ExtractToDirectory($"{directory.FullName}\\CustomDecals.zip", directory.FullName);
 				File.Delete($"{directory.FullName}\\CustomDecals.zip");
 			}
 			if(Directory.Exists($"{directory.FullName}\\CustomDecals")) AddCustomDecalsFolder($"{directory.FullName}\\CustomDecals"); 

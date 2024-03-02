@@ -20,7 +20,7 @@ public class CustomSurfaces
 		foreach(DirectoryInfo directory in new DirectoryInfo(ModsFolderPath).GetDirectories()) {
 			if(File.Exists($"{directory.FullName}\\CustomSurfaces.zip")) {
 				if(Directory.Exists($"{directory.FullName}\\CustomSurfaces")) Directory.Delete($"{directory.FullName}\\CustomSurfaces", true);
-				ZipFile.ExtractToDirectory($"{directory.FullName}\\CustomSurfaces", directory.FullName);
+				ZipFile.ExtractToDirectory($"{directory.FullName}\\CustomSurfaces.zip", directory.FullName);
 				File.Delete($"{directory.FullName}\\CustomSurfaces.zip");
 			}
 			if(Directory.Exists($"{directory.FullName}\\CustomSurfaces")) AddCustomSurfacesFolder($"{directory.FullName}\\CustomSurfaces");
