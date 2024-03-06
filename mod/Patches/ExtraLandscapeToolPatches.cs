@@ -26,7 +26,8 @@ namespace ExtraLandscapingTools.Patches
 	[HarmonyPatch(typeof(GameManager), "Awake")]
 	internal class GameManager_Awake
 	{	
-		static internal readonly string ELTDataPath = $"{EnvPath.kUserDataPath}\\Mods\\ELT";
+		static internal readonly string ELTGameDataPath = $"{EnvPath.kStreamingDataPath}\\Mods\\ELT"; //: $"{EnvPath.kUserDataPath}\\Mods\\ELT"; Settings.settings.UseGameFolderForCache ? 
+		static internal readonly string ELTUserDataPath = $"{EnvPath.kUserDataPath}\\Mods\\ELT"; //: $"{EnvPath.kUserDataPath}\\Mods\\ELT"; Settings.settings.UseGameFolderForCache ? 
 		static private readonly string PathToParent = Directory.GetParent(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location)).FullName;
 		public static readonly string PathToMods = Path.Combine(PathToParent,"ExtraLandscapingTools_mods");
 		public static readonly string PathToCustomBrushes = Path.Combine(PathToMods,"CustomBrushes");
@@ -48,6 +49,7 @@ namespace ExtraLandscapingTools.Patches
 				File.Delete(pathToZip);
 			}
 
+			Settings.settings = Settings.LoadSettings("ELT", new ELTSettings());
 			ELT.ClearData();
 
 			CustomSurfaces.SearchForCustomSurfacesFolder(PathToParent);
@@ -55,8 +57,6 @@ namespace ExtraLandscapingTools.Patches
 
 			if(!PrefabSystem_OnCreate.FolderToLoadBrush.Contains(resourcesBrushes) && Directory.Exists(resourcesBrushes)) PrefabSystem_OnCreate.FolderToLoadBrush.Add(resourcesBrushes);
 			if(!PrefabSystem_OnCreate.FolderToLoadBrush.Contains(PathToCustomBrushes) && Directory.Exists(PathToCustomBrushes)) PrefabSystem_OnCreate.FolderToLoadBrush.Add(PathToCustomBrushes);
-
-			Settings.settings = Settings.LoadSettings("ELT", new ELTSettings());
 		}
 	}
 

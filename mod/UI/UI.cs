@@ -29,6 +29,7 @@ namespace ExtraLandscapingTools
 		internal static List<SettingsUI> settings = [
 			new("ELT", [
 				new SettingsCheckBox("Enable Transfrom Section", "elt.enabletransformsection"),
+				// new SettingsCheckBox("[RESTART] Use Game Folder For Cache", "elt.usegamefolderforcache"),
 				new SettingsButton("Clear Data", "elt.cleardata", "Use this before uninstalling."),
 			]),
 			new("Surfaces", [
@@ -51,6 +52,7 @@ namespace ExtraLandscapingTools
 		private static GetterValueBinding<bool> loadcustomsurfaces;
 		private static GetterValueBinding<bool> loadcustomdecals;
 		private static GetterValueBinding<bool> enableTransformSection;
+		// private static GetterValueBinding<bool> useGameFolderForCache;
 		private static GetterValueBinding<bool> enableSnowSurfaces;
 		internal static bool isMarkerVisible = false;
 		// private static bool isEnableCustomSurfaces = true;
@@ -71,26 +73,6 @@ namespace ExtraLandscapingTools
 			ELT.m_EntityManager = EntityManager;
 			
 			eLT_UI_Mono = eLT_UI_Object.AddComponent<ELT_UI_Mono>();
-			// eLT_UI_Object.transform.localScale = Vector3.one * 1000f;
-			// MeshFilter meshFilter = eLT_UI_Object.AddComponent<MeshFilter>();
-			// meshFilter.mesh = CustomDecals.ConstructMesh(1,1,1);
-			// MeshRenderer meshRenderer = eLT_UI_Object.AddComponent<MeshRenderer>();
-			// Material material = new(Shader.Find("HDRP/Lit"));
-			// byte[] fileData;
-
-			// fileData = File.ReadAllBytes("C:\\Program Files (x86)\\Steam\\steamapps\\common\\Cities Skylines II\\BepInEx\\plugins\\ExtraLandscapingTools_mods\\CustomDecals\\Misc\\Scattered Leaves\\_NormalMap.png");
-			// Texture2D texture2D_BaseColorMap_Temp = new(1, 1);
-			// if (texture2D_BaseColorMap_Temp.LoadImage(fileData)) material.SetTexture("_BaseColorMap", texture2D_BaseColorMap_Temp);
-			// fileData = File.ReadAllBytes("C:\\Program Files (x86)\\Steam\\steamapps\\common\\Cities Skylines II\\BepInEx\\plugins\\ExtraLandscapingTools_mods\\CustomDecals\\Misc\\Scattered Leaves\\_BaseColorMap.png");
-
-			// fileData = File.ReadAllBytes("C:\\Program Files (x86)\\Steam\\steamapps\\common\\Cities Skylines II\\BepInEx\\plugins\\ExtraLandscapingTools_mods\\CustomDecals\\Misc\\Scattered Leaves\\_NormalMap.png");
-			// Texture2D texture2D_Norma_Temp = new(1, 1, TextureFormat.RGB24, false);
-			// // if (texture2D_Norma_Temp.LoadImage(fileData)) 
-			// material.SetTexture("_NormalMap", texture2D_Norma_Temp);
-
-			// foreach(string s in material.GetPropertyNames(MaterialPropertyType.Float)) Plugin.Logger.LogMessage(s);
-			// material.SetFloat("_NormalScale", 10);
-			// meshRenderer.material = material;
 
 			AddBinding(new GetterValueBinding<string>("elt", "settings", () => Encoder.Encode(settings, EncodeOptions.None)));
 			if(Prefab.CanCreateCustomAssetMenu()) {
@@ -98,6 +80,15 @@ namespace ExtraLandscapingTools
 				// AddBinding(selectedAssetCat = new GetterValueBinding<string>("elt", "selectedassetcat", () => selectedAssetscat));
 				AddBinding(new TriggerBinding<string>("elt", "assetscat", new Action<string>(OnAssetCatClick)));
 			}
+
+			AddBinding(enableTransformSection = new GetterValueBinding<bool>("elt", "enabletransformsection", () => Settings.settings.EnableTransformSection));
+			AddBinding(new TriggerBinding<bool>("elt", "enabletransformsection", new Action<bool>(EnableTransformSection)));
+
+			// AddBinding(useGameFolderForCache = new GetterValueBinding<bool>("elt", "usegamefolderforcache", () => Settings.settings.UseGameFolderForCache));
+			// AddBinding(new TriggerBinding<bool>("elt", "usegamefolderforcache", new Action<bool>(UseGameFolderForCache)));
+
+			AddBinding(new TriggerBinding("elt", "cleardata", new Action(ELT.ClearData)));
+
 			AddBinding(selectSurfaceReplacerTool = new GetterValueBinding<bool>("elt", "selectsurfacereplacertool", () => ELT.m_ToolSystem.activeTool is SurfaceReplacerTool));
 			AddBinding(new TriggerBinding<bool>("elt", "selectsurfacereplacertool", new Action<bool>(SelectSurfaceReplacerTool)));
 
@@ -110,14 +101,10 @@ namespace ExtraLandscapingTools
 			AddBinding(loadcustomdecals = new GetterValueBinding<bool>("elt", "loadcustomdecals", () => Settings.settings.LoadCustomDecals));
 			AddBinding(new TriggerBinding<bool>("elt", "loadcustomdecals", new Action<bool>(LoadCustomDecals)));
 
-			AddBinding(enableTransformSection = new GetterValueBinding<bool>("elt", "enabletransformsection", () => Settings.settings.EnableTransformSection));
-			AddBinding(new TriggerBinding<bool>("elt", "enabletransformsection", new Action<bool>(EnableTransformSection)));
-
 			AddBinding(enableSnowSurfaces = new GetterValueBinding<bool>("elt", "enableSnowSurfaces", () => Settings.settings.EnableSnowSurfaces));
 			AddBinding(new TriggerBinding<bool>("elt", "enableSnowSurfaces", new Action<bool>(EnableSurfacesSnow)));
 
 			// AddBinding(new TriggerBinding("elt", "clearsurfacescache", new Action(CustomSurfaces.ClearSurfacesCache)));
-			AddBinding(new TriggerBinding("elt", "cleardata", new Action(ELT.ClearData)));
 
 			UIAssetCategoryQuery = GetEntityQuery(new EntityQueryDesc
 			{
@@ -161,6 +148,13 @@ namespace ExtraLandscapingTools
 			Settings.SaveSettings("ELT", Settings.settings);
 			enableTransformSection.Update();
 		}
+
+		// private void UseGameFolderForCache( bool b ) {
+		// 	ELT.ClearData();
+		// 	Settings.settings.UseGameFolderForCache = b;
+		// 	Settings.SaveSettings("ELT", Settings.settings);
+		// 	useGameFolderForCache.Update();
+		// }		
 
 		private void EnableSurfacesSnow( bool b ) {
 			Settings.settings.EnableSnowSurfaces = b;

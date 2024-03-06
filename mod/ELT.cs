@@ -30,9 +30,12 @@ namespace ExtraLandscapingTools
 		}
 
 		internal static void ClearData() {
-			if(Directory.Exists(GameManager_Awake.ELTDataPath)) {
-				Directory.Delete(GameManager_Awake.ELTDataPath, true);
+			if(Directory.Exists(GameManager_Awake.ELTGameDataPath)) {
+				Directory.Delete(GameManager_Awake.ELTGameDataPath, true);
 			}
+			if(Directory.Exists(GameManager_Awake.ELTUserDataPath)) {
+				Directory.Delete(GameManager_Awake.ELTUserDataPath, true);
+			}			
 		}
 
 		internal static void ExtractZip(string pathToZip) {

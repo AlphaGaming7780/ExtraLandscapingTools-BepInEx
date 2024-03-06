@@ -31,6 +31,7 @@ namespace ExtraLandscapingTools
 		public bool LoadCustomDecals = true;
 		public bool EnableTransformSection = true;
 		public bool EnableSnowSurfaces = false;
+		// public bool UseGameFolderForCache = false;
 	}
 
 }

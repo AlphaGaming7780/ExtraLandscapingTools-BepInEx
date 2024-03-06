@@ -192,7 +192,7 @@ public class CustomDecals
 		SurfaceAsset surfaceAsset = new()
 		{
 			guid = Guid.NewGuid(), //DecalRenderPrefab.surfaceAssets.ToArray()[0].guid, //
-			database = AssetDatabase.user //DecalRenderPrefab.surfaceAssets.ToArray()[0].database,
+			database = AssetDatabase.game //DecalRenderPrefab.surfaceAssets.ToArray()[0].database,
 		};
 		surfaceAsset.database.AddAsset<SurfaceAsset>(assetDataPath, surfaceAsset.guid);
         surfaceAsset.SetData(decalSurface);
@@ -205,7 +205,7 @@ public class CustomDecals
 		GeometryAsset geometryAsset = new()
 		{
 			guid = Guid.NewGuid(),
-			database = AssetDatabase.user //DecalRenderPrefab.geometryAsset.database
+			database = AssetDatabase.game //DecalRenderPrefab.geometryAsset.database
 		};
 
 		AssetDataPath assetDataPath2 = AssetDataPath.Create($"Mods/ELT/CustomDecals/{modName}/{catName}/{decalName}", "GeometryAsset");
