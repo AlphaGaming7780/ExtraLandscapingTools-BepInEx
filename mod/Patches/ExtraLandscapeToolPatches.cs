@@ -18,7 +18,6 @@ using Colossal.IO.AssetDatabase;
 using System.IO.Compression;
 using Unity.Collections;
 using Colossal.PSI.Environment;
-using BepInEx;
 
 namespace ExtraLandscapingTools.Patches
 {
@@ -262,14 +261,11 @@ namespace ExtraLandscapingTools.Patches
 					if(result is bool b && !b) return false;
 				}
 
-				// if(Prefab.onAddPrefab is not null) if(!Prefab.onAddPrefab(prefab)) return false;
-
 				if (removeTools.Contains(prefab.name) || 
 					(	
 						prefab is not TerraformingPrefab && 
 						prefab is not SurfacePrefab && 
-						prefab is not StaticObjectPrefab //&&
-						// prefab is not NetLanePrefab
+						prefab is not StaticObjectPrefab
 					) || 
 					prefab is BuildingPrefab || 
 					prefab is BuildingExtensionPrefab)
@@ -337,7 +333,6 @@ namespace ExtraLandscapingTools.Patches
 				if(prefab is TerraformingPrefab) TerraformingUI.m_Group = Prefab.GetExistingToolCategory(prefab, "Terraforming") ?? TerraformingUI.m_Group;
 				else if(prefab is SurfacePrefab) TerraformingUI.m_Group ??= CustomSurfaces.SetupUIGroupe(prefab);
 				else if(prefab.name.ToLower().Contains("decal") || prefab.name.ToLower().Contains("roadarrow") || prefab.GetComponent<CustomDecal>() != null) TerraformingUI.m_Group = CustomDecals.SetupUIGroupe(prefab);
-				// else if(prefab is NetLanePrefab) TerraformingUI.m_Group ??= Prefab.GetOrCreateNewToolCategory(prefab, "Landscaping", "NetLanePrefab");
 				else TerraformingUI.m_Group ??= Prefab.GetOrCreateNewToolCategory(prefab, "Landscaping", "[ELT] Failed Prefab, IF you see this tab, repport it, it's a bug.");
 				
 				if(TerraformingUI.m_Group == null) {

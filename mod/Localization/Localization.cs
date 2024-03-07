@@ -28,8 +28,16 @@ namespace ExtraLandscapingTools
 					if(localeAsset.data.entries.ContainsKey(key)) localeAsset.data.entries[key] = localization[loc][key];
 					else localeAsset.data.entries.Add(key, localization[loc][key]);
 
-					if(localeAsset.data.indexCounts.ContainsKey(key)) localeAsset.data.indexCounts[key] = localeAsset.data.indexCounts.Count;
-					else localeAsset.data.indexCounts.Add(key, localeAsset.data.indexCounts.Count);
+					if(!key.Contains(":")) continue;
+
+					string[] splited = key.Split(":");
+					if(int.TryParse(splited[1], out int n)) {
+						n++;
+						if(localeAsset.data.indexCounts.ContainsKey(splited[0])) {
+							if(localeAsset.data.indexCounts[splited[0]] < n) localeAsset.data.indexCounts[splited[0]] = n;
+						} 
+						else localeAsset.data.indexCounts.Add(splited[0], n);
+					}		
 				}
 			}
 		}
