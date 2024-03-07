@@ -123,7 +123,12 @@ namespace ExtraLandscapingTools
 		}
 
 		private static void OnSelectionChanged(Entity entity, Entity prefab, float3 SelectedPosition) {
-			if( !Settings.settings.EnableTransformSection || entity == Entity.Null || ELT.m_EntityManager.HasComponent<Building>(entity) || ELT.m_EntityManager.HasComponent<LabelExtents>(entity)) return;
+			if( !Settings.settings.EnableTransformSection || 
+				entity == Entity.Null || 
+				ELT.m_EntityManager.HasComponent<Building>(entity) || 
+				ELT.m_EntityManager.HasComponent<LabelExtents>(entity) || 
+				!ELT.m_EntityManager.HasComponent<Game.Objects.Transform>(entity)
+			) return;
 
 			selectedEntity = entity;
 			selectedPrefab = prefab;
