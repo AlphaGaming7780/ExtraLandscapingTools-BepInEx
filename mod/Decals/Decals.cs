@@ -125,7 +125,7 @@ public class CustomDecals
 		Texture2D texture2D_BaseColorMap_Temp = new(1, 1);
 		if (!texture2D_BaseColorMap_Temp.LoadImage(fileData)) {UnityEngine.Debug.LogError($"[ELT] Failed to Load the BaseColorMap image for the {decalName} decal."); return;}
 
-		Texture2D texture2D_BaseColorMap = new(texture2D_BaseColorMap_Temp.width, texture2D_BaseColorMap_Temp.height, texture2D_BaseColorMap_Temp.isDataSRGB ? GraphicsFormat.R8G8B8A8_SRGB : GraphicsFormat.R8G8B8A8_SNorm, texture2D_BaseColorMap_Temp.mipmapCount, TextureCreationFlags.MipChain)
+		Texture2D texture2D_BaseColorMap = new(texture2D_BaseColorMap_Temp.width, texture2D_BaseColorMap_Temp.height, GraphicsFormat.R8G8B8A8_SRGB, texture2D_BaseColorMap_Temp.mipmapCount, TextureCreationFlags.MipChain)
 		{
 			name = $"{decalName}_BaseColorMap"
 		};
@@ -135,14 +135,19 @@ public class CustomDecals
 		}
 		texture2D_BaseColorMap.Apply();
 		if(!File.Exists(folderPath+"\\icon.png")) ELT.ResizeTexture(texture2D_BaseColorMap_Temp, 128, folderPath+"\\icon.png");
-		TextureImporter.Texture textureImporterBaseColorMap = new($"{decalName}_BaseColorMap", folderPath+"\\"+"_BaseColorMap.png", texture2D_BaseColorMap);	
+		TextureImporter.Texture textureImporterBaseColorMap = new($"{decalName}_BaseColorMap", folderPath+"\\"+"_BaseColorMap.png", texture2D_BaseColorMap);
+		textureImporterBaseColorMap.CompressBC(1);
+
 		decalSurface.AddProperty("_BaseColorMap", textureImporterBaseColorMap);
 		
 		if(File.Exists(folderPath+"\\_NormalMap.png")) {
 			fileData = File.ReadAllBytes(folderPath+"\\_NormalMap.png");
-			Texture2D texture2D_NormalMap_temp = new(1, 1);
+			Texture2D texture2D_NormalMap_temp = new(1, 1)
+			{
+				name = $"{decalName}_NormalMap"
+			};
 			if(texture2D_NormalMap_temp.LoadImage(fileData)) {
-				Texture2D texture2D_NormalMap = new(texture2D_NormalMap_temp.width, texture2D_NormalMap_temp.height, texture2D_NormalMap_temp.isDataSRGB ? GraphicsFormat.R8G8B8A8_SRGB : GraphicsFormat.R8G8B8A8_SNorm, texture2D_NormalMap_temp.mipmapCount, TextureCreationFlags.MipChain)
+				Texture2D texture2D_NormalMap = new(texture2D_NormalMap_temp.width, texture2D_NormalMap_temp.height, GraphicsFormat.R8G8B8A8_SRGB, texture2D_NormalMap_temp.mipmapCount,TextureCreationFlags.None)
 				{
 					name = $"{decalName}_NormalMap"
 				};
@@ -162,7 +167,7 @@ public class CustomDecals
 			fileData = File.ReadAllBytes(folderPath+"\\_MaskMap.png");
 			Texture2D texture2D_MaskMap_temp = new(1, 1);
 			if(texture2D_MaskMap_temp.LoadImage(fileData)) {
-				Texture2D texture2D_MaskMap = new(texture2D_MaskMap_temp.width, texture2D_MaskMap_temp.height, texture2D_MaskMap_temp.isDataSRGB ? GraphicsFormat.R8G8B8A8_SRGB : GraphicsFormat.R8G8B8A8_SNorm, texture2D_MaskMap_temp.mipmapCount, TextureCreationFlags.MipChain)
+				Texture2D texture2D_MaskMap = new(texture2D_MaskMap_temp.width, texture2D_MaskMap_temp.height, GraphicsFormat.R8G8B8A8_SRGB, texture2D_MaskMap_temp.mipmapCount,TextureCreationFlags.None)
 				{
 					name = $"{decalName}_MaskMap"
 				};
@@ -172,6 +177,7 @@ public class CustomDecals
 				}
 				texture2D_MaskMap.Apply();
 				TextureImporter.Texture textureImporterMaskMap = new($"{decalName}_MaskMap", folderPath+"\\"+"_MaskMap.png", texture2D_MaskMap);
+				textureImporterMaskMap.CompressBC(1);
 				decalSurface.AddProperty("_MaskMap", textureImporterMaskMap);
 
 			};

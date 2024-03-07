@@ -42,6 +42,11 @@ namespace ExtraLandscapingTools
 
 		}
 
+		public static long MapUlongToLong(ulong ulongValue)
+		{
+			return unchecked((long)ulongValue + long.MinValue);
+		}
+
 		public static Texture2D ResizeTexture( Texture2D texture, int newSize, string savePath = null) {
 
 			if(texture is null) {
