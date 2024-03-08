@@ -63,7 +63,12 @@ function ExtraLandscapingTools_CreateCustomCatButton(name, icon) {
 	})
 
 	ExtraLandscapingTools_CustomCatButton.addEventListener("mouseenter", function() {
+		ExtraLandscapingTools_ShowCustomCatInfo(name, icon)
 		engine.trigger("audio.playSound", "hover-item", 1);
+	})
+
+	ExtraLandscapingTools_CustomCatButton.addEventListener("mouseleave", function() {
+		ExtraLandscapingTools_HideCustomCatInfo(name)
 	})
 
 	ExtraLandscapingTools_CustomCatButtonDict[name] = ExtraLandscapingTools_CustomCatButton
@@ -72,6 +77,59 @@ function ExtraLandscapingTools_CreateCustomCatButton(name, icon) {
 	ExtraLandscapingTools_CustomCatButton.appendChild(ExtraLandscapingTools_CustomCatButton_Div)
 	ExtraLandscapingTools_CustomAssetCategory_Items.appendChild(ExtraLandscapingTools_CustomCatButton)
 }
+
+function ExtraLandscapingTools_ShowCustomCatInfo(name, icon) {
+	var ExtraLandscapingTools_detailContainer = document.getElementsByClassName("detail-container_E9q")[0]
+	var ExtraLandscapingTools_detailContainer_assetDetailPanel = document.createElement("div")
+	var ExtraLandscapingTools_detailContainer_titleBar = document.createElement("div")
+	var ExtraLandscapingTools_detailContainer_title = document.createElement("div")
+	var ExtraLandscapingTools_detailContainer_content = document.createElement("div")
+	var ExtraLandscapingTools_detailContainer_previewContainer = document.createElement("div")
+	var ExtraLandscapingTools_detailContainer_preview = document.createElement("img")
+	var ExtraLandscapingTools_detailContainer_column = document.createElement("div")
+	var ExtraLandscapingTools_detailContainer_paragraphs = document.createElement("div")
+	var ExtraLandscapingTools_detailContainer_paragraphsTexte = document.createElement("p")
+	
+	ExtraLandscapingTools_detailContainer_assetDetailPanel.className = "asset-detail-panel_hf8 detail-panel_izf"
+	ExtraLandscapingTools_detailContainer_assetDetailPanel.id = "ExtraLandscapingTools_detailContainer_assetDetailPanel_"+name
+	ExtraLandscapingTools_detailContainer_titleBar.className = "title-bar_I7O child-opacity-transition_nkS"
+	ExtraLandscapingTools_detailContainer_title.className = "title_qub"
+	ExtraLandscapingTools_detailContainer_content.className = "content_rep row_H0d child-opacity-transition_nkS"
+	ExtraLandscapingTools_detailContainer_previewContainer.className = "preview-container_sPA"
+	ExtraLandscapingTools_detailContainer_preview.className = "preview_MDY"
+	ExtraLandscapingTools_detailContainer_column.className = "column_dTT"
+	ExtraLandscapingTools_detailContainer_paragraphs.className = "paragraphs_nbD description_ZQn"
+
+	ExtraLandscapingTools_detailContainer_title.innerHTML = name
+
+	ExtraLandscapingTools_detailContainer_preview.src = icon
+
+	ExtraLandscapingTools_detailContainer_paragraphsTexte.setAttribute("cohinline", "cohinline")
+	ExtraLandscapingTools_detailContainer_paragraphsTexte.innerHTML = name
+
+
+	ExtraLandscapingTools_detailContainer_titleBar.appendChild(ExtraLandscapingTools_detailContainer_title)
+	ExtraLandscapingTools_detailContainer_assetDetailPanel.appendChild(ExtraLandscapingTools_detailContainer_titleBar)
+
+	ExtraLandscapingTools_detailContainer_previewContainer.appendChild(ExtraLandscapingTools_detailContainer_preview)
+	ExtraLandscapingTools_detailContainer_content.appendChild(ExtraLandscapingTools_detailContainer_previewContainer)
+
+	ExtraLandscapingTools_detailContainer_paragraphs.appendChild(ExtraLandscapingTools_detailContainer_paragraphsTexte)
+	ExtraLandscapingTools_detailContainer_column.appendChild(ExtraLandscapingTools_detailContainer_paragraphs)
+	ExtraLandscapingTools_detailContainer_content.appendChild(ExtraLandscapingTools_detailContainer_column)
+
+	ExtraLandscapingTools_detailContainer_assetDetailPanel.appendChild(ExtraLandscapingTools_detailContainer_content)
+
+	ExtraLandscapingTools_detailContainer.appendChild(ExtraLandscapingTools_detailContainer_assetDetailPanel)
+
+}
+
+function ExtraLandscapingTools_HideCustomCatInfo(name) {
+	var ExtraLandscapingTools_detailContainer_assetDetailPanel = document.getElementById("ExtraLandscapingTools_detailContainer_assetDetailPanel_"+name)
+	ExtraLandscapingTools_detailContainer_assetDetailPanel.parentElement.removeChild(ExtraLandscapingTools_detailContainer_assetDetailPanel)
+	
+}
+
 
 function ExtraLandscapingTools_SelectButtonAssetCat(element, bool = true) {
 	if(ExtraLandscapingTools_SelectedCustomAssetCategory != undefined) {
