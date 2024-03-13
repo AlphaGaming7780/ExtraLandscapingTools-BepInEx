@@ -21,7 +21,8 @@
         "_MetallicAlphaSource": 0,
         "_MetallicOpacity": 1,
         "_NormalAlphaSource": 0,
-        "_NormalOpacity": 1
+        "_NormalOpacity": 1,
+        "UiPriority": -1
     },
     "Vector": {
         "_BaseColor": {

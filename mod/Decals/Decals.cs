@@ -117,7 +117,7 @@ public class CustomDecals
 			}
 		}
 
-		if(!decalSurface.floats.ContainsKey("_DrawOrder")) decalSurface.AddProperty("_DrawOrder", 0f);
+		// if(!decalSurface.floats.ContainsKey("_DrawOrder")) decalSurface.AddProperty("_DrawOrder", 0f);
 
 		byte[] fileData;
 
@@ -232,7 +232,7 @@ public class CustomDecals
 		DecalProperties decalProperties = renderPrefab.AddComponent<DecalProperties>();
 		decalProperties.m_TextureArea = new(new(TextureArea.x, TextureArea.y), new(TextureArea.z, TextureArea.w));
 		decalProperties.m_LayerMask = (DecalLayers)decalSurface.GetFloatProperty("colossal_DecalLayerMask");
-		decalProperties.m_RendererPriority = (int)decalSurface.GetFloatProperty("_DrawOrder"); //0;//DecalPropertiesPrefab.m_RendererPriority;
+		decalProperties.m_RendererPriority = (int)( decalSurface.HasProperty("_DrawOrder")? decalSurface.GetFloatProperty("_DrawOrder"): 0);
 		decalProperties.m_EnableInfoviewColor = false;//DecalPropertiesPrefab.m_EnableInfoviewColor;
 
 		ObjectMeshInfo objectMeshInfo = new()
@@ -255,7 +255,7 @@ public class CustomDecals
 		UIObject decalPrefabUI = decalPrefab.AddComponent<UIObject>();
 		decalPrefabUI.m_IsDebugObject = false;
 		decalPrefabUI.m_Icon = File.Exists(folderPath+"\\icon.png") ? $"{GameManager_InitializeThumbnails.COUIBaseLocation}/CustomDecals/{catName}/{decalName}/icon.png" : ELT.GetIcon(decalPrefab);
-		decalPrefabUI.m_Priority = -1;
+		decalPrefabUI.m_Priority = (int)(decalSurface.HasProperty("UiPriority") ? decalSurface.GetFloatProperty("UiPriority") : -1);
 		decalPrefabUI.m_Group = SetupUIGroupe(decalPrefab, catName);
 
 		decalPrefab.AddComponent<CustomDecal>();
