@@ -28,7 +28,7 @@ namespace ExtraLandscapingTools
 
 		internal static List<SettingsUI> settings = [
 			new("ELT", [
-				new SettingsCheckBox("Enable Transfrom Section", "elt.enabletransformsection"),
+				new SettingsCheckBox("Enable Transform Section", "elt.enabletransformsection"),
 				// new SettingsCheckBox("[RESTART] Use Game Folder For Cache", "elt.usegamefolderforcache"),
 				new SettingsButton("Clear Data", "elt.cleardata", "Use this before uninstalling."),
 			]),
@@ -68,6 +68,7 @@ namespace ExtraLandscapingTools
 			ELT.m_RenderingSystem = base.World.GetOrCreateSystemManaged<RenderingSystem>();
 			ELT.m_ToolSystem = base.World.GetOrCreateSystemManaged<ToolSystem>();
 			ELT.m_ToolbarUISystem = base.World.GetOrCreateSystemManaged<ToolbarUISystem>();
+			ELT.m_PrefabSystem = base.World.GetOrCreateSystemManaged<PrefabSystem>();
 			// ELT.m_ToolUISystem = base.World.GetOrCreateSystemManaged<ToolUISystem>();
 			ELT.m_SurfaceReplacerTool = base.World.GetOrCreateSystemManaged<SurfaceReplacerTool>();
 			ELT.m_EntityManager = EntityManager;

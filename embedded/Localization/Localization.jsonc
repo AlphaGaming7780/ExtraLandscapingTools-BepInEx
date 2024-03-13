@@ -31,7 +31,13 @@
 			"Services.NAME[Props]": "Props",
 			"Services.DESCRIPTION[Props]": "Props",
 			"SubServices.NAME[Decals]": "Decals",
-			"Assets.SUB_SERVICE_DESCRIPTION[Decals]": "Decals"
+			"Assets.SUB_SERVICE_DESCRIPTION[Decals]": "Decals",
+			
+			//3.0
+			"Services.NAME[Custom Assets]": "Assets",
+			"Services.DESCRIPTION[Custom Assets]": "Assets",
+			"Services.NAME[Custom Decals]": "Decals",
+			"Services.DESCRIPTION[Custom Decals]": "Decals"
 		},
 		"fr-FR": {
 			//1.5
@@ -64,7 +70,13 @@
 			"Services.NAME[Props]": "Props",
 			"Services.DESCRIPTION[Props]": "Props",
 			"SubServices.NAME[Decals]": "Decals",
-			"Assets.SUB_SERVICE_DESCRIPTION[Decals]": "Decals"
+			"Assets.SUB_SERVICE_DESCRIPTION[Decals]": "Decals",
+			
+			//3.0
+			"Services.NAME[Custom Assets]": "Assets",
+			"Services.DESCRIPTION[Custom Assets]": "Assets",
+			"Services.NAME[Custom Decals]": "Decals",
+			"Services.DESCRIPTION[Custom Decals]": "Decals"
 		},
 		"de-DE": {
 			//1.5
@@ -97,7 +109,13 @@
 			"Services.NAME[Props]": "Props",
 			"Services.DESCRIPTION[Props]": "Props",
 			"SubServices.NAME[Decals]": "Decals",
-			"Assets.SUB_SERVICE_DESCRIPTION[Decals]": "Decals"
+			"Assets.SUB_SERVICE_DESCRIPTION[Decals]": "Decals",
+			
+			//3.0
+			"Services.NAME[Custom Assets]": "Assets",
+			"Services.DESCRIPTION[Custom Assets]": "Assets",
+			"Services.NAME[Custom Decals]": "Decals",
+			"Services.DESCRIPTION[Custom Decals]": "Decals"
 		},
 		"ko-KR": {
 			//1.5
@@ -129,7 +147,13 @@
 			"Services.DESCRIPTION[Custom Surfaces]": "지면 도구",
 			"Services.NAME[Props]": "Props",
 			"Services.DESCRIPTION[Props]": "Props",
-			"SubServices.NAME[Decals]": "Decals"
+			"SubServices.NAME[Decals]": "Decals",
+			
+			//3.0
+			"Services.NAME[Custom Assets]": "Assets",
+			"Services.DESCRIPTION[Custom Assets]": "Assets",
+			"Services.NAME[Custom Decals]": "Decals",
+			"Services.DESCRIPTION[Custom Decals]": "Decals"
 		}
 	}
 }

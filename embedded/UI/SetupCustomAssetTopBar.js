@@ -1,6 +1,8 @@
-var ExtraLandscapingTools_Header = document.getElementsByClassName("header_H_U")[0]
+
 // var ExtraLandscapingTools_AssetCategory = document.getElementsByClassName("asset-category-tab-bar_IGA")[0]
 // var ExtraLandscapingTools_AssetCategory_CloseButton = document.getElementsByClassName("close-button_kMj")[0]
+
+var ExtraLandscapingTools_Header = document.getElementsByClassName("header_H_U")[0]
 
 if(!ExtraLandscapingTools_Header.contains(document.getElementById("ExtraLandscapingTools_CustomAssetCategory"))) {
 	if(document.getElementById("ExtraLandscapingTools_CustomAssetCategory") == null) {

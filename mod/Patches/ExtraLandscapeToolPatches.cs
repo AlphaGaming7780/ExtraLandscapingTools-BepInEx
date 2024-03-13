@@ -107,6 +107,7 @@ namespace ExtraLandscapingTools.Patches
 		public static void Postfix(UpdateSystem updateSystem) {
 			updateSystem.UpdateAt<ELT_UI>(SystemUpdatePhase.UIUpdate);
 			updateSystem.UpdateAt<TransformSection>(SystemUpdatePhase.UIUpdate);
+			// updateSystem.UpdateAfter<MainSysteme>(SystemUpdatePhase.PrefabUpdate);
 			// updateSystem.UpdateAt<SurfaceReplacerTool>(SystemUpdatePhase.ToolUpdate);
 		}
 	}
