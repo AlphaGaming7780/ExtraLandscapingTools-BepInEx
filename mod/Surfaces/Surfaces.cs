@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.IO.Compression;
+using System.Linq;
 using Colossal.Json;
 using ExtraLandscapingTools.Patches;
 using Game.Prefabs;
@@ -203,7 +204,7 @@ public class CustomSurfaces
 		surfacePrefabUI.active = true;
 		surfacePrefabUI.m_IsDebugObject = false;
 		surfacePrefabUI.m_Icon = File.Exists(folderPath+"\\icon.png") ? $"{GameManager_InitializeThumbnails.COUIBaseLocation}/CustomSurfaces/{CatName}/{new DirectoryInfo(folderPath).Name}/icon.png" : ELT.GetIcon(surfacePrefab);
-		surfacePrefabUI.m_Priority = -1;
+		surfacePrefabUI.m_Priority = (int)(SurfaceInformation.Keys.Contains("UiPriority") ? SurfaceInformation["UiPriority"]: -1);
 		surfacePrefabUI.m_Group = SetupUIGroupe(surfacePrefab, CatName);
 
 		surfacePrefab.AddComponent<CustomSurface>();
