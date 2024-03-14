@@ -88,7 +88,11 @@ public class CustomDecals
 		foreach(string folder in FolderToLoadDecals) {
 			foreach(string catFolder in Directory.GetDirectories( folder )) {
 				foreach(string decalsFolder in Directory.GetDirectories( catFolder )) {
-					CreateCustomDecal(decalsFolder, new DirectoryInfo(decalsFolder).Name, new DirectoryInfo(catFolder).Name, new DirectoryInfo(folder).Parent.Name);
+					try {
+						CreateCustomDecal(decalsFolder, new DirectoryInfo(decalsFolder).Name, new DirectoryInfo(catFolder).Name, new DirectoryInfo(folder).Parent.Name);
+					} catch (Exception e) {
+						Plugin.Logger.LogError($"Failed to load the custom decal at {decalsFolder} | ERROR : {e}");
+					}
 				}
 			}
 		}

@@ -78,7 +78,11 @@ public class CustomSurfaces
 			foreach(string surfacesCat in Directory.GetDirectories( folder )) {
 				foreach(string filePath in Directory.GetDirectories( surfacesCat )) 
 				{	
-					CreateCustomSurface(filePath, material, new DirectoryInfo(surfacesCat).Name, new DirectoryInfo(folder).Parent.Name);
+					try {
+						CreateCustomSurface(filePath, material, new DirectoryInfo(surfacesCat).Name, new DirectoryInfo(folder).Parent.Name);
+					} catch (Exception e) {
+						Plugin.Logger.LogError($"Failed to load the custom surface at {filePath} | ERROR : {e}");
+					}
 				}
 			}
 		}

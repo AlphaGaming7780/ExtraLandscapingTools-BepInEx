@@ -71,8 +71,11 @@ public class Prefab
 	}
 
 	public static void CreateNewUiToolMenu(PrefabBase prefab, string menu, int offset = 1) {
-	if (!ELT.m_PrefabSystem.TryGetPrefab(new PrefabID(nameof(UIAssetMenuPrefab), menu), out var p2) //Landscaping
-		|| p2 is not UIAssetMenuPrefab SurfaceMenu)
+
+		if(menu is null) return;
+
+		if (!ELT.m_PrefabSystem.TryGetPrefab(new PrefabID(nameof(UIAssetMenuPrefab), menu), out var p2) //Landscaping
+			|| p2 is not UIAssetMenuPrefab SurfaceMenu)
 		{
 			SurfaceMenu = ScriptableObject.CreateInstance<UIAssetMenuPrefab>();
 			SurfaceMenu.name = menu;
@@ -101,7 +104,7 @@ public class Prefab
 		if(CanCreateCustomAssetMenu()) return "Custom Assets";
 		else if(CustomSurfaces.CanCreateCustomSurfaces()) return "Custom Surfaces";
 		else if(CustomDecals.CanCreateCustomDecals()) return "Custom Decals";
-		else return "Custom Assets";
+		else return null;
 	}
 
 	internal static bool CanCreateCustomAssetMenu() {

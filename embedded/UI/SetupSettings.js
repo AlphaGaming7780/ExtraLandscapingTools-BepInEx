@@ -1,6 +1,7 @@
 
 var ExtraLandscapingTools_LandscapingMenu = document.getElementsByClassName("asset-panel_VFR")[0]
 // var ExtraLandscapingTools_AssetCategory = ExtraLandscapingTools_LandscapingMenu.childNodes[0]
+
 var ExtraLandscapingTools_bottomPanel = ExtraLandscapingTools_LandscapingMenu.children[1]
 var ExtraLandscapingTools_AssetCategory = document.getElementsByClassName("asset-category-tab-bar_IGA")[0]
 
