@@ -38,10 +38,6 @@ namespace ExtraLandscapingTools
 			}			
 		}
 
-		internal static void ExtractZip(string pathToZip) {
-
-		}
-
 		public static long MapUlongToLong(ulong ulongValue)
 		{
 			return unchecked((long)ulongValue + long.MinValue);
@@ -213,11 +209,9 @@ namespace ExtraLandscapingTools
 						// }
 					}
 				} catch(Exception e) {Plugin.Logger.LogError(e);}
-
-				return $"{GameManager_InitializeThumbnails.COUIBaseLocation}/resources/Icons/Misc/placeholder.svg";
 			}
 
-			return $"{GameManager_InitializeThumbnails.COUIBaseLocation}/resources/Icons/Misc/placeholder.svg";
+			return Icons.Placeholder;
 		}
 
 

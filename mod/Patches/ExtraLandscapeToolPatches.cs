@@ -69,7 +69,7 @@ namespace ExtraLandscapingTools.Patches
 	}
 
 	[HarmonyPatch(typeof(GameManager), "InitializeThumbnails")]
-	internal class GameManager_InitializeThumbnails
+	public class GameManager_InitializeThumbnails
 	{	
 		private static readonly string IconsResourceKey = $"{MyPluginInfo.PLUGIN_NAME.ToLower()}";
 
