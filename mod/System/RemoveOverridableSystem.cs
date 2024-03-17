@@ -63,7 +63,7 @@
                         Plugin.Logger.LogInfo($"{nameof(RemoveOverridable)}.{nameof(OnGameLoadingComplete)} Removed Overridable from {prefabBase.name}");
                     } else
                     {
-                        Plugin.Logger.LogInfo($"{nameof(RemoveOverridable)}.{nameof(OnGameLoadingComplete)} Did not remove Overridable from {prefabBase.name}. PrefabBase is StaticObjectPrefab: {prefabBase is StaticObjectPrefab} HasComponent objectGeometryData: {EntityManager.HasComponent<ObjectGeometryData>(entity)} prefabBase.GetComponent<DecalProperties>() != null : {prefabBase.GetComponent<DecalProperties>() != null}");
+                        // Plugin.Logger.LogInfo($"{nameof(RemoveOverridable)}.{nameof(OnGameLoadingComplete)} Did not remove Overridable from {prefabBase.name}. PrefabBase is StaticObjectPrefab: {prefabBase is StaticObjectPrefab} HasComponent objectGeometryData: {EntityManager.HasComponent<ObjectGeometryData>(entity)} prefabBase.GetComponent<DecalProperties>() != null : {prefabBase.GetComponent<DecalProperties>() != null}");
                     }
                 } else
                 {

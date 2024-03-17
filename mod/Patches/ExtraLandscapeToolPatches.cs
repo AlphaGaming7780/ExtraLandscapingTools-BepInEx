@@ -18,6 +18,7 @@ using Colossal.IO.AssetDatabase;
 using System.IO.Compression;
 using Unity.Collections;
 using Colossal.PSI.Environment;
+using RemoveOverridable.Systems;
 
 namespace ExtraLandscapingTools.Patches
 {
@@ -107,7 +108,7 @@ namespace ExtraLandscapingTools.Patches
 		public static void Postfix(UpdateSystem updateSystem) {
 			updateSystem.UpdateAt<ELT_UI>(SystemUpdatePhase.UIUpdate);
 			updateSystem.UpdateAt<TransformSection>(SystemUpdatePhase.UIUpdate);
-			// updateSystem.UpdateAfter<MainSysteme>(SystemUpdatePhase.PrefabUpdate);
+			updateSystem.UpdateAfter<RemoveOverridableSystem>(SystemUpdatePhase.PrefabUpdate);
 			// updateSystem.UpdateAt<SurfaceReplacerTool>(SystemUpdatePhase.ToolUpdate);
 		}
 	}
