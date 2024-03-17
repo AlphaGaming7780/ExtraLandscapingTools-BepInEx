@@ -2,6 +2,7 @@ using System;
 using System.IO;
 using System.Reflection;
 using ExtraLandscapingTools.Patches;
+using ExtraLandscapingTools.UI;
 using Game.Prefabs;
 using Game.Rendering;
 using Game.Tools;
