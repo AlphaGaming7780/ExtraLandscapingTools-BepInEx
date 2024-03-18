@@ -285,7 +285,7 @@ namespace ExtraLandscapingTools.Patches
 				if (prefab is StaticObjectPrefab && 
 					!prefab.name.ToLower().Contains("decal") && 
 					!prefab.name.ToLower().Contains("roadarrow") && 
-					!prefab.name.ToLower().Contains("lanemarkings") &&
+					!prefab.name.ToLower().Contains("lanemarkings") && //prefab.hasComponent<DecaProperties>() == null
 					prefab.GetComponent<CustomDecal>() == null) 
 				{
 					return true;

@@ -46,7 +46,7 @@
 	-->
 	<PropertyGroup>
 		<Cities2_Location>C:\Program Files (x86)\Steam\steamapps\common\Cities Skylines II</Cities2_Location>
-		<Cities2_Location>E:\SteamLibrary\steamapps\common\Cities Skylines II</Cities2_Location>
+		<!-- <Cities2_Location>E:\SteamLibrary\steamapps\common\Cities Skylines II</Cities2_Location> -->
 	</PropertyGroup>
 
 	<!--
@@ -54,10 +54,10 @@
 		above needs to be uncommented for this to work
 	-->
 	<ItemGroup>
-        <Reference Include="$(Cities2_Location)\Cities2_Data\Managed\Colossal.*.dll" Private="False" />
-        <Reference Include="$(Cities2_Location)\Cities2_Data\Managed\Game*.dll" Private="False" />
-        <Reference Include="$(Cities2_Location)\Cities2_Data\Managed\Unity.*.dll" Private="False" />
-		<Reference Include="cohtml.Net"><HintPath>$(Cities2_Location)\Cities2_Data\Managed\cohtml.Net.dll</HintPath><Private>False</Private></Reference>
+        <Reference Include="$(Cities2_Location)\Cities2_Data\Managed PB\Colossal.*.dll" Private="False" />
+        <Reference Include="$(Cities2_Location)\Cities2_Data\Managed PB\Game*.dll" Private="False" />
+        <Reference Include="$(Cities2_Location)\Cities2_Data\Managed PB\Unity.*.dll" Private="False" />
+		<Reference Include="cohtml.Net"><HintPath>$(Cities2_Location)\Cities2_Data\Managed PB\cohtml.Net.dll</HintPath><Private>False</Private></Reference>
 	</ItemGroup>
 	
 
