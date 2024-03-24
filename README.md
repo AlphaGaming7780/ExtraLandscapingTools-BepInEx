@@ -4,7 +4,7 @@ This mod aims to add features and improve existing ones for the game's landscapi
 > [!IMPORTANT]  
 > We're in the early stages of C:S2 modding and the tooling is not ready yet so please take this mod as it is and accept any issue.
 
-### -> [Changelog](https://github.com/AlphaGaming7780/ExtraLandscapingTools/blob/main/CHANGELOG.md)
+### -> [Changelog](https://github.com/AlphaGaming7780/ExtraLandscapingTools-BepInEx/blob/main/CHANGELOG.md)
 
 ## Requirements
 
@@ -25,9 +25,9 @@ You can now add resources to your map using this tool.
 ### Surface Tools
 Add different materials to your map using the area tool. (This is a new tab in the landscape tool user interface)
 ### Custom brush
-See the [wiki](https://github.com/AlphaGaming7780/ExtraLandscapingTools/wiki#custom-brush).
+See the [wiki](https://github.com/AlphaGaming7780/ExtraLandscapingTools-BepInEx/wiki#custom-brush).
 ### Custom surface
-See the [wiki](https://github.com/AlphaGaming7780/ExtraLandscapingTools/wiki#custom-surfaces).
+See the [wiki](https://github.com/AlphaGaming7780/ExtraLandscapingTools-BepInEx/wiki#custom-surfaces).
 
 ## Feature roadmap
 <!-- - ✔️ More Pathway ([ELT-Assets](https://github.com/AlphaGaming7780/ELT-Assets)) -->
